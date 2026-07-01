@@ -25,13 +25,7 @@ function Login() {
       localStorage.setItem("lastName", data.lastName);
       localStorage.setItem("role", data.role);
 
-      if (data.role === "ADMIN") {
-        navigate("/admin/dashboard");
-      } else if (data.role === "STAFF") {
-        navigate("/staff/dashboard");
-      } else {
-        navigate("/member/dashboard");
-      }
+      navigate("/dashboard");
     } catch (err) {
       if (err.response?.status === 401) {
         setError("Invalid email or password.");

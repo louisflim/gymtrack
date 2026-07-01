@@ -37,11 +37,7 @@ function Register() {
       localStorage.setItem("lastName", data.lastName);
       localStorage.setItem("role", data.role);
 
-      if (data.role === "ADMIN") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/member/dashboard");
-      }
+      navigate("/dashboard");
     } catch (err) {
       if (err.response?.status === 400) {
         setError(err.response.data || "Registration failed. Check your details.");
