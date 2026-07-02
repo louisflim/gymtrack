@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.cit.lim.gymtrack.dto.AuthResponse;
 import edu.cit.lim.gymtrack.dto.LoginRequest;
 import edu.cit.lim.gymtrack.dto.RegisterRequest;
+import edu.cit.lim.gymtrack.dto.StaffAccountResponse;
 import edu.cit.lim.gymtrack.service.AuthService;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -41,6 +43,18 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         } catch (DisabledException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/staff")
+    public ResponseEntity<?> createStaff(@RequestBody RegisterRequest request, Authentication authentication) {
+        try {
+            StaffAccountResponse response = authService.createStaffByAdmin(request, authentication.getName());
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

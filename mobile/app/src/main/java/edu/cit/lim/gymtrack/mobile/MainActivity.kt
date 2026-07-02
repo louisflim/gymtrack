@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import edu.cit.lim.gymtrack.mobile.ui.auth.AuthViewModel
 import edu.cit.lim.gymtrack.mobile.ui.navigation.AppNavGraph
 import edu.cit.lim.gymtrack.mobile.ui.navigation.Routes
+import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.DashboardViewModel
 import edu.cit.lim.gymtrack.mobile.ui.theme.GymTrackBackground
 import edu.cit.lim.gymtrack.mobile.ui.theme.GymTrackTheme
 
@@ -37,6 +38,12 @@ class MainActivity : ComponentActivity() {
                     val authViewModel: AuthViewModel = viewModel(
                         factory = AuthViewModel.Factory(app.authRepository)
                     )
+                    val dashboardViewModel: DashboardViewModel = viewModel(
+                        factory = DashboardViewModel.Factory(
+                            app.attendanceRepository,
+                            app.authRepository
+                        )
+                    )
 
                     var startDestination by remember { mutableStateOf<String?>(null) }
 
@@ -53,6 +60,7 @@ class MainActivity : ComponentActivity() {
                         AppNavGraph(
                             navController = navController,
                             authViewModel = authViewModel,
+                            dashboardViewModel = dashboardViewModel,
                             startDestination = destination
                         )
                     }

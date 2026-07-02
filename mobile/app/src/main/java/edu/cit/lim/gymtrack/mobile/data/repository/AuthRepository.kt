@@ -5,6 +5,7 @@ import edu.cit.lim.gymtrack.mobile.data.local.SessionTokenHolder
 import edu.cit.lim.gymtrack.mobile.data.model.AuthResponse
 import edu.cit.lim.gymtrack.mobile.data.model.LoginRequest
 import edu.cit.lim.gymtrack.mobile.data.model.RegisterRequest
+import edu.cit.lim.gymtrack.mobile.data.model.StaffAccountResponse
 import edu.cit.lim.gymtrack.mobile.data.model.UserSession
 import edu.cit.lim.gymtrack.mobile.data.remote.ApiService
 import kotlinx.coroutines.flow.Flow
@@ -42,6 +43,31 @@ class AuthRepository(
             )
         )
         return handleAuthResponse(response)
+    }
+
+    suspend fun createStaff(
+        firstName: String,
+        lastName: String,
+        email: String,
+        password: String
+    ): StaffAccountResponse {
+        val response = apiService.createStaff(
+            RegisterRequest(
+                firstName = firstName.trim(),
+                lastName = lastName.trim(),
+                email = email.trim(),
+                password = password,
+                role = "STAFF"
+            )
+        )
+        if (response.isSuccessful) {
+            return response.body()
+                ?: throw AuthException(response.code(), "Empty response from server.")
+        }
+
+        val message = response.errorBody()?.string()?.trim('"').orEmpty()
+            .ifBlank { defaultErrorMessage(response.code()) }
+        throw AuthException(response.code(), message)
     }
 
     suspend fun logout() {

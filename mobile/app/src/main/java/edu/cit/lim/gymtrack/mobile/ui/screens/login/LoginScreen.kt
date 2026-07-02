@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.mobile.ui.auth
+package edu.cit.lim.gymtrack.mobile.ui.screens.login
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -6,13 +6,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import edu.cit.lim.gymtrack.mobile.ui.components.AuthErrorBanner
-import edu.cit.lim.gymtrack.mobile.ui.components.AuthFooterText
-import edu.cit.lim.gymtrack.mobile.ui.components.AuthShell
-import edu.cit.lim.gymtrack.mobile.ui.components.AuthSubmitButton
-import edu.cit.lim.gymtrack.mobile.ui.components.AuthTextField
-import edu.cit.lim.gymtrack.mobile.ui.components.BrandStat
+import edu.cit.lim.gymtrack.mobile.ui.auth.AuthViewModel
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthErrorBanner
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthFooterText
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthShell
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthSubmitButton
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthTextField
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.BrandStat
 
 @Composable
 fun LoginScreen(

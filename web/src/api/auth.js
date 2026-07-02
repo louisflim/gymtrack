@@ -18,3 +18,14 @@ export const registerUser = async (firstName, lastName, email, password, role) =
   });
   return response.data;
 };
+
+export const createStaffUser = async (firstName, lastName, email, password) => {
+  const response = await axiosInstance.post("/auth/staff", {
+    firstName,
+    lastName,
+    email,
+    password,
+    role: "STAFF",
+  });
+  return response.data;
+};

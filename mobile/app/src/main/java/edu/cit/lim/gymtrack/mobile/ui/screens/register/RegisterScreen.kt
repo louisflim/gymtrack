@@ -1,21 +1,20 @@
-package edu.cit.lim.gymtrack.mobile.ui.auth
+package edu.cit.lim.gymtrack.mobile.ui.screens.register
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import edu.cit.lim.gymtrack.mobile.ui.components.AuthErrorBanner
-import edu.cit.lim.gymtrack.mobile.ui.components.AuthFooterText
-import edu.cit.lim.gymtrack.mobile.ui.components.AuthRoleDropdown
-import edu.cit.lim.gymtrack.mobile.ui.components.AuthShell
-import edu.cit.lim.gymtrack.mobile.ui.components.AuthSubmitButton
-import edu.cit.lim.gymtrack.mobile.ui.components.AuthTextField
-import edu.cit.lim.gymtrack.mobile.ui.components.BrandStat
+import edu.cit.lim.gymtrack.mobile.ui.auth.AuthViewModel
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AccountFieldValues
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AccountFields
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthErrorBanner
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthFooterText
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthRoleDropdown
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthShell
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthSubmitButton
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.BrandStat
 
 @Composable
 fun RegisterScreen(
@@ -30,6 +29,19 @@ fun RegisterScreen(
     var confirmPassword by rememberSaveable { mutableStateOf("") }
     var role by rememberSaveable { mutableStateOf("member") }
     val uiState by viewModel.registerState.collectAsState()
+
+    val form = AccountFieldValues(firstName, lastName, email, password, confirmPassword)
+
+    fun onFieldChange(field: String, value: String) {
+        when (field) {
+            "firstName" -> firstName = value
+            "lastName" -> lastName = value
+            "email" -> email = value
+            "password" -> password = value
+            "confirmPassword" -> confirmPassword = value
+        }
+        viewModel.clearRegisterError()
+    }
 
     AuthShell(
         brandEyebrow = "New Member",
@@ -47,64 +59,7 @@ fun RegisterScreen(
     ) {
         uiState.error?.let { AuthErrorBanner(message = it) }
 
-        Row(modifier = Modifier.fillMaxWidth()) {
-            AuthTextField(
-                label = "First Name",
-                value = firstName,
-                onValueChange = {
-                    firstName = it
-                    viewModel.clearRegisterError()
-                },
-                placeholder = "First name",
-                modifier = Modifier.weight(1f)
-            )
-            AuthTextField(
-                label = "Last Name",
-                value = lastName,
-                onValueChange = {
-                    lastName = it
-                    viewModel.clearRegisterError()
-                },
-                placeholder = "Last name",
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        AuthTextField(
-            label = "Email",
-            value = email,
-            onValueChange = {
-                email = it
-                viewModel.clearRegisterError()
-            },
-            placeholder = "you@example.com",
-            keyboardType = androidx.compose.ui.text.input.KeyboardType.Email
-        )
-
-        Row(modifier = Modifier.fillMaxWidth()) {
-            AuthTextField(
-                label = "Password",
-                value = password,
-                onValueChange = {
-                    password = it
-                    viewModel.clearRegisterError()
-                },
-                placeholder = "Create password",
-                isPassword = true,
-                modifier = Modifier.weight(1f)
-            )
-            AuthTextField(
-                label = "Confirm",
-                value = confirmPassword,
-                onValueChange = {
-                    confirmPassword = it
-                    viewModel.clearRegisterError()
-                },
-                placeholder = "Repeat password",
-                isPassword = true,
-                modifier = Modifier.weight(1f)
-            )
-        }
+        AccountFields(values = form, onFieldChange = ::onFieldChange)
 
         AuthRoleDropdown(
             selectedRole = role,

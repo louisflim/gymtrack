@@ -3,6 +3,7 @@ package edu.cit.lim.gymtrack.service;
 import edu.cit.lim.gymtrack.dto.AuthResponse;
 import edu.cit.lim.gymtrack.dto.LoginRequest;
 import edu.cit.lim.gymtrack.dto.RegisterRequest;
+import edu.cit.lim.gymtrack.dto.StaffAccountResponse;
 import edu.cit.lim.gymtrack.entity.Role;
 import edu.cit.lim.gymtrack.entity.User;
 import edu.cit.lim.gymtrack.repository.UserRepository;
@@ -73,5 +74,39 @@ public class AuthService {
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name(), user.getId());
 
         return new AuthResponse(token, user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getRole().name());
+    }
+
+    public StaffAccountResponse createStaffByAdmin(RegisterRequest request, String requesterEmail) {
+        User requester = userRepository.findByEmail(requesterEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Requesting user not found."));
+
+        if (requester.getRole() != Role.ADMIN) {
+            throw new SecurityException("Only ADMIN can create STAFF accounts.");
+        }
+
+        if (request.getRole() != null && !request.getRole().isBlank() && !"STAFF".equalsIgnoreCase(request.getRole())) {
+            throw new IllegalArgumentException("Role must be STAFF for this endpoint.");
+        }
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalArgumentException("Email is already registered");
+        }
+
+        User staff = new User(
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                Role.STAFF
+        );
+
+        User saved = userRepository.save(staff);
+        return new StaffAccountResponse(
+                saved.getId(),
+                saved.getFirstName(),
+                saved.getLastName(),
+                saved.getEmail(),
+                saved.getRole().name()
+        );
     }
 }
