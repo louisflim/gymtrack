@@ -10,7 +10,8 @@ data class RegisterRequest(
     val lastName: String,
     val email: String,
     val password: String,
-    val role: String
+    val role: String,
+    val gymName: String? = null
 )
 
 data class AuthResponse(
@@ -19,7 +20,9 @@ data class AuthResponse(
     val firstName: String,
     val lastName: String,
     val email: String,
-    val role: String
+    val role: String,
+    val gymId: Long? = null,
+    val gymName: String? = null
 )
 
 data class UserSession(
@@ -28,7 +31,9 @@ data class UserSession(
     val firstName: String = "",
     val lastName: String = "",
     val email: String = "",
-    val role: String = ""
+    val role: String = "",
+    val gymId: Long? = null,
+    val gymName: String? = null
 ) {
     val isLoggedIn: Boolean get() = token.isNotBlank()
 }
@@ -47,11 +52,18 @@ data class AttendanceScanResponse(
     val memberName: String,
     val role: String,
     val active: Boolean,
+    val planName: String?,
+    val membershipStatus: String?,
     val timestamp: String,
-    val message: String
+    val message: String,
+    val gymName: String? = null,
+    val enrolled: Boolean = false
 )
 
 data class AttendanceLogResponse(
+    val id: Long? = null,
+    val memberId: Long? = null,
+    val memberName: String? = null,
     val checkInTime: String,
     val checkOutTime: String?
 )

@@ -1,7 +1,20 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
+
+// Emulator: http://10.0.2.2:8080/  |  Physical phone (same Wi-Fi): http://YOUR_PC_IP:8080/
+val debugBaseUrl = localProperties.getProperty("debug.base.url", "http://10.0.2.2:8080/")
+val releaseBaseUrl = localProperties.getProperty("release.base.url", "http://10.0.2.2:8080/")
 
 android {
     namespace = "edu.cit.lim.gymtrack.mobile"
@@ -14,16 +27,14 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        // Emulator -> host machine's localhost:8080. Change this if you're
-        // testing on a physical device or a deployed backend.
-        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/\"")
+        buildConfigField("String", "BASE_URL", "\"$debugBaseUrl\"")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            buildConfigField("String", "BASE_URL", "\"https://your-deployed-backend.example.com/\"")
+            buildConfigField("String", "BASE_URL", "\"$releaseBaseUrl\"")
         }
     }
 
@@ -64,6 +75,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.browser:browser:1.8.0")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.5.3")
 

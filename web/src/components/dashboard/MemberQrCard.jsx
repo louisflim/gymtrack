@@ -1,6 +1,6 @@
 import DashboardSection from "./DashboardSection";
 
-function MemberQrCard({ qrImage, loading }) {
+function MemberQrCard({ qrImage, loading, note }) {
   return (
     <DashboardSection title="My Member QR" className="dashboard-qr-card">
       {qrImage ? (
@@ -11,7 +11,7 @@ function MemberQrCard({ qrImage, loading }) {
         </p>
       )}
       <p className="dashboard-qr-note">
-        Present this QR code for attendance check-in/check-out.
+        {note || "Present this QR code to staff for attendance check-in/check-out."}
       </p>
     </DashboardSection>
   );

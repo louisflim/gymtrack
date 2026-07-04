@@ -1,9 +1,25 @@
 import { useEffect, useRef } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
 
+function stopVideoStream(videoEl) {
+  const stream = videoEl?.srcObject;
+  if (stream && typeof stream.getTracks === "function") {
+    stream.getTracks().forEach((track) => track.stop());
+  }
+  if (videoEl) {
+    videoEl.srcObject = null;
+  }
+}
+
 function QrScanner({ open, onScanSuccess, onClose, statusMessage }) {
   const videoRef = useRef(null);
   const controlsRef = useRef(null);
+  const scannerRef = useRef(null);
+  const onScanSuccessRef = useRef(onScanSuccess);
+
+  useEffect(() => {
+    onScanSuccessRef.current = onScanSuccess;
+  }, [onScanSuccess]);
 
   useEffect(() => {
     if (!open) {
@@ -11,9 +27,11 @@ function QrScanner({ open, onScanSuccess, onClose, statusMessage }) {
     }
 
     const scanner = new BrowserMultiFormatReader();
+    scannerRef.current = scanner;
     let isActive = true;
     let ignoreFurtherScans = false;
-    const safeStop = () => {
+
+    const releaseCamera = () => {
       try {
         controlsRef.current?.stop();
       } catch (_stopErr) {
@@ -21,6 +39,12 @@ function QrScanner({ open, onScanSuccess, onClose, statusMessage }) {
       } finally {
         controlsRef.current = null;
       }
+      try {
+        scanner.reset();
+      } catch (_resetErr) {
+        // Ignore cleanup reset races.
+      }
+      stopVideoStream(videoRef.current);
     };
 
     const startScanner = async () => {
@@ -32,19 +56,20 @@ function QrScanner({ open, onScanSuccess, onClose, statusMessage }) {
 
           if (result && !ignoreFurtherScans) {
             ignoreFurtherScans = true;
-            onScanSuccess(result.getText());
-            safeStop();
+            onScanSuccessRef.current(result.getText());
+            releaseCamera();
           }
 
           if (error && error.name !== "NotFoundException") {
-            onScanSuccess(null, "Camera scan failed. Please try again.");
-            safeStop();
+            onScanSuccessRef.current(null, "Camera scan failed. Please try again.");
+            releaseCamera();
           }
         });
       } catch (_err) {
         if (isActive) {
-          onScanSuccess(null, "Unable to access camera. Check browser permission.");
+          onScanSuccessRef.current(null, "Unable to access camera. Check browser permission.");
         }
+        releaseCamera();
       }
     };
 
@@ -52,14 +77,10 @@ function QrScanner({ open, onScanSuccess, onClose, statusMessage }) {
 
     return () => {
       isActive = false;
-      safeStop();
-      try {
-        scanner.reset();
-      } catch (_resetErr) {
-        // Ignore cleanup reset races.
-      }
+      releaseCamera();
+      scannerRef.current = null;
     };
-  }, [open, onScanSuccess]);
+  }, [open]);
 
   if (!open) {
     return null;
@@ -74,7 +95,7 @@ function QrScanner({ open, onScanSuccess, onClose, statusMessage }) {
             Close
           </button>
         </div>
-        <video ref={videoRef} className="scanner-video" muted />
+        <video ref={videoRef} className="scanner-video" muted playsInline />
         <p className="scanner-help">{statusMessage || "Align the QR code inside the camera view."}</p>
       </div>
     </div>

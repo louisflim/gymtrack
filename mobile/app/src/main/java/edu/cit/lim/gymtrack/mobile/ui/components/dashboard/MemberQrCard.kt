@@ -20,7 +20,11 @@ import edu.cit.lim.gymtrack.mobile.ui.theme.GymTrackBorder
 import edu.cit.lim.gymtrack.mobile.ui.theme.GymTrackTextMuted
 
 @Composable
-fun MemberQrCard(qrImageBase64: String?, loading: Boolean) {
+fun MemberQrCard(
+    qrImageBase64: String?,
+    loading: Boolean,
+    note: String = "Present this QR code to staff for attendance check-in/check-out."
+) {
     DashboardSectionCard(title = "My Member QR") {
         if (loading) {
             CircularProgressIndicator(color = GymTrackAccent)
@@ -52,7 +56,7 @@ fun MemberQrCard(qrImageBase64: String?, loading: Boolean) {
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Present this QR code for attendance check-in/check-out.",
+            text = note,
             style = MaterialTheme.typography.bodyMedium,
             color = GymTrackTextMuted
         )

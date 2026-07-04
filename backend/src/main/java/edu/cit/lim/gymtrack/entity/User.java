@@ -30,6 +30,13 @@ public class User {
     @Column(nullable = false)
     private boolean active = true;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gym_id")
+    private Gym gym;
+
+    @Column(name = "first_check_in_completed", nullable = false)
+    private boolean firstCheckInCompleted = false;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -70,6 +77,12 @@ public class User {
 
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
+
+    public Gym getGym() { return gym; }
+    public void setGym(Gym gym) { this.gym = gym; }
+
+    public boolean isFirstCheckInCompleted() { return firstCheckInCompleted; }
+    public void setFirstCheckInCompleted(boolean firstCheckInCompleted) { this.firstCheckInCompleted = firstCheckInCompleted; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 }

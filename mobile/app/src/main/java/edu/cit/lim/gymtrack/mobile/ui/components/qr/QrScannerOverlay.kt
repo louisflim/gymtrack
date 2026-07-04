@@ -58,7 +58,7 @@ fun QrScannerOverlay(
                 PackageManager.PERMISSION_GRANTED
         )
     }
-    var barcodeView by remember { mutableStateOf<DecoratedBarcodeView?>(null) }
+    val barcodeViewRef = remember { mutableStateOf<DecoratedBarcodeView?>(null) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
@@ -75,9 +75,20 @@ fun QrScannerOverlay(
         }
     }
 
+    val releaseCamera = {
+        barcodeViewRef.value?.pause()
+        barcodeViewRef.value = null
+    }
+
     val closeScanner = {
-        barcodeView?.pause()
+        releaseCamera()
         onClose()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            releaseCamera()
+        }
     }
 
     Dialog(
@@ -97,7 +108,6 @@ fun QrScannerOverlay(
                     factory = { ctx ->
                         DecoratedBarcodeView(ctx).apply {
                             viewFinder.setLaserVisibility(false)
-                            barcodeView = this
                             decodeContinuous(object : BarcodeCallback {
                                 override fun barcodeResult(result: BarcodeResult?) {
                                     val text = result?.text ?: return
@@ -105,20 +115,18 @@ fun QrScannerOverlay(
                                     onScan(text)
                                 }
                             })
+                            barcodeViewRef.value = this
                             resume()
                         }
                     },
                     modifier = Modifier.fillMaxSize(),
-                    update = { view ->
-                        view.resume()
+                    onRelease = { view ->
+                        view.pause()
+                        if (barcodeViewRef.value === view) {
+                            barcodeViewRef.value = null
+                        }
                     }
                 )
-
-                DisposableEffect(Unit) {
-                    onDispose {
-                        barcodeView?.pause()
-                    }
-                }
             }
 
             Column(

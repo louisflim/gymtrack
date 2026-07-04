@@ -14,6 +14,7 @@ import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthFooterText
 import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthRoleDropdown
 import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthShell
 import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthSubmitButton
+import edu.cit.lim.gymtrack.mobile.ui.components.auth.AuthTextField
 import edu.cit.lim.gymtrack.mobile.ui.components.auth.BrandStat
 
 @Composable
@@ -28,6 +29,7 @@ fun RegisterScreen(
     var password by rememberSaveable { mutableStateOf("") }
     var confirmPassword by rememberSaveable { mutableStateOf("") }
     var role by rememberSaveable { mutableStateOf("member") }
+    var gymName by rememberSaveable { mutableStateOf("") }
     val uiState by viewModel.registerState.collectAsState()
 
     val form = AccountFieldValues(firstName, lastName, email, password, confirmPassword)
@@ -69,6 +71,18 @@ fun RegisterScreen(
             }
         )
 
+        if (role == "owner") {
+            AuthTextField(
+                label = "Gym Name",
+                value = gymName,
+                onValueChange = {
+                    gymName = it
+                    viewModel.clearRegisterError()
+                },
+                placeholder = "e.g. Chuchu Gym"
+            )
+        }
+
         AuthSubmitButton(
             text = if (uiState.isLoading) "Creating Account..." else "Create Account",
             onClick = {
@@ -79,6 +93,7 @@ fun RegisterScreen(
                     password = password,
                     confirmPassword = confirmPassword,
                     role = role,
+                    gymName = gymName,
                     onSuccess = onRegisterSuccess
                 )
             },
@@ -87,7 +102,8 @@ fun RegisterScreen(
                 lastName.isNotBlank() &&
                 email.isNotBlank() &&
                 password.isNotBlank() &&
-                confirmPassword.isNotBlank()
+                confirmPassword.isNotBlank() &&
+                (role != "owner" || gymName.isNotBlank())
         )
 
         AuthFooterText(

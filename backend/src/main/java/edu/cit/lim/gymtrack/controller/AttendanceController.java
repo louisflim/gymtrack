@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,18 +25,52 @@ public class AttendanceController {
         this.qrAttendanceService = qrAttendanceService;
     }
 
-    @PostMapping("/scan")
-    public ResponseEntity<?> scan(@RequestBody ScanRequest request) {
+    @PostMapping("/scan-gym")
+    public ResponseEntity<?> scanGym(@RequestBody ScanRequest request, Authentication authentication) {
         try {
-            AttendanceScanResponse response = qrAttendanceService.scanAttendance(request.getQrData());
+            return ResponseEntity.ok(qrAttendanceService.scanGymQrAsMember(
+                    request.getQrData(),
+                    authentication.getName()
+            ));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        } catch (SecurityException ex) {
+            return ResponseEntity.status(403).body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/scan")
+    public ResponseEntity<?> scan(@RequestBody ScanRequest request, Authentication authentication) {
+        try {
+            AttendanceScanResponse response = qrAttendanceService.scanAttendance(
+                    request.getQrData(),
+                    authentication.getName()
+            );
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
+        } catch (SecurityException ex) {
+            return ResponseEntity.status(403).body(ex.getMessage());
         }
     }
 
     @GetMapping("/me")
     public ResponseEntity<List<AttendanceLogResponse>> myLogs(Authentication authentication) {
         return ResponseEntity.ok(qrAttendanceService.getMyAttendanceLogs(authentication.getName()));
+    }
+
+    @GetMapping("/gym")
+    public ResponseEntity<?> gymLogs(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String date,
+            Authentication authentication) {
+        try {
+            return ResponseEntity.ok(qrAttendanceService.getGymAttendanceLogs(
+                    authentication.getName(), search, date));
+        } catch (SecurityException ex) {
+            return ResponseEntity.status(403).body(ex.getMessage());
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 }

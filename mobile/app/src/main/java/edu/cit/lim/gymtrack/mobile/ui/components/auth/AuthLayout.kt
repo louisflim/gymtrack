@@ -37,7 +37,6 @@ data class BrandStat(
 
 @Composable
 fun AuthShell(
-    brandEyebrow: String,
     brandTitle: String,
     brandHighlight: String,
     brandTagline: String,
@@ -45,6 +44,7 @@ fun AuthShell(
     formEyebrow: String,
     formHeading: String,
     formSubheading: String,
+    brandEyebrow: String = "",
     brandModifier: Modifier = Modifier,
     formModifier: Modifier = Modifier,
     formContent: @Composable ColumnScope.() -> Unit
@@ -102,29 +102,35 @@ private fun BrandPanel(
                     y += 28f
                 }
             }
-            .padding(horizontal = 32.dp, vertical = 40.dp)
+            .padding(horizontal = 28.dp, vertical = 36.dp)
     ) {
-        Text(
-            text = eyebrow.uppercase(),
-            style = MaterialTheme.typography.titleMedium,
-            color = GymTrackTextMuted
-        )
-        Spacer(modifier = Modifier.height(24.dp))
+        if (eyebrow.isNotBlank()) {
+            Text(
+                text = eyebrow.uppercase(),
+                style = MaterialTheme.typography.titleMedium,
+                color = GymTrackTextMuted
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+        }
 
         lines.forEach { line ->
             Text(
                 text = line.uppercase(),
                 style = MaterialTheme.typography.displayLarge,
-                color = GymTrackTextPrimary
+                color = GymTrackTextPrimary,
+                softWrap = false,
+                maxLines = 1
             )
         }
         Text(
             text = highlight.uppercase(),
             style = MaterialTheme.typography.displayLarge,
-            color = GymTrackAccent
+            color = GymTrackAccent,
+            softWrap = false,
+            maxLines = 1
         )
 
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = tagline,
             style = MaterialTheme.typography.bodyLarge,
@@ -132,8 +138,8 @@ private fun BrandPanel(
         )
 
         if (stats.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(40.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
+            Spacer(modifier = Modifier.height(32.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(28.dp)) {
                 stats.forEach { stat ->
                     Column {
                         Text(
@@ -216,23 +222,29 @@ fun DashboardBrandPanel(
             .background(GymTrackBrandPanel)
             .padding(horizontal = 32.dp, vertical = 40.dp)
     ) {
-        Text(
-            text = eyebrow.uppercase(),
-            style = MaterialTheme.typography.titleMedium,
-            color = GymTrackTextMuted
-        )
-        Spacer(modifier = Modifier.height(24.dp))
+        if (eyebrow.isNotBlank()) {
+            Text(
+                text = eyebrow.uppercase(),
+                style = MaterialTheme.typography.titleMedium,
+                color = GymTrackTextMuted
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+        }
         title.lines().forEach { line ->
             Text(
                 text = line.uppercase(),
                 style = MaterialTheme.typography.displayLarge,
-                color = GymTrackTextPrimary
+                color = GymTrackTextPrimary,
+                softWrap = false,
+                maxLines = 1
             )
         }
         Text(
             text = highlight.uppercase(),
             style = MaterialTheme.typography.displayLarge,
-            color = GymTrackAccent
+            color = GymTrackAccent,
+            softWrap = false,
+            maxLines = 1
         )
         Spacer(modifier = Modifier.height(28.dp))
         Text(

@@ -8,6 +8,7 @@ import edu.cit.lim.gymtrack.mobile.data.model.RegisterRequest
 import edu.cit.lim.gymtrack.mobile.data.model.StaffAccountResponse
 import edu.cit.lim.gymtrack.mobile.data.model.UserSession
 import edu.cit.lim.gymtrack.mobile.data.remote.ApiService
+import edu.cit.lim.gymtrack.mobile.data.remote.ApiErrorParser
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
@@ -31,7 +32,8 @@ class AuthRepository(
         lastName: String,
         email: String,
         password: String,
-        role: String
+        role: String,
+        gymName: String? = null
     ): UserSession {
         val response = apiService.register(
             RegisterRequest(
@@ -39,7 +41,8 @@ class AuthRepository(
                 lastName = lastName.trim(),
                 email = email.trim(),
                 password = password,
-                role = role
+                role = role,
+                gymName = gymName?.trim()?.takeIf { it.isNotBlank() }
             )
         )
         return handleAuthResponse(response)
@@ -65,8 +68,11 @@ class AuthRepository(
                 ?: throw AuthException(response.code(), "Empty response from server.")
         }
 
-        val message = response.errorBody()?.string()?.trim('"').orEmpty()
-            .ifBlank { defaultErrorMessage(response.code()) }
+        val message = ApiErrorParser.parse(
+            response.errorBody()?.string(),
+            response.code(),
+            defaultErrorMessage(response.code())
+        )
         throw AuthException(response.code(), message)
     }
 
@@ -85,8 +91,11 @@ class AuthRepository(
             return session
         }
 
-        val message = response.errorBody()?.string()?.trim('"').orEmpty()
-            .ifBlank { defaultErrorMessage(response.code()) }
+        val message = ApiErrorParser.parse(
+            response.errorBody()?.string(),
+            response.code(),
+            defaultErrorMessage(response.code())
+        )
         throw AuthException(response.code(), message)
     }
 
@@ -96,12 +105,14 @@ class AuthRepository(
         firstName = firstName,
         lastName = lastName,
         email = email,
-        role = role
+        role = role,
+        gymId = gymId,
+        gymName = gymName
     )
 
     private fun defaultErrorMessage(statusCode: Int): String = when (statusCode) {
         401 -> "Invalid email or password."
-        403 -> "This account has been deactivated."
+        403 -> "You do not have permission to perform this action."
         400 -> "Request failed. Check your details."
         else -> "Something went wrong. Try again."
     }

@@ -8,8 +8,9 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
+  const isPublicAuthRoute = /^\/auth\/(login|register)$/.test(config.url ?? "");
   const token = localStorage.getItem("token");
-  if (token) {
+  if (token && !isPublicAuthRoute) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;

@@ -10,9 +10,9 @@ val Typography = Typography(
     displayLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Normal,
-        fontSize = 56.sp,
-        lineHeight = 52.sp,
-        letterSpacing = 0.5.sp
+        fontSize = 40.sp,
+        lineHeight = 40.sp,
+        letterSpacing = 0.2.sp
     ),
     headlineLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,

@@ -1,15 +1,14 @@
 function BrandPanel({ eyebrow, titleLines, highlight, tagline, stats, className = "" }) {
   return (
     <div className={`auth-brand ${className}`.trim()}>
-      <div className="auth-brand-eyebrow">{eyebrow}</div>
+      {eyebrow ? <div className="auth-brand-eyebrow">{eyebrow}</div> : null}
       <h1 className="auth-brand-title">
         {titleLines.map((line) => (
-          <span key={line}>
+          <span key={line} className="auth-brand-title-line">
             {line}
-            <br />
           </span>
         ))}
-        <span>{highlight}</span>
+        <span className="auth-brand-title-highlight">{highlight}</span>
       </h1>
       <p className="auth-brand-tagline">{tagline}</p>
       <div className="auth-brand-footer">

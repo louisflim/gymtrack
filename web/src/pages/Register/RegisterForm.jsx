@@ -19,6 +19,17 @@ function RegisterForm({ error, loading, values, onChange, onSubmit, footer }) {
             <option value="owner">Gym Owner</option>
           </select>
         </div>
+        {values.role === "owner" && (
+          <div className="input-group">
+            <label>Gym Name</label>
+            <input
+              value={values.gymName}
+              onChange={(e) => onChange("gymName", e.target.value)}
+              placeholder="e.g. Chuchu Gym"
+              required
+            />
+          </div>
+        )}
         <button type="submit" className="auth-submit" disabled={loading}>
           {loading ? "Creating Account..." : "Create Account"}
         </button>

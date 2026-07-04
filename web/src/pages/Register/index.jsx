@@ -3,10 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../../api/auth";
 import BrandPanel from "../../components/auth/BrandPanel";
 import SplitAuthLayout from "../../components/layout/SplitAuthLayout";
-import { saveSession } from "../../utils/session";
+import { getApiError } from "../../utils/apiError";
 import RegisterForm from "./RegisterForm";
 
-const EMPTY_FORM = { firstName: "", lastName: "", email: "", password: "", confirmPassword: "", role: "member" };
+const EMPTY_FORM = { firstName: "", lastName: "", email: "", password: "", confirmPassword: "", role: "member", gymName: "" };
 
 function Register() {
   const navigate = useNavigate();
@@ -25,19 +25,27 @@ function Register() {
       return;
     }
 
+    if (form.role === "owner" && !form.gymName.trim()) {
+      setError("Gym name is required when registering as gym owner.");
+      return;
+    }
+
     setLoading(true);
     const backendRole = form.role === "owner" ? "ADMIN" : "MEMBER";
 
     try {
-      const data = await registerUser(form.firstName, form.lastName, form.email, form.password, backendRole);
+      const data = await registerUser(
+        form.firstName,
+        form.lastName,
+        form.email,
+        form.password,
+        backendRole,
+        form.role === "owner" ? form.gymName.trim() : undefined
+      );
       saveSession(data);
       navigate("/dashboard");
     } catch (err) {
-      if (err.response?.status === 400) {
-        setError(err.response.data || "Registration failed. Check your details.");
-      } else {
-        setError("Something went wrong. Try again.");
-      }
+      setError(getApiError(err, "Registration failed. Check your details."));
     } finally {
       setLoading(false);
     }

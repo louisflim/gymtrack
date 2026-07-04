@@ -27,6 +27,8 @@ function Login() {
         setError("Invalid email or password.");
       } else if (err.response?.status === 403) {
         setError(err.response.data || "This account has been deactivated.");
+      } else if (err.code === "ERR_NETWORK") {
+        setError("Cannot reach the server. Make sure the backend is running on port 8080.");
       } else {
         setError("Something went wrong. Try again.");
       }
@@ -39,7 +41,6 @@ function Login() {
     <SplitAuthLayout
       brand={
         <BrandPanel
-          eyebrow="Member Access"
           titleLines={["TRAIN", "TRACK"]}
           highlight="TRANSFORM"
           tagline="One system for memberships, attendance, and payments. Built for gyms that run on discipline, not paperwork."

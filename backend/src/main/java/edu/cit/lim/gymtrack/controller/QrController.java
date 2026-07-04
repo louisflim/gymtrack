@@ -29,4 +29,15 @@ public class QrController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
+
+    @GetMapping("/gym")
+    public ResponseEntity<?> gymQr(Authentication authentication) {
+        try {
+            return ResponseEntity.ok(qrAttendanceService.generateGymQrForStaff(authentication.getName()));
+        } catch (SecurityException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
+    }
 }

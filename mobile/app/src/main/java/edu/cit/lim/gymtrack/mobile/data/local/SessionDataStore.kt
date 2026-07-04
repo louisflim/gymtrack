@@ -22,7 +22,9 @@ class SessionDataStore(private val context: Context) {
             firstName = prefs[KEY_FIRST_NAME].orEmpty(),
             lastName = prefs[KEY_LAST_NAME].orEmpty(),
             email = prefs[KEY_EMAIL].orEmpty(),
-            role = prefs[KEY_ROLE].orEmpty()
+            role = prefs[KEY_ROLE].orEmpty(),
+            gymId = prefs[KEY_GYM_ID],
+            gymName = prefs[KEY_GYM_NAME]
         )
     }
 
@@ -34,6 +36,16 @@ class SessionDataStore(private val context: Context) {
             prefs[KEY_LAST_NAME] = session.lastName
             prefs[KEY_EMAIL] = session.email
             prefs[KEY_ROLE] = session.role
+            if (session.gymId != null) {
+                prefs[KEY_GYM_ID] = session.gymId
+            } else {
+                prefs.remove(KEY_GYM_ID)
+            }
+            if (!session.gymName.isNullOrBlank()) {
+                prefs[KEY_GYM_NAME] = session.gymName
+            } else {
+                prefs.remove(KEY_GYM_NAME)
+            }
         }
     }
 
@@ -50,5 +62,7 @@ class SessionDataStore(private val context: Context) {
         private val KEY_LAST_NAME = stringPreferencesKey("last_name")
         private val KEY_EMAIL = stringPreferencesKey("email")
         private val KEY_ROLE = stringPreferencesKey("role")
+        private val KEY_GYM_ID = longPreferencesKey("gym_id")
+        private val KEY_GYM_NAME = stringPreferencesKey("gym_name")
     }
 }

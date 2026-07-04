@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthRepository
+import edu.cit.lim.gymtrack.mobile.data.remote.ApiErrorParser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -39,8 +40,9 @@ class AuthViewModel(
                 onSuccess()
             } catch (e: AuthException) {
                 _loginState.value = AuthUiState(error = e.message)
-            } catch (_: Exception) {
-                _loginState.value = AuthUiState(error = "Something went wrong. Try again.")
+            } catch (e: Exception) {
+                val networkMessage = ApiErrorParser.networkMessage(e)
+                _loginState.value = AuthUiState(error = networkMessage ?: "Something went wrong. Try again.")
             }
         }
     }
@@ -52,10 +54,16 @@ class AuthViewModel(
         password: String,
         confirmPassword: String,
         role: String,
+        gymName: String = "",
         onSuccess: () -> Unit
     ) {
         if (password != confirmPassword) {
             _registerState.value = AuthUiState(error = "Passwords do not match.")
+            return
+        }
+
+        if (role == "owner" && gymName.isBlank()) {
+            _registerState.value = AuthUiState(error = "Gym name is required when registering as gym owner.")
             return
         }
 
@@ -64,13 +72,21 @@ class AuthViewModel(
         viewModelScope.launch {
             _registerState.value = AuthUiState(isLoading = true)
             try {
-                authRepository.register(firstName, lastName, email, password, backendRole)
+                authRepository.register(
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    backendRole,
+                    gymName.takeIf { role == "owner" }
+                )
                 _registerState.value = AuthUiState()
                 onSuccess()
             } catch (e: AuthException) {
                 _registerState.value = AuthUiState(error = e.message)
-            } catch (_: Exception) {
-                _registerState.value = AuthUiState(error = "Something went wrong. Try again.")
+            } catch (e: Exception) {
+                val networkMessage = ApiErrorParser.networkMessage(e)
+                _registerState.value = AuthUiState(error = networkMessage ?: "Something went wrong. Try again.")
             }
         }
     }

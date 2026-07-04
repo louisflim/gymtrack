@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import edu.cit.lim.gymtrack.mobile.ui.auth.AuthViewModel
+import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.AdminViewModel
 import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.DashboardScreen
 import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.DashboardViewModel
 import edu.cit.lim.gymtrack.mobile.ui.screens.login.LoginScreen
@@ -17,6 +18,7 @@ fun AppNavGraph(
     navController: NavHostController,
     authViewModel: AuthViewModel,
     dashboardViewModel: DashboardViewModel,
+    adminViewModel: AdminViewModel,
     startDestination: String
 ) {
     val session by authViewModel.session.collectAsState()
@@ -57,6 +59,7 @@ fun AppNavGraph(
             DashboardScreen(
                 session = session,
                 dashboardViewModel = dashboardViewModel,
+                adminViewModel = adminViewModel,
                 onSignOut = {
                     authViewModel.logout {
                         navController.navigate(Routes.LOGIN) {

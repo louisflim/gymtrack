@@ -1,0 +1,8 @@
+sdk.dir=C\:\\Users\\YOUR_NAME\\AppData\\Local\\Android\\Sdk
+
+# Emulator (Android Studio AVD):
+# debug.base.url=http://10.0.2.2:8080/
+#
+# Physical phone on same Wi-Fi (use your PC IPv4 from ipconfig):
+debug.base.url=http://192.168.1.19:8080/
+release.base.url=http://192.168.1.19:8080/

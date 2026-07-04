@@ -25,7 +25,6 @@ fun LoginScreen(
     val uiState by viewModel.loginState.collectAsState()
 
     AuthShell(
-        brandEyebrow = "Member Access",
         brandTitle = "TRAIN\nTRACK",
         brandHighlight = "TRANSFORM",
         brandTagline = "One system for memberships, attendance, and payments. Built for gyms that run on discipline, not paperwork.",

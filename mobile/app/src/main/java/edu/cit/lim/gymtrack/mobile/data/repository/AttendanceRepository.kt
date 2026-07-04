@@ -2,6 +2,7 @@ package edu.cit.lim.gymtrack.mobile.data.repository
 
 import edu.cit.lim.gymtrack.mobile.data.model.AttendanceLogResponse
 import edu.cit.lim.gymtrack.mobile.data.model.AttendanceScanResponse
+import edu.cit.lim.gymtrack.mobile.data.model.MemberGymScanResponse
 import edu.cit.lim.gymtrack.mobile.data.model.QrCodeResponse
 import edu.cit.lim.gymtrack.mobile.data.model.ScanRequest
 import edu.cit.lim.gymtrack.mobile.data.remote.ApiService
@@ -15,6 +16,22 @@ class AttendanceRepository(
             throw AuthException(response.code(), extractMessage(response.code(), response.errorBody()?.string()))
         }
         return response.body() ?: throw AuthException(response.code(), "No QR data returned.")
+    }
+
+    suspend fun getGymQrCode(): QrCodeResponse {
+        val response = apiService.gymQrCode()
+        if (!response.isSuccessful) {
+            throw AuthException(response.code(), extractMessage(response.code(), response.errorBody()?.string()))
+        }
+        return response.body() ?: throw AuthException(response.code(), "No gym QR data returned.")
+    }
+
+    suspend fun scanGymQr(qrData: String): MemberGymScanResponse {
+        val response = apiService.scanGymQr(ScanRequest(qrData))
+        if (!response.isSuccessful) {
+            throw AuthException(response.code(), extractMessage(response.code(), response.errorBody()?.string()))
+        }
+        return response.body() ?: throw AuthException(response.code(), "No scan result returned.")
     }
 
     suspend fun scanQr(qrData: String): AttendanceScanResponse {

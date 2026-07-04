@@ -1,0 +1,24 @@
+# Copy to application-local.properties (gitignored) or set these as environment variables.
+# Use TEST keys for local development; use LIVE keys only in production.
+
+# Database (optional — defaults are in application.properties)
+# spring.datasource.url=jdbc:postgresql://YOUR_HOST:5432/postgres
+# spring.datasource.username=postgres.YOUR_PROJECT
+# spring.datasource.password=YOUR_PASSWORD
+#
+# If spring-boot:run fails with "Unable to determine Dialect", the app cannot reach
+# PostgreSQL. Check internet, Supabase project status, and that empty env vars like
+# SPRING_DATASOURCE_URL are not overriding your credentials.
+
+# Test mode (recommended for localhost — no webhook required)
+paymongo.secret-key=sk_test_YOUR_TEST_SECRET_KEY
+paymongo.public-key=pk_test_YOUR_TEST_PUBLIC_KEY
+paymongo.mock-enabled=true
+
+# Production (set via env vars on your host — do not commit live keys)
+# PAYMONGO_SECRET_KEY=sk_live_YOUR_LIVE_SECRET_KEY
+# PAYMONGO_PUBLIC_KEY=pk_live_YOUR_LIVE_PUBLIC_KEY
+# PAYMONGO_MOCK_ENABLED=false
+
+# Webhook signing secret from PayMongo dashboard → Webhooks
+# paymongo.webhook-secret=whsec_YOUR_WEBHOOK_SECRET
