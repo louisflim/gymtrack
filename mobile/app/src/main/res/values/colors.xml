@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="gymtrack_background">#FF0B0B0D</color>
+    <color name="gymtrack_brand_panel">#FF050505</color>
+    <color name="gymtrack_accent">#FFC8FF3D</color>
+    <color name="gymtrack_accent_hover">#FFD9FF70</color>
+    <color name="gymtrack_text_primary">#FFF2F2ED</color>
+    <color name="gymtrack_text_muted">#FF6B6B70</color>
+    <color name="gymtrack_text_secondary">#FF8A8A8E</color>
+    <color name="gymtrack_border">#FF2A2A2E</color>
+    <color name="gymtrack_placeholder">#FF4A4A4E</color>
+    <color name="gymtrack_error">#FFFF8A8A</color>
+    <color name="gymtrack_error_bg">#14FF4D4D</color>
+    <color name="gymtrack_error_border">#59FF4D4D</color>
+    <color name="gymtrack_disabled_button">#FF3A3F2E</color>
+    <color name="gymtrack_summary_bg">#0DFFFFFF</color>
+    <color name="gymtrack_white">#FFFFFFFF</color>
+    <color name="status_active_bg">#26C8FF3D</color>
+    <color name="status_expiring_bg">#26FFC43D</color>
+    <color name="status_expired_bg">#26FF4D4D</color>
+    <color name="status_none_bg">#336B6B70</color>
+    <color name="status_expiring_text">#FFFFC43D</color>
 </resources>

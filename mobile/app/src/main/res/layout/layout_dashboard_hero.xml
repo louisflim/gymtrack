@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gymtrack_brand_panel"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GYMTRACK DASHBOARD"
+        android:textAppearance="@style/TextAppearance.GymTrack.Eyebrow" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TRAIN"
+        android:textAppearance="@style/TextAppearance.GymTrack.HeroLine" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TRACK"
+        android:textAppearance="@style/TextAppearance.GymTrack.HeroLine" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="THRIVE"
+        android:textAppearance="@style/TextAppearance.GymTrack.HeroLine"
+        android:textColor="@color/gymtrack_accent" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Monitor your gym access, membership details, and activity from one place."
+        android:textColor="@color/gymtrack_text_secondary"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:id="@+id/dashboardHeroStats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal" />
+
+</LinearLayout>

@@ -1,75 +1,36 @@
 package edu.cit.lim.gymtrack.mobile
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
-import edu.cit.lim.gymtrack.mobile.ui.auth.AuthViewModel
-import edu.cit.lim.gymtrack.mobile.ui.navigation.AppNavGraph
-import edu.cit.lim.gymtrack.mobile.ui.navigation.Routes
-import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.AdminViewModel
-import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.DashboardViewModel
-import edu.cit.lim.gymtrack.mobile.ui.theme.GymTrackBackground
-import edu.cit.lim.gymtrack.mobile.ui.theme.GymTrackTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navOptions
+import edu.cit.lim.gymtrack.mobile.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val app = application as GymTrackApplication
-
-        setContent {
-            GymTrackTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = GymTrackBackground
-                ) {
-                    val navController = rememberNavController()
-                    val authViewModel: AuthViewModel = viewModel(
-                        factory = AuthViewModel.Factory(app.authRepository)
-                    )
-                    val dashboardViewModel: DashboardViewModel = viewModel(
-                        factory = DashboardViewModel.Factory(
-                            app.attendanceRepository,
-                            app.authRepository,
-                            app.gymRepository
-                        )
-                    )
-                    val adminViewModel: AdminViewModel = viewModel(
-                        factory = AdminViewModel.Factory(app.gymRepository)
-                    )
-
-                    var startDestination by remember { mutableStateOf<String?>(null) }
-
-                    LaunchedEffect(Unit) {
-                        val session = app.authRepository.currentSession()
-                        startDestination = if (session.isLoggedIn) {
-                            Routes.DASHBOARD
-                        } else {
-                            Routes.LOGIN
+        if (savedInstanceState == null) {
+            val app = application as GymTrackApplication
+            lifecycleScope.launch {
+                val session = app.authRepository.currentSession()
+                if (session.isLoggedIn) {
+                    val navHost = supportFragmentManager
+                        .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                    navHost.navController.navigate(
+                        R.id.dashboardFragment,
+                        null,
+                        navOptions {
+                            popUpTo(R.id.loginFragment) { inclusive = true }
                         }
-                    }
-
-                    startDestination?.let { destination ->
-                        AppNavGraph(
-                            navController = navController,
-                            authViewModel = authViewModel,
-                            dashboardViewModel = dashboardViewModel,
-                            adminViewModel = adminViewModel,
-                            startDestination = destination
-                        )
-                    }
+                    )
                 }
             }
         }

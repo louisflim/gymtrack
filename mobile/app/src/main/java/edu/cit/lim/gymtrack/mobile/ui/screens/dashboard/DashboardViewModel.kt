@@ -9,7 +9,7 @@ import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
 import edu.cit.lim.gymtrack.mobile.data.remote.ApiErrorParser
-import edu.cit.lim.gymtrack.mobile.ui.components.auth.AccountFieldValues
+import edu.cit.lim.gymtrack.mobile.ui.model.AccountFieldValues
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

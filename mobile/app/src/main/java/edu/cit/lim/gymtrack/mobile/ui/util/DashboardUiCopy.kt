@@ -1,6 +1,6 @@
 package edu.cit.lim.gymtrack.mobile.ui.util
 
-import edu.cit.lim.gymtrack.mobile.ui.components.dashboard.DashboardNavItem
+import edu.cit.lim.gymtrack.mobile.ui.model.DashboardNavItem
 
 /** Shared dashboard copy/config for mobile. Keep in sync with web/src/constants/dashboardUi.js */
 

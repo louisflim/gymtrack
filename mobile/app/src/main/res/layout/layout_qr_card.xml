@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_section_card"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MY MEMBER QR"
+        android:textAppearance="@style/TextAppearance.GymTrack.SectionLabel" />
+
+    <ProgressBar
+        android:id="@+id/qrLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:indeterminateTint="@color/gymtrack_accent"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/qrImage"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/gymtrack_white"
+        android:contentDescription="QR Code"
+        android:padding="8dp"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/qrNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/gymtrack_text_muted"
+        android:textSize="14sp" />
+
+</LinearLayout>

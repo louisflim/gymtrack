@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_section_card"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MY MEMBERSHIP"
+        android:textAppearance="@style/TextAppearance.GymTrack.SectionLabel" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Plan" android:textAppearance="@style/TextAppearance.GymTrack.SectionLabel" />
+    <TextView android:id="@+id/membershipPlan" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/gymtrack_text_primary" android:textSize="16sp" android:textStyle="bold" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Status" android:textAppearance="@style/TextAppearance.GymTrack.SectionLabel" />
+    <TextView android:id="@+id/membershipStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Valid Until" android:textAppearance="@style/TextAppearance.GymTrack.SectionLabel" />
+    <TextView android:id="@+id/membershipEndDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/gymtrack_text_primary" android:textSize="16sp" android:textStyle="bold" />
+
+</LinearLayout>

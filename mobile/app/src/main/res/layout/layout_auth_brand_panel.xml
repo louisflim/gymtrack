@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gymtrack_brand_panel"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <TextView
+        android:id="@+id/brandEyebrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.GymTrack.Eyebrow"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/brandLine1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.GymTrack.HeroLine" />
+
+    <TextView
+        android:id="@+id/brandLine2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.GymTrack.HeroLine" />
+
+    <TextView
+        android:id="@+id/brandHighlight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.GymTrack.HeroLine"
+        android:textColor="@color/gymtrack_accent" />
+
+    <TextView
+        android:id="@+id/brandTagline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:lineSpacingExtra="4dp"
+        android:textColor="@color/gymtrack_text_secondary"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:id="@+id/brandStatsRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal" />
+
+</LinearLayout>
