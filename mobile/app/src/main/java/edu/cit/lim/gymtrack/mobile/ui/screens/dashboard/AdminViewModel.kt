@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import edu.cit.lim.gymtrack.mobile.data.model.*
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
+import edu.cit.lim.gymtrack.mobile.feature.members.MemberRepository
 import edu.cit.lim.gymtrack.mobile.feature.plans.PlanRepository
 import edu.cit.lim.gymtrack.mobile.ui.model.KpiItem
 import edu.cit.lim.gymtrack.mobile.ui.util.formatCurrency
@@ -44,7 +45,8 @@ data class PlanFormState(
 
 class AdminViewModel(
     private val gymRepository: GymRepository,
-    private val planRepository: PlanRepository
+    private val planRepository: PlanRepository,
+    private val memberRepository: MemberRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AdminUiState())
@@ -91,7 +93,7 @@ class AdminViewModel(
             _uiState.value = _uiState.value.copy(loading = true)
             try {
                 val plans = planRepository.allPlans()
-                val members = gymRepository.members()
+                val members = memberRepository.members()
                 val payments = gymRepository.allPayments()
                 val staff = gymRepository.staff()
                 val stats = gymRepository.dashboardStats()
@@ -173,7 +175,7 @@ class AdminViewModel(
     fun assignPlan(memberId: Long, planId: Long) {
         viewModelScope.launch {
             try {
-                gymRepository.assignPlan(memberId, planId)
+                memberRepository.assignPlan(memberId, planId)
                 _uiState.value = _uiState.value.copy(statusMessage = "Plan assigned.")
                 loadAll()
             } catch (e: AuthException) {
@@ -185,7 +187,7 @@ class AdminViewModel(
     fun updateMember(id: Long, request: MemberUpdateRequest) {
         viewModelScope.launch {
             try {
-                gymRepository.updateMember(id, request)
+                memberRepository.updateMember(id, request)
                 _uiState.value = _uiState.value.copy(statusMessage = "Member updated.")
                 loadAll()
             } catch (e: AuthException) {
@@ -208,12 +210,13 @@ class AdminViewModel(
 
     class Factory(
         private val gymRepository: GymRepository,
-        private val planRepository: PlanRepository
+        private val planRepository: PlanRepository,
+        private val memberRepository: MemberRepository
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AdminViewModel::class.java)) {
-                return AdminViewModel(gymRepository, planRepository) as T
+                return AdminViewModel(gymRepository, planRepository, memberRepository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

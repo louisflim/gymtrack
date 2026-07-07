@@ -1,7 +1,8 @@
 import { useState } from "react";
-import FilterBar from "../common/FilterBar";
-import StatusBadge from "../common/StatusBadge";
-import DashboardSection from "../dashboard/DashboardSection";
+import FilterBar from "../../components/common/FilterBar";
+import StatusBadge from "../../components/common/StatusBadge";
+import DashboardSection from "../../components/dashboard/DashboardSection";
+
 function MemberTable({ members, plans, onUpdate, onAssignPlan }) {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("ALL");

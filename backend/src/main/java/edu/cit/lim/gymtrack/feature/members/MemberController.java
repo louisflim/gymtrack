@@ -1,8 +1,7 @@
-package edu.cit.lim.gymtrack.controller;
+package edu.cit.lim.gymtrack.feature.members;
 
-import edu.cit.lim.gymtrack.dto.AssignPlanRequest;
-import edu.cit.lim.gymtrack.dto.MemberUpdateRequest;
-import edu.cit.lim.gymtrack.service.MemberService;
+import edu.cit.lim.gymtrack.feature.members.dto.AssignPlanRequest;
+import edu.cit.lim.gymtrack.feature.members.dto.MemberUpdateRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

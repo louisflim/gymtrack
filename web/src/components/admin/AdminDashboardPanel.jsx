@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { fetchMembers, assignPlanToMember, updateMember } from "../../api/members";
+import { fetchMembers, assignPlanToMember, updateMember, MemberTable } from "../../features/members";
 import { fetchAllPayments } from "../../api/payments";
 import { createPlan, fetchAllPlans, updatePlan, PlanForm, PlanList } from "../../features/plans";
 import { fetchDashboardStats } from "../../api/dashboard";
 import { fetchStaff, updateStaff } from "../../api/staff";
 import { fetchGymAttendanceLogs } from "../../api/qr";
 import { formatCurrency } from "../../utils/formatters";
-import MemberTable from "./MemberTable";
 import PaymentTable from "./PaymentTable";
 import StaffTable from "./StaffTable";
 import AttendanceLogTable from "./AttendanceLogTable";

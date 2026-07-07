@@ -1,6 +1,7 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.members.dto;
 
 public class MemberUpdateRequest {
+
     private String firstName;
     private String lastName;
     private String email;

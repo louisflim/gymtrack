@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "../../api/axiosInstance";
 
 export const fetchMembers = async (search = "", status = "ALL") => {
   const response = await axiosInstance.get("/members", { params: { search, status } });

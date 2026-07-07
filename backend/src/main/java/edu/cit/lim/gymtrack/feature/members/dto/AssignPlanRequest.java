@@ -1,6 +1,7 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.members.dto;
 
 public class AssignPlanRequest {
+
     private Long memberId;
     private Long planId;
 

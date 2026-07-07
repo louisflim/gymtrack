@@ -274,5 +274,63 @@ _[Insert screenshot of plan management]_
 
 ---
 
+## Slice 5 — Member Management (ready to commit)
+
+### Purpose
+Allow Gym Owners to list, search, edit members and assign subscription plans (FR-006).
+
+### Files moved / created
+
+**Backend**
+| File | Responsibility |
+|------|----------------|
+| `feature/members/MemberController.java` | `GET/PUT /api/members`, `POST /api/members/assign-plan` |
+| `feature/members/MemberService.java` | Member list/update and plan assignment |
+| `feature/members/dto/MemberResponse.java` | Member summary with membership info |
+| `feature/members/dto/MemberUpdateRequest.java` | Profile update payload |
+| `feature/members/dto/AssignPlanRequest.java` | Plan assignment payload |
+
+**Web**
+| File | Responsibility |
+|------|----------------|
+| `features/members/MemberTable.jsx` | Member list, edit modal, assign-plan modal |
+| `features/members/api.js` | Member API calls |
+
+**Mobile**
+| File | Responsibility |
+|------|----------------|
+| `feature/members/MemberRepository.kt` | Member API calls |
+
+### API
+- `GET /api/members` — list/search/filter members (admin only)
+- `PUT /api/members/{id}` — update member profile (admin only)
+- `POST /api/members/assign-plan` — assign plan to member (admin only)
+
+### Database
+- `users` — member profile updates
+- `memberships` — updated via assign-plan (uses MembershipService)
+
+### Flow
+1. Admin opens Members tab → members at their gym load.
+2. Edit member → PUT updates user row.
+3. Assign plan → activates membership for member.
+
+### Removed from horizontal packages
+- Deleted `controller/MemberController`, `service/MemberService`
+- Deleted `dto/MemberResponse`, `MemberUpdateRequest`, `AssignPlanRequest`
+- Deleted `web/src/api/members.js`, `web/src/components/admin/MemberTable.jsx`
+- Member methods removed from mobile `GymRepository`
+
+### Testing
+- [ ] Admin views member list on web
+- [ ] Edit member name/email → saved
+- [ ] Assign plan to enrolled member → status updates
+- [ ] Same flows on Android admin dashboard
+
+### Screenshot
+_[Insert screenshot of member management]_
+
+---
+
 ## Next slice
-When ready, say **"continue with members slice"** — member management will move to `feature/members/`.
+When ready, say **"continue with membership slice"** — membership status will move to `feature/membership/`.
