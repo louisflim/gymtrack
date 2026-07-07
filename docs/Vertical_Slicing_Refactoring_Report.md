@@ -332,5 +332,61 @@ _[Insert screenshot of member management]_
 
 ---
 
+## Slice 6 — Membership Status (ready to commit)
+
+### Purpose
+Track member subscription status, onboarding steps, and gym enrollment (FR-007).
+
+### Files moved / created
+
+**Backend**
+| File | Responsibility |
+|------|----------------|
+| `feature/membership/MembershipController.java` | `GET /api/membership/me` |
+| `feature/membership/MembershipService.java` | Status computation, activation, attendance eligibility |
+| `feature/membership/dto/MembershipResponse.java` | Membership + onboarding payload |
+
+**Web**
+| File | Responsibility |
+|------|----------------|
+| `features/membership/MembershipCard.jsx` | Member status summary |
+| `features/membership/MemberOnboardingCard.jsx` | Gym enrollment / next-step guidance |
+| `features/membership/api.js` | `fetchMyMembership()` |
+
+**Mobile**
+| File | Responsibility |
+|------|----------------|
+| `feature/membership/MembershipRepository.kt` | Membership API call |
+
+### API
+- `GET /api/membership/me` — current member's plan, status, gym, next onboarding step
+
+### Database
+- `memberships` — read/update for status and dates
+- `users` — gym link and first-check-in flag
+
+### Flow
+1. Member opens dashboard → `GET /api/membership/me`.
+2. `MembershipService` refreshes status (ACTIVE, EXPIRING_SOON, EXPIRED, NONE).
+3. UI shows onboarding card or membership card based on `nextStep`.
+4. Activation also called from payments and admin assign-plan (shared service).
+
+### Removed from horizontal packages
+- Deleted `controller/MembershipController`, `service/MembershipService`, `dto/MembershipResponse`
+- Deleted `web/src/api/membership.js`
+- Deleted `web/src/components/member/MembershipCard.jsx`, `MemberOnboardingCard.jsx`
+- `myMembership()` removed from mobile `GymRepository`
+
+### Testing
+- [ ] New member sees "Scan Gym QR" onboarding step
+- [ ] After gym scan → next step updates
+- [ ] After plan purchase → membership card shows plan and dates
+- [ ] Same flows on Android
+
+### Screenshot
+_[Insert screenshot of membership status]_
+
+---
+
 ## Next slice
-When ready, say **"continue with membership slice"** — membership status will move to `feature/membership/`.
+When ready, say **"continue with payments slice"** — PayMongo checkout will move to `feature/payments/`.

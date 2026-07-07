@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchMyMembership } from "../../api/membership";
+import { fetchMyMembership, MembershipCard } from "../../features/membership";
 import { createCheckout, fetchMyPayments } from "../../api/payments";
 import { fetchActivePlans, PlanPicker } from "../../features/plans";
-import MembershipCard from "./MembershipCard";
 import PaymentHistory from "./PaymentHistory";
 import AttendanceHistory from "./AttendanceHistory";
 

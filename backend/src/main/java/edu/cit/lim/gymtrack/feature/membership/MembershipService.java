@@ -1,10 +1,11 @@
-package edu.cit.lim.gymtrack.service;
+package edu.cit.lim.gymtrack.feature.membership;
 
-import edu.cit.lim.gymtrack.dto.MembershipResponse;
 import edu.cit.lim.gymtrack.entity.*;
+import edu.cit.lim.gymtrack.feature.membership.dto.MembershipResponse;
 import edu.cit.lim.gymtrack.repository.MembershipRepository;
 import edu.cit.lim.gymtrack.repository.SubscriptionPlanRepository;
 import edu.cit.lim.gymtrack.repository.UserRepository;
+import edu.cit.lim.gymtrack.service.QrAttendanceService;
 import edu.cit.lim.gymtrack.util.MembershipStatusUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,11 +61,9 @@ public class MembershipService {
             }
         }
 
-        // Always start from today for the plan's duration (do not stack onto a previous end date).
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusDays(plan.getDurationDays());
 
-        // Update the latest membership in place so older stacked rows cannot keep a later end date.
         Membership membership = membershipRepository.findTopByUserIdOrderByEndDateDesc(userId)
                 .orElseGet(Membership::new);
         membership.setUser(user);

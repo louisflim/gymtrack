@@ -9,6 +9,7 @@ import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.staff.StaffCreationRepository
+import edu.cit.lim.gymtrack.mobile.feature.membership.MembershipRepository
 import edu.cit.lim.gymtrack.mobile.feature.plans.PlanRepository
 import edu.cit.lim.gymtrack.mobile.data.remote.ApiErrorParser
 import edu.cit.lim.gymtrack.mobile.ui.model.AccountFieldValues
@@ -42,7 +43,8 @@ class DashboardViewModel(
     private val authRepository: AuthRepository,
     private val gymRepository: GymRepository,
     private val staffCreationRepository: StaffCreationRepository,
-    private val planRepository: PlanRepository
+    private val planRepository: PlanRepository,
+    private val membershipRepository: MembershipRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState(loading = true))
@@ -52,7 +54,7 @@ class DashboardViewModel(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(loading = true)
             try {
-                val membership = gymRepository.myMembership()
+                val membership = membershipRepository.myMembership()
                 val plans = if (membership.gymId != null) planRepository.activePlans() else emptyList()
                 val payments = gymRepository.myPayments()
                 val attendance = runCatching { attendanceRepository.getMyAttendance() }.getOrDefault(emptyList())
@@ -205,7 +207,8 @@ class DashboardViewModel(
         private val authRepository: AuthRepository,
         private val gymRepository: GymRepository,
         private val staffCreationRepository: StaffCreationRepository,
-        private val planRepository: PlanRepository
+        private val planRepository: PlanRepository,
+        private val membershipRepository: MembershipRepository
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -215,7 +218,8 @@ class DashboardViewModel(
                     authRepository,
                     gymRepository,
                     staffCreationRepository,
-                    planRepository
+                    planRepository,
+                    membershipRepository
                 ) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")

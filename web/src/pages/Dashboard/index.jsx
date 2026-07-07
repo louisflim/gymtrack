@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createStaffUser } from "../../features/auth/staff";
-import { fetchMyMembership } from "../../api/membership";
+import { fetchMyMembership, MemberOnboardingCard } from "../../features/membership";
 import { fetchGymQrCode, fetchMyQrCode, scanAttendance, scanGymQr } from "../../api/qr";
 import AdminDashboardPanel from "../../components/admin/AdminDashboardPanel";
 import AttendanceScannerCard from "../../components/dashboard/AttendanceScannerCard";
@@ -11,7 +11,6 @@ import DashboardSummaryGrid from "../../components/dashboard/DashboardSummaryGri
 import GymQrCard from "../../components/dashboard/GymQrCard";
 import MemberQrCard from "../../components/dashboard/MemberQrCard";
 import MemberDashboardPanel from "../../components/member/MemberDashboardPanel";
-import MemberOnboardingCard from "../../components/member/MemberOnboardingCard";
 import QrScanner from "../../components/qr/QrScanner";
 import { MEMBER_QR_NOTES, STAFF_HOME_HINT } from "../../constants/dashboardUi";
 import { clearSession, readSession } from "../../utils/session";

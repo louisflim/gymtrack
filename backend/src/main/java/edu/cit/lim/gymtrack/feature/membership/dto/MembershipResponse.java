@@ -1,6 +1,7 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.membership.dto;
 
 public class MembershipResponse {
+
     private Long id;
     private Long planId;
     private String planName;

@@ -56,7 +56,8 @@ class DashboardViewModelFactory(
                 app.authRepository,
                 app.gymRepository,
                 app.staffCreationRepository,
-                app.planRepository
+                app.planRepository,
+                app.membershipRepository
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

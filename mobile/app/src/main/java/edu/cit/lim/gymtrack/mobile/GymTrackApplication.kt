@@ -11,6 +11,7 @@ import edu.cit.lim.gymtrack.mobile.feature.auth.login.LoginRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.registration.RegistrationRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.staff.StaffCreationRepository
 import edu.cit.lim.gymtrack.mobile.feature.members.MemberRepository
+import edu.cit.lim.gymtrack.mobile.feature.membership.MembershipRepository
 import edu.cit.lim.gymtrack.mobile.feature.plans.PlanRepository
 import kotlinx.coroutines.runBlocking
 
@@ -32,6 +33,8 @@ class GymTrackApplication : Application() {
         private set
     lateinit var memberRepository: MemberRepository
         private set
+    lateinit var membershipRepository: MembershipRepository
+        private set
 
     override fun onCreate() {
         super.onCreate()
@@ -43,6 +46,7 @@ class GymTrackApplication : Application() {
         staffCreationRepository = StaffCreationRepository(api)
         planRepository = PlanRepository(api)
         memberRepository = MemberRepository(api)
+        membershipRepository = MembershipRepository(api)
         attendanceRepository = AttendanceRepository(api)
         gymRepository = GymRepository(api)
 

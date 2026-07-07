@@ -5,9 +5,6 @@ import edu.cit.lim.gymtrack.mobile.data.remote.ApiService
 
 class GymRepository(private val apiService: ApiService) {
 
-    suspend fun myMembership(): MembershipResponse =
-        unwrap(apiService.myMembership())
-
     suspend fun checkout(planId: Long): CheckoutResponse =
         unwrap(apiService.checkout(CheckoutRequest(planId)))
 

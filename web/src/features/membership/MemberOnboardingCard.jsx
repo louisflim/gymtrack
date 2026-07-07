@@ -1,6 +1,6 @@
 import { ONBOARDING_STEPS } from "../../constants/dashboardUi";
-import DashboardSection from "../dashboard/DashboardSection";
-import DashboardStatus from "../dashboard/DashboardStatus";
+import DashboardSection from "../../components/dashboard/DashboardSection";
+import DashboardStatus from "../../components/dashboard/DashboardStatus";
 
 function MemberOnboardingCard({ membership, onOpenScanner, statusMessage }) {
   const step = membership?.nextStep || "ENROLL_AT_GYM";

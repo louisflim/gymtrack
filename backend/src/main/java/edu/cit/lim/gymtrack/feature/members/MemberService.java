@@ -1,6 +1,6 @@
 package edu.cit.lim.gymtrack.feature.members;
 
-import edu.cit.lim.gymtrack.dto.MembershipResponse;
+import edu.cit.lim.gymtrack.feature.membership.dto.MembershipResponse;
 import edu.cit.lim.gymtrack.entity.Gym;
 import edu.cit.lim.gymtrack.entity.Membership;
 import edu.cit.lim.gymtrack.entity.MembershipStatus;
@@ -12,7 +12,7 @@ import edu.cit.lim.gymtrack.feature.members.dto.MemberResponse;
 import edu.cit.lim.gymtrack.feature.members.dto.MemberUpdateRequest;
 import edu.cit.lim.gymtrack.repository.SubscriptionPlanRepository;
 import edu.cit.lim.gymtrack.repository.UserRepository;
-import edu.cit.lim.gymtrack.service.MembershipService;
+import edu.cit.lim.gymtrack.feature.membership.MembershipService;
 import edu.cit.lim.gymtrack.util.GymGuard;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

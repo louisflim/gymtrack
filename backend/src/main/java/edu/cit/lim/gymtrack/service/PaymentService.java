@@ -7,6 +7,7 @@ import edu.cit.lim.gymtrack.entity.PaymentStatus;
 import edu.cit.lim.gymtrack.entity.SubscriptionPlan;
 import edu.cit.lim.gymtrack.entity.User;
 import edu.cit.lim.gymtrack.entity.Gym;
+import edu.cit.lim.gymtrack.feature.membership.MembershipService;
 import edu.cit.lim.gymtrack.feature.plans.PlanService;
 import edu.cit.lim.gymtrack.repository.PaymentRepository;
 import edu.cit.lim.gymtrack.repository.UserRepository;

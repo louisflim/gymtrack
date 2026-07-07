@@ -1,5 +1,5 @@
-import DashboardSection from "../dashboard/DashboardSection";
-import StatusBadge from "../common/StatusBadge";
+import DashboardSection from "../../components/dashboard/DashboardSection";
+import StatusBadge from "../../components/common/StatusBadge";
 
 function MembershipCard({ membership }) {
   return (

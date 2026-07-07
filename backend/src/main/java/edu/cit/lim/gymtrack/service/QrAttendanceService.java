@@ -15,6 +15,7 @@ import edu.cit.lim.gymtrack.entity.Membership;
 import edu.cit.lim.gymtrack.entity.MembershipStatus;
 import edu.cit.lim.gymtrack.entity.Role;
 import edu.cit.lim.gymtrack.entity.User;
+import edu.cit.lim.gymtrack.feature.membership.MembershipService;
 import edu.cit.lim.gymtrack.repository.AttendanceLogRepository;
 import edu.cit.lim.gymtrack.repository.GymRepository;
 import edu.cit.lim.gymtrack.repository.UserRepository;

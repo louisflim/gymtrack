@@ -1,7 +1,5 @@
-package edu.cit.lim.gymtrack.controller;
+package edu.cit.lim.gymtrack.feature.membership;
 
-import edu.cit.lim.gymtrack.dto.MembershipResponse;
-import edu.cit.lim.gymtrack.service.MembershipService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +17,7 @@ public class MembershipController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<MembershipResponse> myMembership(Authentication authentication) {
+    public ResponseEntity<?> myMembership(Authentication authentication) {
         return ResponseEntity.ok(membershipService.getMembershipForEmail(authentication.getName()));
     }
 }
