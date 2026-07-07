@@ -1,11 +1,11 @@
-package edu.cit.lim.gymtrack.service;
+package edu.cit.lim.gymtrack.feature.plans;
 
-import edu.cit.lim.gymtrack.dto.PlanRequest;
-import edu.cit.lim.gymtrack.dto.PlanResponse;
 import edu.cit.lim.gymtrack.entity.Gym;
 import edu.cit.lim.gymtrack.entity.Role;
 import edu.cit.lim.gymtrack.entity.SubscriptionPlan;
 import edu.cit.lim.gymtrack.entity.User;
+import edu.cit.lim.gymtrack.feature.plans.dto.PlanRequest;
+import edu.cit.lim.gymtrack.feature.plans.dto.PlanResponse;
 import edu.cit.lim.gymtrack.repository.SubscriptionPlanRepository;
 import edu.cit.lim.gymtrack.repository.UserRepository;
 import edu.cit.lim.gymtrack.util.GymGuard;

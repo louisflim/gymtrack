@@ -1,14 +1,10 @@
-package edu.cit.lim.gymtrack.controller;
+package edu.cit.lim.gymtrack.feature.plans;
 
-import edu.cit.lim.gymtrack.dto.PlanRequest;
-import edu.cit.lim.gymtrack.dto.PlanResponse;
-import edu.cit.lim.gymtrack.service.PlanService;
+import edu.cit.lim.gymtrack.feature.plans.dto.PlanRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/plans")

@@ -1,8 +1,9 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.plans.dto;
 
 import java.math.BigDecimal;
 
 public class PlanRequest {
+
     private String name;
     private int durationDays;
     private BigDecimal price;

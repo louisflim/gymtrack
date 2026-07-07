@@ -1,5 +1,5 @@
-import StatusBadge from "../common/StatusBadge";
-import DashboardSection from "../dashboard/DashboardSection";
+import StatusBadge from "../../components/common/StatusBadge";
+import DashboardSection from "../../components/dashboard/DashboardSection";
 
 function PlanList({ plans, onEdit }) {
   return (

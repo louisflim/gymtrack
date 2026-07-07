@@ -215,5 +215,64 @@ _[Insert screenshot of staff creation success]_
 
 ---
 
+## Slice 4 — Subscription Plans (ready to commit)
+
+### Purpose
+Allow Gym Owners to create and manage subscription plans; members view active plans for their gym (FR-005).
+
+### Files moved / created
+
+**Backend**
+| File | Responsibility |
+|------|----------------|
+| `feature/plans/PlanController.java` | `GET/POST/PUT /api/plans` |
+| `feature/plans/PlanService.java` | Plan CRUD scoped to admin gym |
+| `feature/plans/dto/PlanRequest.java` | Create/update payload |
+| `feature/plans/dto/PlanResponse.java` | Plan summary |
+
+**Web**
+| File | Responsibility |
+|------|----------------|
+| `features/plans/PlanForm.jsx` | Admin plan create/edit form |
+| `features/plans/PlanList.jsx` | Admin plan table |
+| `features/plans/PlanPicker.jsx` | Member plan selection cards |
+| `features/plans/api.js` | Plan API calls |
+
+**Mobile**
+| File | Responsibility |
+|------|----------------|
+| `feature/plans/PlanRepository.kt` | Plan API calls |
+
+### API
+- `GET /api/plans/active` — active plans for member's or staff's gym
+- `GET /api/plans` — all plans (admin only)
+- `POST /api/plans` — create plan (admin only)
+- `PUT /api/plans/{id}` — update plan (admin only)
+
+### Database
+- `subscription_plans` — plan rows linked to gym
+
+### Flow
+1. Admin creates plan on dashboard → saved to their gym.
+2. Member scans gym QR → enrolled → sees active plans in Plans tab.
+3. Member selects plan → checkout (payments slice).
+
+### Removed from horizontal packages
+- Deleted `controller/PlanController`, `service/PlanService`, `dto/PlanRequest`, `dto/PlanResponse`
+- Deleted `web/src/api/plans.js`
+- Deleted `web/src/components/admin/PlanForm.jsx`, `PlanList.jsx`, `member/PlanPicker.jsx`
+- Plan methods removed from mobile `GymRepository`
+
+### Testing
+- [ ] Admin creates plan on web → appears in plan list
+- [ ] Admin edits plan → changes saved
+- [ ] Member sees active plans after gym enrollment
+- [ ] Same flows on Android
+
+### Screenshot
+_[Insert screenshot of plan management]_
+
+---
+
 ## Next slice
-When ready, say **"continue with plans slice"** — plan management will move to `feature/plans/`.
+When ready, say **"continue with members slice"** — member management will move to `feature/members/`.

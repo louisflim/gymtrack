@@ -1,9 +1,10 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.plans.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class PlanResponse {
+
     private Long id;
     private String name;
     private int durationDays;

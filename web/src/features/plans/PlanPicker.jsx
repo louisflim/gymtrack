@@ -1,5 +1,5 @@
-import DashboardSection from "../dashboard/DashboardSection";
-import DashboardStatus from "../dashboard/DashboardStatus";
+import DashboardSection from "../../components/dashboard/DashboardSection";
+import DashboardStatus from "../../components/dashboard/DashboardStatus";
 
 function PlanPicker({ plans, onSubscribe, loading, statusMessage, enrolled }) {
   return (

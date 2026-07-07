@@ -1,4 +1,4 @@
-import DashboardSection from "../dashboard/DashboardSection";
+import DashboardSection from "../../components/dashboard/DashboardSection";
 
 function PlanForm({ values, onChange, onSubmit, submitLabel, loading }) {
   const handle = (field) => (e) => onChange(field, e.target.type === "checkbox" ? e.target.checked : e.target.value);

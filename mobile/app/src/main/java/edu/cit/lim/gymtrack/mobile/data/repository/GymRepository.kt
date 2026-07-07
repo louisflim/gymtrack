@@ -5,18 +5,6 @@ import edu.cit.lim.gymtrack.mobile.data.remote.ApiService
 
 class GymRepository(private val apiService: ApiService) {
 
-    suspend fun activePlans(): List<PlanResponse> =
-        unwrap(apiService.activePlans())
-
-    suspend fun allPlans(): List<PlanResponse> =
-        unwrap(apiService.allPlans())
-
-    suspend fun createPlan(request: PlanRequest): PlanResponse =
-        unwrap(apiService.createPlan(request))
-
-    suspend fun updatePlan(id: Long, request: PlanRequest): PlanResponse =
-        unwrap(apiService.updatePlan(id, request))
-
     suspend fun members(search: String? = null, status: String? = null): List<MemberResponse> =
         unwrap(apiService.members(search, status))
 

@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { fetchMyMembership } from "../../api/membership";
 import { createCheckout, fetchMyPayments } from "../../api/payments";
-import { fetchActivePlans } from "../../api/plans";
+import { fetchActivePlans, PlanPicker } from "../../features/plans";
 import MembershipCard from "./MembershipCard";
 import PaymentHistory from "./PaymentHistory";
 import AttendanceHistory from "./AttendanceHistory";
-import PlanPicker from "./PlanPicker";
 
 function MemberDashboardPanel({ membership: membershipProp, onMembershipChange, section = "all" }) {
   const [membership, setMembership] = useState(membershipProp);

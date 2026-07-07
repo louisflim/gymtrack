@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import edu.cit.lim.gymtrack.mobile.data.model.*
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
+import edu.cit.lim.gymtrack.mobile.feature.plans.PlanRepository
 import edu.cit.lim.gymtrack.mobile.ui.model.KpiItem
 import edu.cit.lim.gymtrack.mobile.ui.util.formatCurrency
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +42,10 @@ data class PlanFormState(
     val active: Boolean = true
 )
 
-class AdminViewModel(private val gymRepository: GymRepository) : ViewModel() {
+class AdminViewModel(
+    private val gymRepository: GymRepository,
+    private val planRepository: PlanRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AdminUiState())
     val uiState: StateFlow<AdminUiState> = _uiState.asStateFlow()
@@ -86,7 +90,7 @@ class AdminViewModel(private val gymRepository: GymRepository) : ViewModel() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(loading = true)
             try {
-                val plans = gymRepository.allPlans()
+                val plans = planRepository.allPlans()
                 val members = gymRepository.members()
                 val payments = gymRepository.allPayments()
                 val staff = gymRepository.staff()
@@ -148,9 +152,9 @@ class AdminViewModel(private val gymRepository: GymRepository) : ViewModel() {
             try {
                 val request = PlanRequest(form.name, form.durationDays.toInt(), BigDecimal(form.price), form.active)
                 if (_uiState.value.editingPlanId != null) {
-                    gymRepository.updatePlan(_uiState.value.editingPlanId!!, request)
+                    planRepository.updatePlan(_uiState.value.editingPlanId!!, request)
                 } else {
-                    gymRepository.createPlan(request)
+                    planRepository.createPlan(request)
                 }
                 _uiState.value = _uiState.value.copy(
                     planForm = PlanFormState(),
@@ -202,11 +206,14 @@ class AdminViewModel(private val gymRepository: GymRepository) : ViewModel() {
         }
     }
 
-    class Factory(private val gymRepository: GymRepository) : ViewModelProvider.Factory {
+    class Factory(
+        private val gymRepository: GymRepository,
+        private val planRepository: PlanRepository
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AdminViewModel::class.java)) {
-                return AdminViewModel(gymRepository) as T
+                return AdminViewModel(gymRepository, planRepository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }
