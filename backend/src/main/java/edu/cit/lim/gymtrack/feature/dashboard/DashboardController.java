@@ -1,7 +1,6 @@
-package edu.cit.lim.gymtrack.controller;
+package edu.cit.lim.gymtrack.feature.dashboard;
 
-import edu.cit.lim.gymtrack.dto.DashboardStatsResponse;
-import edu.cit.lim.gymtrack.service.DashboardService;
+import edu.cit.lim.gymtrack.feature.dashboard.dto.DashboardStatsResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

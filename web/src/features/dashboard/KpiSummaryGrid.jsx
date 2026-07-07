@@ -1,4 +1,4 @@
-import SummaryItem from "../dashboard/SummaryItem";
+import SummaryItem from "../../components/dashboard/SummaryItem";
 
 function KpiSummaryGrid({ items = [] }) {
   if (!items.length) return null;

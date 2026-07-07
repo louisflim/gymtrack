@@ -525,5 +525,56 @@ _[Insert screenshot of attendance scan success]_
 
 ---
 
+## Slice 9 — Admin Dashboard (ready to commit)
+
+### Purpose
+Aggregate gym KPI metrics for the admin home tab: member counts, subscription status, today's check-ins, and total payments collected.
+
+### Files moved / created
+
+**Backend**
+| File | Responsibility |
+|------|----------------|
+| `feature/dashboard/DashboardController.java` | `GET /api/dashboard/stats` |
+| `feature/dashboard/DashboardService.java` | Aggregates gym KPI metrics |
+| `feature/dashboard/dto/DashboardStatsResponse.java` | KPI response payload |
+
+**Web**
+| File | Responsibility |
+|------|----------------|
+| `features/dashboard/KpiSummaryGrid.jsx` | Admin KPI card grid |
+| `features/dashboard/api.js` | `fetchDashboardStats()` |
+
+**Mobile**
+| File | Responsibility |
+|------|----------------|
+| `feature/dashboard/DashboardRepository.kt` | Dashboard stats API call |
+
+### API
+- `GET /api/dashboard/stats` — admin-only gym KPI summary
+
+### Database
+- Reads from `users`, `memberships`, `attendance_logs`, `payments` (no new tables)
+
+### Flow
+1. Admin opens Home tab → `GET /api/dashboard/stats`.
+2. `DashboardService` counts members, active/expired subscriptions, today's check-ins, and paid revenue.
+3. Web `KpiSummaryGrid` / mobile KPI adapter renders the metrics.
+
+### Removed from horizontal packages
+- Deleted `controller/DashboardController`, `service/DashboardService`, `dto/DashboardStatsResponse`
+- Deleted `web/src/api/dashboard.js`, `web/src/components/common/KpiSummaryGrid.jsx`
+- `dashboardStats()` removed from mobile `GymRepository`
+
+### Testing
+- [ ] Admin home tab shows all five KPI cards with correct values
+- [ ] Non-admin users cannot access stats endpoint
+- [ ] Same KPIs display on Android admin overview tab
+
+### Screenshot
+_[Insert screenshot of admin KPI grid]_
+
+---
+
 ## Next slice
-When ready, say **"continue with dashboard slice"** — admin KPIs will move to `feature/dashboard/`.
+When ready, say **"continue with staff slice"** — staff account management will move to `feature/staff/`.

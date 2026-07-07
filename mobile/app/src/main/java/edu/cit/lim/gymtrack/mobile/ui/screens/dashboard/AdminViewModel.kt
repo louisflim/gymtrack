@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import edu.cit.lim.gymtrack.mobile.data.model.*
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 import edu.cit.lim.gymtrack.mobile.feature.attendance.AttendanceRepository
+import edu.cit.lim.gymtrack.mobile.feature.dashboard.DashboardRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
 import edu.cit.lim.gymtrack.mobile.feature.members.MemberRepository
 import edu.cit.lim.gymtrack.mobile.feature.payments.PaymentRepository
@@ -50,7 +51,8 @@ class AdminViewModel(
     private val planRepository: PlanRepository,
     private val memberRepository: MemberRepository,
     private val paymentRepository: PaymentRepository,
-    private val attendanceRepository: AttendanceRepository
+    private val attendanceRepository: AttendanceRepository,
+    private val dashboardRepository: DashboardRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AdminUiState())
@@ -100,7 +102,7 @@ class AdminViewModel(
                 val members = memberRepository.members()
                 val payments = paymentRepository.allPayments()
                 val staff = gymRepository.staff()
-                val stats = gymRepository.dashboardStats()
+                val stats = dashboardRepository.dashboardStats()
                 _uiState.value = _uiState.value.copy(
                     loading = false,
                     plans = plans,
@@ -217,7 +219,8 @@ class AdminViewModel(
         private val planRepository: PlanRepository,
         private val memberRepository: MemberRepository,
         private val paymentRepository: PaymentRepository,
-        private val attendanceRepository: AttendanceRepository
+        private val attendanceRepository: AttendanceRepository,
+        private val dashboardRepository: DashboardRepository
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -227,7 +230,8 @@ class AdminViewModel(
                     planRepository,
                     memberRepository,
                     paymentRepository,
-                    attendanceRepository
+                    attendanceRepository,
+                    dashboardRepository
                 ) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")

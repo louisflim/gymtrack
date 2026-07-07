@@ -2,13 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { fetchMembers, assignPlanToMember, updateMember, MemberTable } from "../../features/members";
 import { fetchAllPayments, PaymentTable } from "../../features/payments";
 import { createPlan, fetchAllPlans, updatePlan, PlanForm, PlanList } from "../../features/plans";
-import { fetchDashboardStats } from "../../api/dashboard";
+import { fetchDashboardStats, KpiSummaryGrid } from "../../features/dashboard";
 import { fetchStaff, updateStaff } from "../../api/staff";
 import { fetchGymAttendanceLogs, AttendanceLogTable } from "../../features/attendance";
 import { formatCurrency } from "../../utils/formatters";
 import StaffTable from "./StaffTable";
 import { CreateStaffForm } from "../../features/auth/staff";
-import KpiSummaryGrid from "../common/KpiSummaryGrid";
 
 const EMPTY_PLAN = { name: "", durationDays: 30, price: "999", active: true };
 

@@ -1,11 +1,11 @@
-package edu.cit.lim.gymtrack.service;
+package edu.cit.lim.gymtrack.feature.dashboard;
 
-import edu.cit.lim.gymtrack.dto.DashboardStatsResponse;
 import edu.cit.lim.gymtrack.entity.Gym;
 import edu.cit.lim.gymtrack.entity.MembershipStatus;
 import edu.cit.lim.gymtrack.entity.PaymentStatus;
 import edu.cit.lim.gymtrack.entity.Role;
 import edu.cit.lim.gymtrack.entity.User;
+import edu.cit.lim.gymtrack.feature.dashboard.dto.DashboardStatsResponse;
 import edu.cit.lim.gymtrack.feature.membership.MembershipService;
 import edu.cit.lim.gymtrack.repository.AttendanceLogRepository;
 import edu.cit.lim.gymtrack.repository.PaymentRepository;
@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

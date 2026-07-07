@@ -1,15 +1,13 @@
-package edu.cit.lim.gymtrack.mobile.data.repository
+package edu.cit.lim.gymtrack.mobile.feature.dashboard
 
-import edu.cit.lim.gymtrack.mobile.data.model.*
+import edu.cit.lim.gymtrack.mobile.data.model.DashboardStatsResponse
 import edu.cit.lim.gymtrack.mobile.data.remote.ApiService
+import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 
-class GymRepository(private val apiService: ApiService) {
+class DashboardRepository(private val apiService: ApiService) {
 
-    suspend fun staff(): List<StaffResponse> =
-        unwrap(apiService.staffList())
-
-    suspend fun updateStaff(id: Long, request: StaffUpdateRequest): StaffResponse =
-        unwrap(apiService.updateStaff(id, request))
+    suspend fun dashboardStats(): DashboardStatsResponse =
+        unwrap(apiService.dashboardStats())
 
     private suspend fun <T> unwrap(response: retrofit2.Response<T>): T {
         if (response.isSuccessful) {

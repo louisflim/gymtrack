@@ -10,6 +10,7 @@ import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.login.LoginRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.registration.RegistrationRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.staff.StaffCreationRepository
+import edu.cit.lim.gymtrack.mobile.feature.dashboard.DashboardRepository
 import edu.cit.lim.gymtrack.mobile.feature.members.MemberRepository
 import edu.cit.lim.gymtrack.mobile.feature.membership.MembershipRepository
 import edu.cit.lim.gymtrack.mobile.feature.payments.PaymentRepository
@@ -38,6 +39,8 @@ class GymTrackApplication : Application() {
         private set
     lateinit var paymentRepository: PaymentRepository
         private set
+    lateinit var dashboardRepository: DashboardRepository
+        private set
 
     override fun onCreate() {
         super.onCreate()
@@ -52,6 +55,7 @@ class GymTrackApplication : Application() {
         membershipRepository = MembershipRepository(api)
         paymentRepository = PaymentRepository(api)
         attendanceRepository = AttendanceRepository(api)
+        dashboardRepository = DashboardRepository(api)
         gymRepository = GymRepository(api)
 
         runBlocking {

@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.dashboard.dto;
 
 import java.math.BigDecimal;
 
