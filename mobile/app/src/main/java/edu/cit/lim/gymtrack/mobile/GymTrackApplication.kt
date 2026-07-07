@@ -7,6 +7,7 @@ import edu.cit.lim.gymtrack.mobile.data.remote.RetrofitClient
 import edu.cit.lim.gymtrack.mobile.data.repository.AttendanceRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
+import edu.cit.lim.gymtrack.mobile.feature.auth.login.LoginRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.registration.RegistrationRepository
 import kotlinx.coroutines.runBlocking
 
@@ -20,6 +21,8 @@ class GymTrackApplication : Application() {
         private set
     lateinit var registrationRepository: RegistrationRepository
         private set
+    lateinit var loginRepository: LoginRepository
+        private set
 
     override fun onCreate() {
         super.onCreate()
@@ -27,6 +30,7 @@ class GymTrackApplication : Application() {
         val api = RetrofitClient.apiService
         authRepository = AuthRepository(sessionDataStore, api)
         registrationRepository = RegistrationRepository(sessionDataStore, api)
+        loginRepository = LoginRepository(sessionDataStore, api)
         attendanceRepository = AttendanceRepository(api)
         gymRepository = GymRepository(api)
 

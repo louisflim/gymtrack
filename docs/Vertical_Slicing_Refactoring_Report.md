@@ -100,5 +100,64 @@ _[Insert screenshot of registration success]_
 
 ---
 
+## Slice 2 — User Login (ready to commit)
+
+### Purpose
+Allow registered users (Admin, Staff, Member) to sign in with email and password (FR-003).
+
+### Files moved / created
+
+**Backend**
+| File | Responsibility |
+|------|----------------|
+| `feature/auth/login/LoginController.java` | `POST /api/auth/login` |
+| `feature/auth/login/LoginService.java` | Authentication + JWT issuance |
+| `feature/auth/login/dto/LoginRequest.java` | Request payload |
+
+**Web**
+| File | Responsibility |
+|------|----------------|
+| `features/auth/login/LoginPage.jsx` | Login screen |
+| `features/auth/login/LoginForm.jsx` | Form UI |
+| `features/auth/login/api.js` | `loginUser()` API call |
+
+**Mobile**
+| File | Responsibility |
+|------|----------------|
+| `feature/auth/login/LoginFragment.kt` | Login screen |
+| `feature/auth/login/LoginViewModel.kt` | UI state |
+| `feature/auth/login/LoginRepository.kt` | API call + session save |
+
+### API
+- `POST /api/auth/login` — validates credentials, returns JWT + user profile
+
+### Database
+- `users` — read-only lookup by email
+
+### Flow
+1. User enters email and password.
+2. Client calls `POST /api/auth/login`.
+3. `LoginService` checks account is active, authenticates via Spring Security, issues JWT.
+4. Client stores session and navigates to dashboard.
+
+### Removed from horizontal packages
+- `login()` removed from `AuthController` / `AuthService`
+- `loginUser` removed from `web/src/api/auth.js`
+- `login()` removed from mobile `AuthRepository` / `AuthViewModel`
+- Deleted `web/src/pages/Login/*`
+- `AuthViewModel` now only handles session + logout (used by dashboard)
+
+### Testing
+- [ ] Sign in with valid credentials on web → dashboard
+- [ ] Wrong password → "Invalid email or password"
+- [ ] Deactivated account → forbidden message
+- [ ] Same flows on Android app
+- [ ] Sign out from dashboard → returns to login
+
+### Screenshot
+_[Insert screenshot of login success]_
+
+---
+
 ## Next slice
-When ready, say **"continue with login slice"** — login will move to `feature/auth/login/` the same way.
+When ready, say **"continue with staff creation slice"** — staff creation will move to `feature/auth/staff/`.

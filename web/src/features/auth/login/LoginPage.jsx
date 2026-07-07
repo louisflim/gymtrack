@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../api/auth";
-import BrandPanel from "../../components/auth/BrandPanel";
-import SplitAuthLayout from "../../components/layout/SplitAuthLayout";
-import { saveSession } from "../../utils/session";
+import BrandPanel from "../../../components/auth/BrandPanel";
+import SplitAuthLayout from "../../../components/layout/SplitAuthLayout";
+import { saveSession } from "../../../utils/session";
+import { getApiError } from "../../../utils/apiError";
+import { loginUser } from "./api";
 import LoginForm from "./LoginForm";
 
-function Login() {
+function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,12 +26,8 @@ function Login() {
     } catch (err) {
       if (err.response?.status === 401) {
         setError("Invalid email or password.");
-      } else if (err.response?.status === 403) {
-        setError(err.response.data || "This account has been deactivated.");
-      } else if (err.code === "ERR_NETWORK") {
-        setError("Cannot reach the server. Make sure the backend is running on port 8080.");
       } else {
-        setError("Something went wrong. Try again.");
+        setError(getApiError(err, "Something went wrong. Try again."));
       }
     } finally {
       setLoading(false);
@@ -70,4 +67,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;

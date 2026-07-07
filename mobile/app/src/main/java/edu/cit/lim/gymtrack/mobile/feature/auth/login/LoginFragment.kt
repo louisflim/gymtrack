@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.mobile.ui.fragments.auth
+package edu.cit.lim.gymtrack.mobile.feature.auth.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,9 +14,8 @@ import androidx.navigation.fragment.findNavController
 import edu.cit.lim.gymtrack.mobile.GymTrackApplication
 import edu.cit.lim.gymtrack.mobile.R
 import edu.cit.lim.gymtrack.mobile.databinding.FragmentLoginBinding
-import edu.cit.lim.gymtrack.mobile.ui.auth.AuthViewModel
-import edu.cit.lim.gymtrack.mobile.ui.util.AuthViewModelFactory
 import edu.cit.lim.gymtrack.mobile.ui.util.BrandStatData
+import edu.cit.lim.gymtrack.mobile.ui.util.LoginViewModelFactory
 import edu.cit.lim.gymtrack.mobile.ui.util.setupBrandPanel
 import edu.cit.lim.gymtrack.mobile.ui.util.showError
 import kotlinx.coroutines.launch
@@ -26,8 +25,8 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: AuthViewModel by viewModels {
-        AuthViewModelFactory(requireActivity().application as GymTrackApplication)
+    private val viewModel: LoginViewModel by viewModels {
+        LoginViewModelFactory(requireActivity().application as GymTrackApplication)
     }
 
     override fun onCreateView(
@@ -54,8 +53,8 @@ class LoginFragment : Fragment() {
             )
         )
 
-        binding.emailInput.doAfterTextChanged { viewModel.clearLoginError() }
-        binding.passwordInput.doAfterTextChanged { viewModel.clearLoginError() }
+        binding.emailInput.doAfterTextChanged { viewModel.clearError() }
+        binding.passwordInput.doAfterTextChanged { viewModel.clearError() }
 
         binding.registerLink.setOnClickListener {
             findNavController().navigate(R.id.action_login_to_register)
@@ -71,7 +70,7 @@ class LoginFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.loginState.collect { state ->
+                viewModel.uiState.collect { state ->
                     binding.errorText.showError(state.error)
                     binding.signInButton.isEnabled = !state.isLoading &&
                         binding.emailInput.text?.isNotBlank() == true &&

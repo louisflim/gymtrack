@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="edu.cit.lim.gymtrack.mobile.ui.fragments.auth.LoginFragment"
+        android:name="edu.cit.lim.gymtrack.mobile.feature.auth.login.LoginFragment"
         android:label="Login">
         <action
             android:id="@+id/action_login_to_register"

@@ -1,5 +1,5 @@
-import AuthInput from "../../components/auth/AuthInput";
-import FormCard from "../../components/auth/FormCard";
+import AuthInput from "../../../components/auth/AuthInput";
+import FormCard from "../../../components/auth/FormCard";
 
 function LoginForm({ error, loading, email, password, onEmailChange, onPasswordChange, onSubmit, footer }) {
   return (
