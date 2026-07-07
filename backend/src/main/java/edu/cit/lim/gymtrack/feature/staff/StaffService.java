@@ -1,10 +1,10 @@
-package edu.cit.lim.gymtrack.service;
+package edu.cit.lim.gymtrack.feature.staff;
 
-import edu.cit.lim.gymtrack.dto.StaffResponse;
-import edu.cit.lim.gymtrack.dto.StaffUpdateRequest;
 import edu.cit.lim.gymtrack.entity.Gym;
 import edu.cit.lim.gymtrack.entity.Role;
 import edu.cit.lim.gymtrack.entity.User;
+import edu.cit.lim.gymtrack.feature.staff.dto.StaffResponse;
+import edu.cit.lim.gymtrack.feature.staff.dto.StaffUpdateRequest;
 import edu.cit.lim.gymtrack.repository.UserRepository;
 import edu.cit.lim.gymtrack.util.GymGuard;
 import edu.cit.lim.gymtrack.util.RoleGuard;

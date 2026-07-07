@@ -5,8 +5,8 @@ import edu.cit.lim.gymtrack.mobile.data.local.SessionDataStore
 import edu.cit.lim.gymtrack.mobile.data.local.SessionTokenHolder
 import edu.cit.lim.gymtrack.mobile.data.remote.RetrofitClient
 import edu.cit.lim.gymtrack.mobile.feature.attendance.AttendanceRepository
+import edu.cit.lim.gymtrack.mobile.feature.staff.StaffRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthRepository
-import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.login.LoginRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.registration.RegistrationRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.staff.StaffCreationRepository
@@ -23,7 +23,7 @@ class GymTrackApplication : Application() {
         private set
     lateinit var attendanceRepository: AttendanceRepository
         private set
-    lateinit var gymRepository: GymRepository
+    lateinit var staffRepository: StaffRepository
         private set
     lateinit var registrationRepository: RegistrationRepository
         private set
@@ -56,7 +56,7 @@ class GymTrackApplication : Application() {
         paymentRepository = PaymentRepository(api)
         attendanceRepository = AttendanceRepository(api)
         dashboardRepository = DashboardRepository(api)
-        gymRepository = GymRepository(api)
+        staffRepository = StaffRepository(api)
 
         runBlocking {
             val session = authRepository.currentSession()

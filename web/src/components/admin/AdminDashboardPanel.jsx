@@ -3,10 +3,9 @@ import { fetchMembers, assignPlanToMember, updateMember, MemberTable } from "../
 import { fetchAllPayments, PaymentTable } from "../../features/payments";
 import { createPlan, fetchAllPlans, updatePlan, PlanForm, PlanList } from "../../features/plans";
 import { fetchDashboardStats, KpiSummaryGrid } from "../../features/dashboard";
-import { fetchStaff, updateStaff } from "../../api/staff";
 import { fetchGymAttendanceLogs, AttendanceLogTable } from "../../features/attendance";
 import { formatCurrency } from "../../utils/formatters";
-import StaffTable from "./StaffTable";
+import { fetchStaff, updateStaff, StaffTable } from "../../features/staff";
 import { CreateStaffForm } from "../../features/auth/staff";
 
 const EMPTY_PLAN = { name: "", durationDays: 30, price: "999", active: true };

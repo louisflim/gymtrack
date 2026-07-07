@@ -1,9 +1,11 @@
-package edu.cit.lim.gymtrack.mobile.data.repository
+package edu.cit.lim.gymtrack.mobile.feature.staff
 
-import edu.cit.lim.gymtrack.mobile.data.model.*
+import edu.cit.lim.gymtrack.mobile.data.model.StaffResponse
+import edu.cit.lim.gymtrack.mobile.data.model.StaffUpdateRequest
 import edu.cit.lim.gymtrack.mobile.data.remote.ApiService
+import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 
-class GymRepository(private val apiService: ApiService) {
+class StaffRepository(private val apiService: ApiService) {
 
     suspend fun staff(): List<StaffResponse> =
         unwrap(apiService.staffList())

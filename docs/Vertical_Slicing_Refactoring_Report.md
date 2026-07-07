@@ -576,5 +576,61 @@ _[Insert screenshot of admin KPI grid]_
 
 ---
 
-## Next slice
-When ready, say **"continue with staff slice"** — staff account management will move to `feature/staff/`.
+## Slice 10 — Staff Management (ready to commit)
+
+### Purpose
+Allow gym admins to list and update staff accounts (edit name, email, active status). Staff creation remains in the auth slice (`feature/auth/staff`).
+
+### Files moved / created
+
+**Backend**
+| File | Responsibility |
+|------|----------------|
+| `feature/staff/StaffController.java` | List and update staff endpoints |
+| `feature/staff/StaffService.java` | Staff list/update business logic |
+| `feature/staff/dto/StaffResponse.java` | Staff account summary |
+| `feature/staff/dto/StaffUpdateRequest.java` | Staff update payload |
+
+**Web**
+| File | Responsibility |
+|------|----------------|
+| `features/staff/StaffTable.jsx` | Staff list + edit modal |
+| `features/staff/api.js` | `fetchStaff()`, `updateStaff()` |
+
+**Mobile**
+| File | Responsibility |
+|------|----------------|
+| `feature/staff/StaffRepository.kt` | Staff list and update API calls |
+
+### API
+- `GET /api/staff` — list gym staff (admin only)
+- `PUT /api/staff/{id}` — update staff account (admin only)
+
+### Database
+- `users` — staff rows filtered by role STAFF and gym
+
+### Flow
+1. Admin opens Staff tab → staff list loads.
+2. Admin edits a staff member → `PUT /api/staff/{id}` updates name, email, or active flag.
+3. Staff creation still uses `POST /api/auth/staff` from the auth/staff slice.
+
+### Removed from horizontal packages
+- Deleted `controller/StaffController`, `service/StaffService`, `dto/StaffResponse`, `dto/StaffUpdateRequest`
+- Deleted `web/src/api/staff.js`, `web/src/components/admin/StaffTable.jsx`
+- Deleted mobile `GymRepository` (was empty after all slices); staff methods moved to `StaffRepository`
+- Removed unused `GymRepository` dependency from `DashboardViewModel`
+
+### Testing
+- [ ] Admin Staff tab lists all gym staff
+- [ ] Edit staff name/email/active status saves correctly
+- [ ] Duplicate email rejected on update
+- [ ] Same flows on Android
+
+### Screenshot
+_[Insert screenshot of staff table]_
+
+---
+
+## Refactoring complete
+
+All 10 planned vertical slices are implemented. Commit each slice individually using the messages in the commit log table above.

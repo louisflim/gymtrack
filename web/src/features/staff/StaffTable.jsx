@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DashboardSection from "../dashboard/DashboardSection";
+import DashboardSection from "../../components/dashboard/DashboardSection";
 
 function StaffTable({ staff, onUpdate }) {
   const [editing, setEditing] = useState(null);

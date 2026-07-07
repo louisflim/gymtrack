@@ -7,7 +7,6 @@ import edu.cit.lim.gymtrack.mobile.data.model.*
 import edu.cit.lim.gymtrack.mobile.feature.attendance.AttendanceRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthRepository
-import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.staff.StaffCreationRepository
 import edu.cit.lim.gymtrack.mobile.feature.membership.MembershipRepository
 import edu.cit.lim.gymtrack.mobile.feature.payments.PaymentRepository
@@ -42,7 +41,6 @@ data class DashboardUiState(
 class DashboardViewModel(
     private val attendanceRepository: AttendanceRepository,
     private val authRepository: AuthRepository,
-    private val gymRepository: GymRepository,
     private val staffCreationRepository: StaffCreationRepository,
     private val planRepository: PlanRepository,
     private val membershipRepository: MembershipRepository,
@@ -207,7 +205,6 @@ class DashboardViewModel(
     class Factory(
         private val attendanceRepository: AttendanceRepository,
         private val authRepository: AuthRepository,
-        private val gymRepository: GymRepository,
         private val staffCreationRepository: StaffCreationRepository,
         private val planRepository: PlanRepository,
         private val membershipRepository: MembershipRepository,
@@ -219,7 +216,6 @@ class DashboardViewModel(
                 return DashboardViewModel(
                     attendanceRepository,
                     authRepository,
-                    gymRepository,
                     staffCreationRepository,
                     planRepository,
                     membershipRepository,

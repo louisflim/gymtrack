@@ -1,8 +1,7 @@
-package edu.cit.lim.gymtrack.controller;
+package edu.cit.lim.gymtrack.feature.staff;
 
-import edu.cit.lim.gymtrack.dto.StaffResponse;
-import edu.cit.lim.gymtrack.dto.StaffUpdateRequest;
-import edu.cit.lim.gymtrack.service.StaffService;
+import edu.cit.lim.gymtrack.feature.staff.dto.StaffResponse;
+import edu.cit.lim.gymtrack.feature.staff.dto.StaffUpdateRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

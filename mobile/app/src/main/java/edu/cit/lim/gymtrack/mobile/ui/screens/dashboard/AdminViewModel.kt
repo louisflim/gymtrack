@@ -7,7 +7,7 @@ import edu.cit.lim.gymtrack.mobile.data.model.*
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 import edu.cit.lim.gymtrack.mobile.feature.attendance.AttendanceRepository
 import edu.cit.lim.gymtrack.mobile.feature.dashboard.DashboardRepository
-import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
+import edu.cit.lim.gymtrack.mobile.feature.staff.StaffRepository
 import edu.cit.lim.gymtrack.mobile.feature.members.MemberRepository
 import edu.cit.lim.gymtrack.mobile.feature.payments.PaymentRepository
 import edu.cit.lim.gymtrack.mobile.feature.plans.PlanRepository
@@ -47,7 +47,7 @@ data class PlanFormState(
 )
 
 class AdminViewModel(
-    private val gymRepository: GymRepository,
+    private val staffRepository: StaffRepository,
     private val planRepository: PlanRepository,
     private val memberRepository: MemberRepository,
     private val paymentRepository: PaymentRepository,
@@ -101,7 +101,7 @@ class AdminViewModel(
                 val plans = planRepository.allPlans()
                 val members = memberRepository.members()
                 val payments = paymentRepository.allPayments()
-                val staff = gymRepository.staff()
+                val staff = staffRepository.staff()
                 val stats = dashboardRepository.dashboardStats()
                 _uiState.value = _uiState.value.copy(
                     loading = false,
@@ -205,7 +205,7 @@ class AdminViewModel(
     fun updateStaff(id: Long, request: StaffUpdateRequest) {
         viewModelScope.launch {
             try {
-                gymRepository.updateStaff(id, request)
+                staffRepository.updateStaff(id, request)
                 _uiState.value = _uiState.value.copy(statusMessage = "Staff updated.")
                 loadAll()
             } catch (e: AuthException) {
@@ -215,7 +215,7 @@ class AdminViewModel(
     }
 
     class Factory(
-        private val gymRepository: GymRepository,
+        private val staffRepository: StaffRepository,
         private val planRepository: PlanRepository,
         private val memberRepository: MemberRepository,
         private val paymentRepository: PaymentRepository,
@@ -226,7 +226,7 @@ class AdminViewModel(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AdminViewModel::class.java)) {
                 return AdminViewModel(
-                    gymRepository,
+                    staffRepository,
                     planRepository,
                     memberRepository,
                     paymentRepository,
