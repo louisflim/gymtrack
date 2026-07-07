@@ -2,16 +2,18 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createStaffUser } from "../../features/auth/staff";
 import { fetchMyMembership, MemberOnboardingCard } from "../../features/membership";
-import { fetchGymQrCode, fetchMyQrCode, scanAttendance, scanGymQr } from "../../api/qr";
+import { fetchGymQrCode, fetchMyQrCode, scanAttendance, scanGymQr } from "../../features/attendance";
 import AdminDashboardPanel from "../../components/admin/AdminDashboardPanel";
-import AttendanceScannerCard from "../../components/dashboard/AttendanceScannerCard";
+import {
+  AttendanceScannerCard,
+  GymQrCard,
+  MemberQrCard,
+  QrScanner,
+} from "../../features/attendance";
 import DashboardHero from "../../components/dashboard/DashboardHero";
 import DashboardNavBar from "../../components/dashboard/DashboardNavBar";
 import DashboardSummaryGrid from "../../components/dashboard/DashboardSummaryGrid";
-import GymQrCard from "../../components/dashboard/GymQrCard";
-import MemberQrCard from "../../components/dashboard/MemberQrCard";
 import MemberDashboardPanel from "../../components/member/MemberDashboardPanel";
-import QrScanner from "../../components/qr/QrScanner";
 import { MEMBER_QR_NOTES, STAFF_HOME_HINT } from "../../constants/dashboardUi";
 import { clearSession, readSession } from "../../utils/session";
 import { getApiError } from "../../utils/apiError";

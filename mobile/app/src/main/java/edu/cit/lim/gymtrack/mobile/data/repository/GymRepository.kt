@@ -14,9 +14,6 @@ class GymRepository(private val apiService: ApiService) {
     suspend fun updateStaff(id: Long, request: StaffUpdateRequest): StaffResponse =
         unwrap(apiService.updateStaff(id, request))
 
-    suspend fun gymAttendance(search: String? = null, date: String? = null): List<AttendanceLogResponse> =
-        unwrap(apiService.gymAttendance(search, date))
-
     private suspend fun <T> unwrap(response: retrofit2.Response<T>): T {
         if (response.isSuccessful) {
             return response.body() ?: throw AuthException(response.code(), "Empty response from server.")

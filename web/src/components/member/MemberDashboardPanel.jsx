@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchMyMembership, MembershipCard } from "../../features/membership";
 import { createCheckout, fetchMyPayments, PaymentHistory } from "../../features/payments";
 import { fetchActivePlans, PlanPicker } from "../../features/plans";
-import AttendanceHistory from "./AttendanceHistory";
+import { AttendanceHistory } from "../../features/attendance";
 
 function MemberDashboardPanel({ membership: membershipProp, onMembershipChange, section = "all" }) {
   const [membership, setMembership] = useState(membershipProp);

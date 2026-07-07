@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchMyAttendanceLogs } from "../../api/qr";
-import DashboardSection from "../dashboard/DashboardSection";
-import AttendanceLogList from "../common/AttendanceLogList";
+import DashboardSection from "../../components/dashboard/DashboardSection";
+import { fetchMyAttendanceLogs } from "./api";
+import AttendanceLogList from "./AttendanceLogList";
 
 function AttendanceHistory() {
   const [logs, setLogs] = useState([]);

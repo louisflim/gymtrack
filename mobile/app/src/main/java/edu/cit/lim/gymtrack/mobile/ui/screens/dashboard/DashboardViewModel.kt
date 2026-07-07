@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import edu.cit.lim.gymtrack.mobile.data.model.*
-import edu.cit.lim.gymtrack.mobile.data.repository.AttendanceRepository
+import edu.cit.lim.gymtrack.mobile.feature.attendance.AttendanceRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository

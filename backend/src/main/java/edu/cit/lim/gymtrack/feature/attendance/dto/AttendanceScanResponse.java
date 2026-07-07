@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.attendance.dto;
 
 public class AttendanceScanResponse {
     private String action;
@@ -38,3 +38,4 @@ public class AttendanceScanResponse {
     public String getGymName() { return gymName; }
     public boolean isEnrolled() { return enrolled; }
 }
+

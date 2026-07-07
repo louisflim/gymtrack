@@ -452,5 +452,78 @@ _[Insert screenshot of payment success]_
 
 ---
 
+## Slice 8 — QR Attendance (ready to commit)
+
+### Purpose
+QR-based gym enrollment, member check-in/check-out, and attendance history for members and admins (FR-006, FR-007).
+
+### Files moved / created
+
+**Backend**
+| File | Responsibility |
+|------|----------------|
+| `feature/attendance/AttendanceController.java` | Scan, member logs, gym logs endpoints |
+| `feature/attendance/QrController.java` | Member and gym QR generation |
+| `feature/attendance/AttendanceService.java` | QR generation, scan logic, enrollment |
+| `feature/attendance/dto/ScanRequest.java` | Scan payload |
+| `feature/attendance/dto/AttendanceScanResponse.java` | Staff scan result |
+| `feature/attendance/dto/AttendanceLogResponse.java` | Attendance log summary |
+| `feature/attendance/dto/QrCodeResponse.java` | QR image payload |
+| `feature/attendance/dto/MemberGymScanResponse.java` | Member gym-scan result |
+
+**Web**
+| File | Responsibility |
+|------|----------------|
+| `features/attendance/QrScanner.jsx` | Webcam QR scanner |
+| `features/attendance/AttendanceScannerCard.jsx` | Staff scanner launcher |
+| `features/attendance/GymQrCard.jsx` | Admin/staff gym enrollment QR |
+| `features/attendance/MemberQrCard.jsx` | Member personal QR |
+| `features/attendance/AttendanceHistory.jsx` | Member attendance history |
+| `features/attendance/AttendanceLogTable.jsx` | Admin filtered log table |
+| `features/attendance/AttendanceLogList.jsx` | Shared log list renderer |
+| `features/attendance/api.js` | Attendance + QR API calls |
+
+**Mobile**
+| File | Responsibility |
+|------|----------------|
+| `feature/attendance/AttendanceRepository.kt` | QR, scan, and log API calls |
+| `feature/attendance/QrScannerDialogFragment.kt` | Camera QR scanner dialog |
+
+### API
+- `GET /api/qr/me` — member personal QR code
+- `GET /api/qr/gym` — staff/admin gym enrollment QR
+- `POST /api/attendance/scan-gym` — member scans gym QR to enroll
+- `POST /api/attendance/scan` — staff scans member QR for check-in/out
+- `GET /api/attendance/me` — member attendance history
+- `GET /api/attendance/gym` — admin/staff gym attendance logs (search + date filter)
+
+### Database
+- `attendance_logs` — check-in/check-out records
+- `users` — gym link and first-check-in flag updated on enrollment/scan
+- `gyms` — gym QR payload source
+
+### Flow
+1. Admin displays gym QR → member scans → enrolled at gym.
+2. Staff opens scanner → scans member QR → check-in or check-out logged.
+3. Member views personal QR and attendance history; admin filters gym logs.
+
+### Removed from horizontal packages
+- Deleted `controller/AttendanceController`, `controller/QrController`, `service/QrAttendanceService`
+- Deleted `dto/ScanRequest`, `AttendanceScanResponse`, `AttendanceLogResponse`, `QrCodeResponse`, `MemberGymScanResponse`
+- Deleted `web/src/api/qr.js` and horizontal QR/attendance components
+- Deleted mobile `data/repository/AttendanceRepository.kt` and `ui/fragments/qr/QrScannerDialogFragment.kt`
+- `gymAttendance()` removed from mobile `GymRepository`; `MembershipService` now imports `AttendanceService.computeNextStep`
+
+### Testing
+- [ ] Member scans gym QR → enrolled and onboarding step updates
+- [ ] Staff scans member QR → check-in then check-out recorded
+- [ ] Member sees attendance history; admin filters gym logs
+- [ ] Same flows on Android
+
+### Screenshot
+_[Insert screenshot of attendance scan success]_
+
+---
+
 ## Next slice
-When ready, say **"continue with attendance slice"** — QR check-in/out will move to `feature/attendance/`.
+When ready, say **"continue with dashboard slice"** — admin KPIs will move to `feature/dashboard/`.

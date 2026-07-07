@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.attendance.dto;
 
 public class ScanRequest {
     private String qrData;
@@ -7,3 +7,4 @@ public class ScanRequest {
 
     public void setQrData(String qrData) { this.qrData = qrData; }
 }
+

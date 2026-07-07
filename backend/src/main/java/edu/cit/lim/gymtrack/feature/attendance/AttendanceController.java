@@ -1,9 +1,8 @@
-package edu.cit.lim.gymtrack.controller;
+package edu.cit.lim.gymtrack.feature.attendance;
 
-import edu.cit.lim.gymtrack.dto.AttendanceLogResponse;
-import edu.cit.lim.gymtrack.dto.AttendanceScanResponse;
-import edu.cit.lim.gymtrack.dto.ScanRequest;
-import edu.cit.lim.gymtrack.service.QrAttendanceService;
+import edu.cit.lim.gymtrack.feature.attendance.dto.AttendanceLogResponse;
+import edu.cit.lim.gymtrack.feature.attendance.dto.AttendanceScanResponse;
+import edu.cit.lim.gymtrack.feature.attendance.dto.ScanRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,16 +18,16 @@ import java.util.List;
 @RequestMapping("/api/attendance")
 public class AttendanceController {
 
-    private final QrAttendanceService qrAttendanceService;
+    private final AttendanceService attendanceService;
 
-    public AttendanceController(QrAttendanceService qrAttendanceService) {
-        this.qrAttendanceService = qrAttendanceService;
+    public AttendanceController(AttendanceService attendanceService) {
+        this.attendanceService = attendanceService;
     }
 
     @PostMapping("/scan-gym")
     public ResponseEntity<?> scanGym(@RequestBody ScanRequest request, Authentication authentication) {
         try {
-            return ResponseEntity.ok(qrAttendanceService.scanGymQrAsMember(
+            return ResponseEntity.ok(attendanceService.scanGymQrAsMember(
                     request.getQrData(),
                     authentication.getName()
             ));
@@ -42,7 +41,7 @@ public class AttendanceController {
     @PostMapping("/scan")
     public ResponseEntity<?> scan(@RequestBody ScanRequest request, Authentication authentication) {
         try {
-            AttendanceScanResponse response = qrAttendanceService.scanAttendance(
+            AttendanceScanResponse response = attendanceService.scanAttendance(
                     request.getQrData(),
                     authentication.getName()
             );
@@ -56,7 +55,7 @@ public class AttendanceController {
 
     @GetMapping("/me")
     public ResponseEntity<List<AttendanceLogResponse>> myLogs(Authentication authentication) {
-        return ResponseEntity.ok(qrAttendanceService.getMyAttendanceLogs(authentication.getName()));
+        return ResponseEntity.ok(attendanceService.getMyAttendanceLogs(authentication.getName()));
     }
 
     @GetMapping("/gym")
@@ -65,7 +64,7 @@ public class AttendanceController {
             @RequestParam(required = false) String date,
             Authentication authentication) {
         try {
-            return ResponseEntity.ok(qrAttendanceService.getGymAttendanceLogs(
+            return ResponseEntity.ok(attendanceService.getGymAttendanceLogs(
                     authentication.getName(), search, date));
         } catch (SecurityException ex) {
             return ResponseEntity.status(403).body(ex.getMessage());

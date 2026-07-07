@@ -4,10 +4,9 @@ import { fetchAllPayments, PaymentTable } from "../../features/payments";
 import { createPlan, fetchAllPlans, updatePlan, PlanForm, PlanList } from "../../features/plans";
 import { fetchDashboardStats } from "../../api/dashboard";
 import { fetchStaff, updateStaff } from "../../api/staff";
-import { fetchGymAttendanceLogs } from "../../api/qr";
+import { fetchGymAttendanceLogs, AttendanceLogTable } from "../../features/attendance";
 import { formatCurrency } from "../../utils/formatters";
 import StaffTable from "./StaffTable";
-import AttendanceLogTable from "./AttendanceLogTable";
 import { CreateStaffForm } from "../../features/auth/staff";
 import KpiSummaryGrid from "../common/KpiSummaryGrid";
 

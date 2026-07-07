@@ -38,7 +38,7 @@ import edu.cit.lim.gymtrack.mobile.ui.adapters.PlanAdapter
 import edu.cit.lim.gymtrack.mobile.ui.adapters.PlanAdminAdapter
 import edu.cit.lim.gymtrack.mobile.ui.adapters.StaffAdapter
 import edu.cit.lim.gymtrack.mobile.ui.auth.AuthViewModel
-import edu.cit.lim.gymtrack.mobile.ui.fragments.qr.QrScannerDialogFragment
+import edu.cit.lim.gymtrack.mobile.feature.attendance.QrScannerDialogFragment
 import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.AdminTab
 import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.AdminViewModel
 import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.DashboardViewModel

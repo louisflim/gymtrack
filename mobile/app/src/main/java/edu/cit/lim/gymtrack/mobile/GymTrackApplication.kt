@@ -4,7 +4,7 @@ import android.app.Application
 import edu.cit.lim.gymtrack.mobile.data.local.SessionDataStore
 import edu.cit.lim.gymtrack.mobile.data.local.SessionTokenHolder
 import edu.cit.lim.gymtrack.mobile.data.remote.RetrofitClient
-import edu.cit.lim.gymtrack.mobile.data.repository.AttendanceRepository
+import edu.cit.lim.gymtrack.mobile.feature.attendance.AttendanceRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.login.LoginRepository

@@ -1,7 +1,5 @@
-package edu.cit.lim.gymtrack.controller;
+package edu.cit.lim.gymtrack.feature.attendance;
 
-import edu.cit.lim.gymtrack.dto.QrCodeResponse;
-import edu.cit.lim.gymtrack.service.QrAttendanceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -13,16 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/qr")
 public class QrController {
 
-    private final QrAttendanceService qrAttendanceService;
+    private final AttendanceService attendanceService;
 
-    public QrController(QrAttendanceService qrAttendanceService) {
-        this.qrAttendanceService = qrAttendanceService;
+    public QrController(AttendanceService attendanceService) {
+        this.attendanceService = attendanceService;
     }
 
     @GetMapping("/me")
     public ResponseEntity<?> myQr(Authentication authentication) {
         try {
-            return ResponseEntity.ok(qrAttendanceService.generateQrForUser(authentication.getName()));
+            return ResponseEntity.ok(attendanceService.generateQrForUser(authentication.getName()));
         } catch (SecurityException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
         } catch (IllegalArgumentException ex) {
@@ -33,7 +31,7 @@ public class QrController {
     @GetMapping("/gym")
     public ResponseEntity<?> gymQr(Authentication authentication) {
         try {
-            return ResponseEntity.ok(qrAttendanceService.generateGymQrForStaff(authentication.getName()));
+            return ResponseEntity.ok(attendanceService.generateGymQrForStaff(authentication.getName()));
         } catch (SecurityException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
         } catch (IllegalArgumentException ex) {

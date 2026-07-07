@@ -1,5 +1,5 @@
-import DashboardSection from "./DashboardSection";
-import DashboardStatus from "./DashboardStatus";
+import DashboardSection from "../../components/dashboard/DashboardSection";
+import DashboardStatus from "../../components/dashboard/DashboardStatus";
 
 function AttendanceScannerCard({ onOpenScanner, statusMessage }) {
   return (

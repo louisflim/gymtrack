@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.mobile.data.repository
+package edu.cit.lim.gymtrack.mobile.feature.attendance
 
 import edu.cit.lim.gymtrack.mobile.data.model.AttendanceLogResponse
 import edu.cit.lim.gymtrack.mobile.data.model.AttendanceScanResponse
@@ -6,6 +6,7 @@ import edu.cit.lim.gymtrack.mobile.data.model.MemberGymScanResponse
 import edu.cit.lim.gymtrack.mobile.data.model.QrCodeResponse
 import edu.cit.lim.gymtrack.mobile.data.model.ScanRequest
 import edu.cit.lim.gymtrack.mobile.data.remote.ApiService
+import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 
 class AttendanceRepository(
     private val apiService: ApiService
@@ -44,6 +45,14 @@ class AttendanceRepository(
 
     suspend fun getMyAttendance(): List<AttendanceLogResponse> {
         val response = apiService.myAttendance()
+        if (!response.isSuccessful) {
+            throw AuthException(response.code(), extractMessage(response.code(), response.errorBody()?.string()))
+        }
+        return response.body().orEmpty()
+    }
+
+    suspend fun gymAttendance(search: String? = null, date: String? = null): List<AttendanceLogResponse> {
+        val response = apiService.gymAttendance(search, date)
         if (!response.isSuccessful) {
             throw AuthException(response.code(), extractMessage(response.code(), response.errorBody()?.string()))
         }

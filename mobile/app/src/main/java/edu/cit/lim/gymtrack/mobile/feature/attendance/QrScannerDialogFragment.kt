@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.mobile.ui.fragments.qr
+package edu.cit.lim.gymtrack.mobile.feature.attendance
 
 import android.Manifest
 import android.content.pm.PackageManager

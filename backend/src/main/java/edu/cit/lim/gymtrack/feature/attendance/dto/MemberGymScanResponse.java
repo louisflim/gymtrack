@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.attendance.dto;
 
 public class MemberGymScanResponse {
     private String action;
@@ -28,3 +28,4 @@ public class MemberGymScanResponse {
     public boolean isFirstCheckInCompleted() { return firstCheckInCompleted; }
     public String getNextStep() { return nextStep; }
 }
+

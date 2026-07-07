@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.attendance.dto;
 
 public class AttendanceLogResponse {
     private Long id;
@@ -26,3 +26,4 @@ public class AttendanceLogResponse {
     public String getCheckInTime() { return checkInTime; }
     public String getCheckOutTime() { return checkOutTime; }
 }
+

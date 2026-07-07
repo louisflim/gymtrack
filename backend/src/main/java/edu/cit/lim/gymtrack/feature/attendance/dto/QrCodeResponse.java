@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.attendance.dto;
 
 public class QrCodeResponse {
     private String qrData;
@@ -13,3 +13,4 @@ public class QrCodeResponse {
 
     public String getQrImageBase64() { return qrImageBase64; }
 }
+

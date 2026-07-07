@@ -1,4 +1,4 @@
-import DashboardSection from "./DashboardSection";
+import DashboardSection from "../../components/dashboard/DashboardSection";
 
 function MemberQrCard({ qrImage, loading, note }) {
   return (

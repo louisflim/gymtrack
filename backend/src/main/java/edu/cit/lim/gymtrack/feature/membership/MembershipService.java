@@ -5,7 +5,7 @@ import edu.cit.lim.gymtrack.feature.membership.dto.MembershipResponse;
 import edu.cit.lim.gymtrack.repository.MembershipRepository;
 import edu.cit.lim.gymtrack.repository.SubscriptionPlanRepository;
 import edu.cit.lim.gymtrack.repository.UserRepository;
-import edu.cit.lim.gymtrack.service.QrAttendanceService;
+import edu.cit.lim.gymtrack.feature.attendance.AttendanceService;
 import edu.cit.lim.gymtrack.util.MembershipStatusUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,7 +107,7 @@ public class MembershipService {
                 gym != null ? gym.getId() : null,
                 gym != null ? gym.getName() : null,
                 user.isFirstCheckInCompleted(),
-                QrAttendanceService.computeNextStep(user, status)
+                AttendanceService.computeNextStep(user, status)
         );
     }
 }

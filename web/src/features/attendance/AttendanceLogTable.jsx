@@ -1,6 +1,6 @@
-import DashboardSection from "../dashboard/DashboardSection";
-import FilterBar from "../common/FilterBar";
-import AttendanceLogList from "../common/AttendanceLogList";
+import DashboardSection from "../../components/dashboard/DashboardSection";
+import FilterBar from "../../components/common/FilterBar";
+import AttendanceLogList from "./AttendanceLogList";
 
 function AttendanceLogTable({ logs, search, onSearchChange, date, onDateChange }) {
   return (

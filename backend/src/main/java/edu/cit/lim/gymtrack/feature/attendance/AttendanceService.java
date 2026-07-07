@@ -1,14 +1,14 @@
-package edu.cit.lim.gymtrack.service;
+package edu.cit.lim.gymtrack.feature.attendance;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import edu.cit.lim.gymtrack.dto.AttendanceLogResponse;
-import edu.cit.lim.gymtrack.dto.AttendanceScanResponse;
-import edu.cit.lim.gymtrack.dto.MemberGymScanResponse;
-import edu.cit.lim.gymtrack.dto.QrCodeResponse;
+import edu.cit.lim.gymtrack.feature.attendance.dto.AttendanceLogResponse;
+import edu.cit.lim.gymtrack.feature.attendance.dto.AttendanceScanResponse;
+import edu.cit.lim.gymtrack.feature.attendance.dto.MemberGymScanResponse;
+import edu.cit.lim.gymtrack.feature.attendance.dto.QrCodeResponse;
 import edu.cit.lim.gymtrack.entity.AttendanceLog;
 import edu.cit.lim.gymtrack.entity.Gym;
 import edu.cit.lim.gymtrack.entity.Membership;
@@ -32,7 +32,7 @@ import java.util.Base64;
 import java.util.List;
 
 @Service
-public class QrAttendanceService {
+public class AttendanceService {
 
     public static final String NEXT_ENROLL_AT_GYM = "ENROLL_AT_GYM";
     public static final String NEXT_PURCHASE_PLAN = "PURCHASE_PLAN";
@@ -44,7 +44,7 @@ public class QrAttendanceService {
     private final AttendanceLogRepository attendanceLogRepository;
     private final MembershipService membershipService;
 
-    public QrAttendanceService(UserRepository userRepository,
+    public AttendanceService(UserRepository userRepository,
                                GymRepository gymRepository,
                                AttendanceLogRepository attendanceLogRepository,
                                MembershipService membershipService) {
@@ -339,3 +339,4 @@ public class QrAttendanceService {
         }
     }
 }
+
