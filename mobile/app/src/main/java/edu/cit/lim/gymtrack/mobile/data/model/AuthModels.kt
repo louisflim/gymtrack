@@ -14,6 +14,13 @@ data class RegisterRequest(
     val gymName: String? = null
 )
 
+data class CreateStaffRequest(
+    val firstName: String,
+    val lastName: String,
+    val email: String,
+    val password: String
+)
+
 data class AuthResponse(
     val token: String,
     val userId: Long,

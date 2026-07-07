@@ -8,6 +8,7 @@ import edu.cit.lim.gymtrack.mobile.data.repository.AttendanceRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
+import edu.cit.lim.gymtrack.mobile.feature.auth.staff.StaffCreationRepository
 import edu.cit.lim.gymtrack.mobile.data.remote.ApiErrorParser
 import edu.cit.lim.gymtrack.mobile.ui.model.AccountFieldValues
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +39,8 @@ data class DashboardUiState(
 class DashboardViewModel(
     private val attendanceRepository: AttendanceRepository,
     private val authRepository: AuthRepository,
-    private val gymRepository: GymRepository
+    private val gymRepository: GymRepository,
+    private val staffCreationRepository: StaffCreationRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState(loading = true))
@@ -177,7 +179,7 @@ class DashboardViewModel(
             }
             _uiState.value = _uiState.value.copy(creatingStaff = true, staffStatusMessage = null)
             try {
-                val created = authRepository.createStaff(form.firstName, form.lastName, form.email, form.password)
+                val created = staffCreationRepository.createStaff(form.firstName, form.lastName, form.email, form.password)
                 _uiState.value = _uiState.value.copy(
                     creatingStaff = false,
                     staffForm = AccountFieldValues(),
@@ -199,12 +201,18 @@ class DashboardViewModel(
     class Factory(
         private val attendanceRepository: AttendanceRepository,
         private val authRepository: AuthRepository,
-        private val gymRepository: GymRepository
+        private val gymRepository: GymRepository,
+        private val staffCreationRepository: StaffCreationRepository
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(DashboardViewModel::class.java)) {
-                return DashboardViewModel(attendanceRepository, authRepository, gymRepository) as T
+                return DashboardViewModel(
+                    attendanceRepository,
+                    authRepository,
+                    gymRepository,
+                    staffCreationRepository
+                ) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

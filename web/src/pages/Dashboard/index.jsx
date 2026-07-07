@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createStaffUser } from "../../api/auth";
+import { createStaffUser } from "../../features/auth/staff";
 import { fetchMyMembership } from "../../api/membership";
 import { fetchGymQrCode, fetchMyQrCode, scanAttendance, scanGymQr } from "../../api/qr";
 import AdminDashboardPanel from "../../components/admin/AdminDashboardPanel";

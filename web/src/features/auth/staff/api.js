@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "../../../api/axiosInstance";
 
 export const createStaffUser = async (firstName, lastName, email, password) => {
   const response = await axiosInstance.post("/auth/staff", {
@@ -6,7 +6,6 @@ export const createStaffUser = async (firstName, lastName, email, password) => {
     lastName,
     email,
     password,
-    role: "STAFF",
   });
   return response.data;
 };

@@ -1,6 +1,7 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.auth.staff.dto;
 
 public class StaffAccountResponse {
+
     private Long userId;
     private String firstName;
     private String lastName;

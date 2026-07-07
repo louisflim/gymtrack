@@ -51,7 +51,12 @@ class DashboardViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DashboardViewModel::class.java)) {
-            return DashboardViewModel(app.attendanceRepository, app.authRepository, app.gymRepository) as T
+            return DashboardViewModel(
+                app.attendanceRepository,
+                app.authRepository,
+                app.gymRepository,
+                app.staffCreationRepository
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

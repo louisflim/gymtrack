@@ -159,5 +159,61 @@ _[Insert screenshot of login success]_
 
 ---
 
+## Slice 3 — Admin Staff Creation (ready to commit)
+
+### Purpose
+Allow Gym Owners (Admin) to create Staff accounts linked to their gym (FR-004).
+
+### Files moved / created
+
+**Backend**
+| File | Responsibility |
+|------|----------------|
+| `feature/auth/staff/StaffCreationController.java` | `POST /api/auth/staff` |
+| `feature/auth/staff/StaffCreationService.java` | Staff account creation logic |
+| `feature/auth/staff/dto/CreateStaffRequest.java` | Request payload |
+| `feature/auth/staff/dto/StaffAccountResponse.java` | Created staff summary |
+
+**Web**
+| File | Responsibility |
+|------|----------------|
+| `features/auth/staff/CreateStaffForm.jsx` | Staff creation form (admin dashboard) |
+| `features/auth/staff/api.js` | `createStaffUser()` API call |
+
+**Mobile**
+| File | Responsibility |
+|------|----------------|
+| `feature/auth/staff/StaffCreationRepository.kt` | API call for staff creation |
+
+### API
+- `POST /api/auth/staff` — Admin-only; creates STAFF user linked to admin's gym
+
+### Database
+- `users` — new STAFF row with `gym_id` from requesting admin
+
+### Flow
+1. Admin fills staff form on dashboard (web or mobile).
+2. Client calls `POST /api/auth/staff` with JWT.
+3. `StaffCreationService` verifies admin role + gym link, hashes password, saves staff.
+4. Success message shown; staff list refreshes.
+
+### Removed from horizontal packages
+- Deleted `AuthController` / `AuthService` (auth feature fully sliced)
+- Deleted `web/src/api/auth.js`
+- `createStaff()` removed from mobile `AuthRepository`
+- Deleted `web/src/components/dashboard/CreateStaffForm.jsx`
+- `AuthRepository` now only handles session + logout
+
+### Testing
+- [ ] Admin creates staff on web → success message, staff appears in staff tab
+- [ ] Duplicate email → error message
+- [ ] Non-admin cannot call endpoint
+- [ ] Same flow on Android admin dashboard
+
+### Screenshot
+_[Insert screenshot of staff creation success]_
+
+---
+
 ## Next slice
-When ready, say **"continue with staff creation slice"** — staff creation will move to `feature/auth/staff/`.
+When ready, say **"continue with plans slice"** — plan management will move to `feature/plans/`.

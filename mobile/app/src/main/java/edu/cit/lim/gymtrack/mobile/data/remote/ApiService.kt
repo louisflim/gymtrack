@@ -12,7 +12,7 @@ interface ApiService {
     suspend fun register(@Body request: RegisterRequest): Response<AuthResponse>
 
     @POST("api/auth/staff")
-    suspend fun createStaff(@Body request: RegisterRequest): Response<StaffAccountResponse>
+    suspend fun createStaff(@Body request: CreateStaffRequest): Response<StaffAccountResponse>
 
     @GET("api/qr/me")
     suspend fun myQrCode(): Response<QrCodeResponse>

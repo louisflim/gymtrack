@@ -1,24 +1,25 @@
-package edu.cit.lim.gymtrack.service;
+package edu.cit.lim.gymtrack.feature.auth.staff;
 
-import edu.cit.lim.gymtrack.dto.StaffAccountResponse;
-import edu.cit.lim.gymtrack.feature.auth.registration.dto.RegisterRequest;
 import edu.cit.lim.gymtrack.entity.Role;
 import edu.cit.lim.gymtrack.entity.User;
+import edu.cit.lim.gymtrack.feature.auth.staff.dto.CreateStaffRequest;
+import edu.cit.lim.gymtrack.feature.auth.staff.dto.StaffAccountResponse;
 import edu.cit.lim.gymtrack.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthService {
+public class StaffCreationService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public StaffCreationService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    public StaffAccountResponse createStaffByAdmin(RegisterRequest request, String requesterEmail) {
+    public StaffAccountResponse createStaffByAdmin(CreateStaffRequest request, String requesterEmail) {
         User requester = userRepository.findByEmail(requesterEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Requesting user not found."));
 
@@ -28,10 +29,6 @@ public class AuthService {
 
         if (requester.getGym() == null) {
             throw new IllegalArgumentException("Your admin account is not linked to a gym.");
-        }
-
-        if (request.getRole() != null && !request.getRole().isBlank() && !"STAFF".equalsIgnoreCase(request.getRole())) {
-            throw new IllegalArgumentException("Role must be STAFF for this endpoint.");
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {

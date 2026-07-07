@@ -12,7 +12,7 @@ import PlanForm from "./PlanForm";
 import PlanList from "./PlanList";
 import StaffTable from "./StaffTable";
 import AttendanceLogTable from "./AttendanceLogTable";
-import CreateStaffForm from "../dashboard/CreateStaffForm";
+import { CreateStaffForm } from "../../features/auth/staff";
 import KpiSummaryGrid from "../common/KpiSummaryGrid";
 
 const EMPTY_PLAN = { name: "", durationDays: 30, price: "999", active: true };

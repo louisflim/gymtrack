@@ -1,6 +1,6 @@
-import AccountFields from "../auth/AccountFields";
-import DashboardSection from "./DashboardSection";
-import DashboardStatus from "./DashboardStatus";
+import AccountFields from "../../../components/auth/AccountFields";
+import DashboardSection from "../../../components/dashboard/DashboardSection";
+import DashboardStatus from "../../../components/dashboard/DashboardStatus";
 
 function CreateStaffForm({ values, onChange, onSubmit, loading, statusMessage, adminGymName }) {
   const missingGym = !adminGymName;
