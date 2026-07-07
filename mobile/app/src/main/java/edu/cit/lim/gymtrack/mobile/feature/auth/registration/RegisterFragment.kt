@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.mobile.ui.fragments.auth
+package edu.cit.lim.gymtrack.mobile.feature.auth.registration
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,9 +16,8 @@ import androidx.navigation.fragment.findNavController
 import edu.cit.lim.gymtrack.mobile.GymTrackApplication
 import edu.cit.lim.gymtrack.mobile.R
 import edu.cit.lim.gymtrack.mobile.databinding.FragmentRegisterBinding
-import edu.cit.lim.gymtrack.mobile.ui.auth.AuthViewModel
-import edu.cit.lim.gymtrack.mobile.ui.util.AuthViewModelFactory
 import edu.cit.lim.gymtrack.mobile.ui.util.BrandStatData
+import edu.cit.lim.gymtrack.mobile.ui.util.RegistrationViewModelFactory
 import edu.cit.lim.gymtrack.mobile.ui.util.setupBrandPanel
 import edu.cit.lim.gymtrack.mobile.ui.util.showError
 import kotlinx.coroutines.launch
@@ -28,8 +27,8 @@ class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: AuthViewModel by viewModels {
-        AuthViewModelFactory(requireActivity().application as GymTrackApplication)
+    private val viewModel: RegistrationViewModel by viewModels {
+        RegistrationViewModelFactory(requireActivity().application as GymTrackApplication)
     }
 
     private var selectedRole = "member"
@@ -75,7 +74,7 @@ class RegisterFragment : Fragment() {
             ) {
                 selectedRole = if (position == 1) "owner" else "member"
                 binding.gymNameLayout.isVisible = selectedRole == "owner"
-                viewModel.clearRegisterError()
+                viewModel.clearError()
             }
 
             override fun onNothingSelected(parent: android.widget.AdapterView<*>?) = Unit
@@ -89,7 +88,7 @@ class RegisterFragment : Fragment() {
             binding.confirmPasswordInput,
             binding.gymNameInput
         ).forEach { field ->
-            field.doAfterTextChanged { viewModel.clearRegisterError() }
+            field.doAfterTextChanged { viewModel.clearError() }
         }
 
         binding.loginLink.setOnClickListener {
@@ -113,7 +112,7 @@ class RegisterFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.registerState.collect { state ->
+                viewModel.uiState.collect { state ->
                     binding.errorText.showError(state.error)
                     val formValid = binding.firstNameInput.text?.isNotBlank() == true &&
                         binding.lastNameInput.text?.isNotBlank() == true &&

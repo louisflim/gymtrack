@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.cit.lim.gymtrack.dto.AuthResponse;
 import edu.cit.lim.gymtrack.dto.LoginRequest;
-import edu.cit.lim.gymtrack.dto.RegisterRequest;
 import edu.cit.lim.gymtrack.dto.StaffAccountResponse;
+import edu.cit.lim.gymtrack.feature.auth.registration.dto.RegisterRequest;
 import edu.cit.lim.gymtrack.service.AuthService;
 import org.springframework.security.core.Authentication;
 
@@ -23,16 +23,6 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try {
-            AuthResponse response = authService.register(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {

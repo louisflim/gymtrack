@@ -1,5 +1,5 @@
-import AccountFields from "../../components/auth/AccountFields";
-import FormCard from "../../components/auth/FormCard";
+import AccountFields from "../../../components/auth/AccountFields";
+import FormCard from "../../../components/auth/FormCard";
 
 function RegisterForm({ error, loading, values, onChange, onSubmit, footer }) {
   return (

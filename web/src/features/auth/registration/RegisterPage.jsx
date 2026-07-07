@@ -1,14 +1,23 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { registerUser } from "../../api/auth";
-import BrandPanel from "../../components/auth/BrandPanel";
-import SplitAuthLayout from "../../components/layout/SplitAuthLayout";
-import { getApiError } from "../../utils/apiError";
+import BrandPanel from "../../../components/auth/BrandPanel";
+import SplitAuthLayout from "../../../components/layout/SplitAuthLayout";
+import { saveSession } from "../../../utils/session";
+import { getApiError } from "../../../utils/apiError";
+import { registerUser } from "./api";
 import RegisterForm from "./RegisterForm";
 
-const EMPTY_FORM = { firstName: "", lastName: "", email: "", password: "", confirmPassword: "", role: "member", gymName: "" };
+const EMPTY_FORM = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  role: "member",
+  gymName: "",
+};
 
-function Register() {
+function RegisterPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState(EMPTY_FORM);
   const [error, setError] = useState("");
@@ -83,4 +92,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default RegisterPage;

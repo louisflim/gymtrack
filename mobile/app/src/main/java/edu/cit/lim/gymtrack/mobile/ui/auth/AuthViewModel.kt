@@ -28,9 +28,6 @@ class AuthViewModel(
     private val _loginState = MutableStateFlow(AuthUiState())
     val loginState: StateFlow<AuthUiState> = _loginState.asStateFlow()
 
-    private val _registerState = MutableStateFlow(AuthUiState())
-    val registerState: StateFlow<AuthUiState> = _registerState.asStateFlow()
-
     fun login(email: String, password: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
             _loginState.value = AuthUiState(isLoading = true)
@@ -47,56 +44,8 @@ class AuthViewModel(
         }
     }
 
-    fun register(
-        firstName: String,
-        lastName: String,
-        email: String,
-        password: String,
-        confirmPassword: String,
-        role: String,
-        gymName: String = "",
-        onSuccess: () -> Unit
-    ) {
-        if (password != confirmPassword) {
-            _registerState.value = AuthUiState(error = "Passwords do not match.")
-            return
-        }
-
-        if (role == "owner" && gymName.isBlank()) {
-            _registerState.value = AuthUiState(error = "Gym name is required when registering as gym owner.")
-            return
-        }
-
-        val backendRole = if (role == "owner") "ADMIN" else "MEMBER"
-
-        viewModelScope.launch {
-            _registerState.value = AuthUiState(isLoading = true)
-            try {
-                authRepository.register(
-                    firstName,
-                    lastName,
-                    email,
-                    password,
-                    backendRole,
-                    gymName.takeIf { role == "owner" }
-                )
-                _registerState.value = AuthUiState()
-                onSuccess()
-            } catch (e: AuthException) {
-                _registerState.value = AuthUiState(error = e.message)
-            } catch (e: Exception) {
-                val networkMessage = ApiErrorParser.networkMessage(e)
-                _registerState.value = AuthUiState(error = networkMessage ?: "Something went wrong. Try again.")
-            }
-        }
-    }
-
     fun clearLoginError() {
         _loginState.value = _loginState.value.copy(error = null)
-    }
-
-    fun clearRegisterError() {
-        _registerState.value = _registerState.value.copy(error = null)
     }
 
     fun logout(onComplete: () -> Unit) {

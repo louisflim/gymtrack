@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="edu.cit.lim.gymtrack.mobile.ui.fragments.auth.RegisterFragment"
+        android:name="edu.cit.lim.gymtrack.mobile.feature.auth.registration.RegisterFragment"
         android:label="Register">
         <action
             android:id="@+id/action_register_to_dashboard"
