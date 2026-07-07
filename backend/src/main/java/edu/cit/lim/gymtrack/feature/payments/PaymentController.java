@@ -1,14 +1,11 @@
-package edu.cit.lim.gymtrack.controller;
+package edu.cit.lim.gymtrack.feature.payments;
 
-import edu.cit.lim.gymtrack.dto.CheckoutRequest;
-import edu.cit.lim.gymtrack.dto.CheckoutResponse;
-import edu.cit.lim.gymtrack.service.PaymentService;
+import edu.cit.lim.gymtrack.feature.payments.dto.CheckoutRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,8 +21,7 @@ public class PaymentController {
     @PostMapping("/checkout")
     public ResponseEntity<?> checkout(@RequestBody CheckoutRequest request, Authentication authentication) {
         try {
-            CheckoutResponse response = paymentService.createCheckout(request.getPlanId(), authentication.getName());
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(paymentService.createCheckout(request.getPlanId(), authentication.getName()));
         } catch (SecurityException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (IllegalArgumentException | IllegalStateException e) {

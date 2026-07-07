@@ -7,6 +7,7 @@ import edu.cit.lim.gymtrack.mobile.data.model.*
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthException
 import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
 import edu.cit.lim.gymtrack.mobile.feature.members.MemberRepository
+import edu.cit.lim.gymtrack.mobile.feature.payments.PaymentRepository
 import edu.cit.lim.gymtrack.mobile.feature.plans.PlanRepository
 import edu.cit.lim.gymtrack.mobile.ui.model.KpiItem
 import edu.cit.lim.gymtrack.mobile.ui.util.formatCurrency
@@ -46,7 +47,8 @@ data class PlanFormState(
 class AdminViewModel(
     private val gymRepository: GymRepository,
     private val planRepository: PlanRepository,
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val paymentRepository: PaymentRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AdminUiState())
@@ -94,7 +96,7 @@ class AdminViewModel(
             try {
                 val plans = planRepository.allPlans()
                 val members = memberRepository.members()
-                val payments = gymRepository.allPayments()
+                val payments = paymentRepository.allPayments()
                 val staff = gymRepository.staff()
                 val stats = gymRepository.dashboardStats()
                 _uiState.value = _uiState.value.copy(
@@ -211,12 +213,13 @@ class AdminViewModel(
     class Factory(
         private val gymRepository: GymRepository,
         private val planRepository: PlanRepository,
-        private val memberRepository: MemberRepository
+        private val memberRepository: MemberRepository,
+        private val paymentRepository: PaymentRepository
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AdminViewModel::class.java)) {
-                return AdminViewModel(gymRepository, planRepository, memberRepository) as T
+                return AdminViewModel(gymRepository, planRepository, memberRepository, paymentRepository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

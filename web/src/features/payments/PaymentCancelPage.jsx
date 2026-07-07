@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function PaymentCancel() {
+function PaymentCancelPage() {
   const navigate = useNavigate();
 
   return (
@@ -16,4 +16,4 @@ function PaymentCancel() {
   );
 }
 
-export default PaymentCancel;
+export default PaymentCancelPage;

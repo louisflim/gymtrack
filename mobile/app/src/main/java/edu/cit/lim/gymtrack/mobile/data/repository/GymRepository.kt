@@ -5,15 +5,6 @@ import edu.cit.lim.gymtrack.mobile.data.remote.ApiService
 
 class GymRepository(private val apiService: ApiService) {
 
-    suspend fun checkout(planId: Long): CheckoutResponse =
-        unwrap(apiService.checkout(CheckoutRequest(planId)))
-
-    suspend fun myPayments(): List<PaymentResponse> =
-        unwrap(apiService.myPayments())
-
-    suspend fun allPayments(): List<PaymentResponse> =
-        unwrap(apiService.allPayments())
-
     suspend fun dashboardStats(): DashboardStatsResponse =
         unwrap(apiService.dashboardStats())
 
@@ -25,10 +16,6 @@ class GymRepository(private val apiService: ApiService) {
 
     suspend fun gymAttendance(search: String? = null, date: String? = null): List<AttendanceLogResponse> =
         unwrap(apiService.gymAttendance(search, date))
-
-    suspend fun confirmMockPayment(reference: String) {
-        unwrap(apiService.confirmMockPayment(reference))
-    }
 
     private suspend fun <T> unwrap(response: retrofit2.Response<T>): T {
         if (response.isSuccessful) {

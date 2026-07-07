@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { confirmMockPayment } from "../../api/payments";
+import { confirmMockPayment } from "./api";
 
-function PaymentSuccess() {
+function PaymentSuccessPage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
@@ -27,4 +27,4 @@ function PaymentSuccess() {
   );
 }
 
-export default PaymentSuccess;
+export default PaymentSuccessPage;

@@ -10,6 +10,7 @@ import edu.cit.lim.gymtrack.mobile.data.repository.AuthRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.GymRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.staff.StaffCreationRepository
 import edu.cit.lim.gymtrack.mobile.feature.membership.MembershipRepository
+import edu.cit.lim.gymtrack.mobile.feature.payments.PaymentRepository
 import edu.cit.lim.gymtrack.mobile.feature.plans.PlanRepository
 import edu.cit.lim.gymtrack.mobile.data.remote.ApiErrorParser
 import edu.cit.lim.gymtrack.mobile.ui.model.AccountFieldValues
@@ -44,7 +45,8 @@ class DashboardViewModel(
     private val gymRepository: GymRepository,
     private val staffCreationRepository: StaffCreationRepository,
     private val planRepository: PlanRepository,
-    private val membershipRepository: MembershipRepository
+    private val membershipRepository: MembershipRepository,
+    private val paymentRepository: PaymentRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState(loading = true))
@@ -56,7 +58,7 @@ class DashboardViewModel(
             try {
                 val membership = membershipRepository.myMembership()
                 val plans = if (membership.gymId != null) planRepository.activePlans() else emptyList()
-                val payments = gymRepository.myPayments()
+                val payments = paymentRepository.myPayments()
                 val attendance = runCatching { attendanceRepository.getMyAttendance() }.getOrDefault(emptyList())
                 val canShowQr = membership.nextStep == "FIRST_CHECK_IN" || membership.nextStep == "ACTIVE"
                 val qrImage = if (canShowQr) {
@@ -95,7 +97,7 @@ class DashboardViewModel(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(subscribing = true, memberStatusMessage = null)
             try {
-                val checkout = gymRepository.checkout(planId)
+                val checkout = paymentRepository.checkout(planId)
                 onCheckoutUrl(checkout.checkoutUrl)
             } catch (e: AuthException) {
                 _uiState.value = _uiState.value.copy(memberStatusMessage = e.message)
@@ -110,7 +112,7 @@ class DashboardViewModel(
     fun confirmMockIfNeeded(url: String) {
         val reference = "reference=([^&]+)".toRegex().find(url)?.groupValues?.getOrNull(1) ?: return
         viewModelScope.launch {
-            runCatching { gymRepository.confirmMockPayment(reference) }
+            runCatching { paymentRepository.confirmMockPayment(reference) }
             loadMemberDashboard()
         }
     }
@@ -208,7 +210,8 @@ class DashboardViewModel(
         private val gymRepository: GymRepository,
         private val staffCreationRepository: StaffCreationRepository,
         private val planRepository: PlanRepository,
-        private val membershipRepository: MembershipRepository
+        private val membershipRepository: MembershipRepository,
+        private val paymentRepository: PaymentRepository
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -219,7 +222,8 @@ class DashboardViewModel(
                     gymRepository,
                     staffCreationRepository,
                     planRepository,
-                    membershipRepository
+                    membershipRepository,
+                    paymentRepository
                 ) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")

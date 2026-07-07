@@ -1,9 +1,10 @@
-package edu.cit.lim.gymtrack.dto;
+package edu.cit.lim.gymtrack.feature.payments.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class PaymentResponse {
+
     private Long id;
     private String memberName;
     private String planName;

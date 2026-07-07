@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "../../api/axiosInstance";
 
 export const createCheckout = async (planId) => {
   const response = await axiosInstance.post("/payments/checkout", { planId });

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchMyMembership, MembershipCard } from "../../features/membership";
-import { createCheckout, fetchMyPayments } from "../../api/payments";
+import { createCheckout, fetchMyPayments, PaymentHistory } from "../../features/payments";
 import { fetchActivePlans, PlanPicker } from "../../features/plans";
-import PaymentHistory from "./PaymentHistory";
 import AttendanceHistory from "./AttendanceHistory";
 
 function MemberDashboardPanel({ membership: membershipProp, onMembershipChange, section = "all" }) {

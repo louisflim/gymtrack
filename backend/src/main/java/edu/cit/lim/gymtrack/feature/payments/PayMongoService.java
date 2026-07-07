@@ -1,4 +1,4 @@
-package edu.cit.lim.gymtrack.service;
+package edu.cit.lim.gymtrack.feature.payments;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

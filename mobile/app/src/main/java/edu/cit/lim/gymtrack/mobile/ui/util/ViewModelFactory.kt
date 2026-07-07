@@ -57,7 +57,8 @@ class DashboardViewModelFactory(
                 app.gymRepository,
                 app.staffCreationRepository,
                 app.planRepository,
-                app.membershipRepository
+                app.membershipRepository,
+                app.paymentRepository
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
@@ -70,7 +71,7 @@ class AdminViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AdminViewModel::class.java)) {
-            return AdminViewModel(app.gymRepository, app.planRepository, app.memberRepository) as T
+            return AdminViewModel(app.gymRepository, app.planRepository, app.memberRepository, app.paymentRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

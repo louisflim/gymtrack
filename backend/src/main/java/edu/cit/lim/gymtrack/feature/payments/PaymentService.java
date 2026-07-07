@@ -1,13 +1,13 @@
-package edu.cit.lim.gymtrack.service;
+package edu.cit.lim.gymtrack.feature.payments;
 
-import edu.cit.lim.gymtrack.dto.CheckoutResponse;
-import edu.cit.lim.gymtrack.dto.PaymentResponse;
+import edu.cit.lim.gymtrack.entity.Gym;
 import edu.cit.lim.gymtrack.entity.Payment;
 import edu.cit.lim.gymtrack.entity.PaymentStatus;
 import edu.cit.lim.gymtrack.entity.SubscriptionPlan;
 import edu.cit.lim.gymtrack.entity.User;
-import edu.cit.lim.gymtrack.entity.Gym;
 import edu.cit.lim.gymtrack.feature.membership.MembershipService;
+import edu.cit.lim.gymtrack.feature.payments.dto.CheckoutResponse;
+import edu.cit.lim.gymtrack.feature.payments.dto.PaymentResponse;
 import edu.cit.lim.gymtrack.feature.plans.PlanService;
 import edu.cit.lim.gymtrack.repository.PaymentRepository;
 import edu.cit.lim.gymtrack.repository.UserRepository;

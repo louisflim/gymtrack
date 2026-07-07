@@ -388,5 +388,69 @@ _[Insert screenshot of membership status]_
 
 ---
 
+## Slice 7 — Online Payment (ready to commit)
+
+### Purpose
+Allow members to pay for subscription plans via PayMongo checkout; admins view payment history (FR-008).
+
+### Files moved / created
+
+**Backend**
+| File | Responsibility |
+|------|----------------|
+| `feature/payments/PaymentController.java` | Checkout, webhook, list endpoints |
+| `feature/payments/PaymentService.java` | Payment flow + membership activation |
+| `feature/payments/PayMongoService.java` | PayMongo API integration (mock in dev) |
+| `feature/payments/dto/CheckoutRequest.java` | Checkout payload |
+| `feature/payments/dto/CheckoutResponse.java` | Checkout URL response |
+| `feature/payments/dto/PaymentResponse.java` | Payment record summary |
+
+**Web**
+| File | Responsibility |
+|------|----------------|
+| `features/payments/PaymentTable.jsx` | Admin/member payment table |
+| `features/payments/PaymentHistory.jsx` | Member payment history wrapper |
+| `features/payments/PaymentSuccessPage.jsx` | Post-checkout success + mock confirm |
+| `features/payments/PaymentCancelPage.jsx` | Cancelled checkout page |
+| `features/payments/api.js` | Payment API calls |
+
+**Mobile**
+| File | Responsibility |
+|------|----------------|
+| `feature/payments/PaymentRepository.kt` | Checkout, history, mock confirm |
+
+### API
+- `POST /api/payments/checkout` — create PayMongo session
+- `POST /api/payments/webhook` — PayMongo webhook handler
+- `POST /api/payments/confirm-mock` — dev mock payment confirm
+- `GET /api/payments/me` — member payment history
+- `GET /api/payments` — admin gym payment list
+
+### Database
+- `payments` — payment records with status and PayMongo reference
+
+### Flow
+1. Member selects plan → checkout created → redirect to PayMongo (or mock URL).
+2. On success → webhook or mock confirm marks PAID → membership activated.
+3. Admin views all gym payments; member views own history.
+
+### Removed from horizontal packages
+- Deleted `controller/PaymentController`, `service/PaymentService`, `service/PayMongoService`
+- Deleted `dto/CheckoutRequest`, `CheckoutResponse`, `PaymentResponse`
+- Deleted `web/src/api/payments.js`, admin `PaymentTable.jsx`, member `PaymentHistory.jsx`
+- Deleted `web/src/pages/PaymentSuccess`, `PaymentCancel`
+- Payment methods removed from mobile `GymRepository`
+
+### Testing
+- [ ] Member subscribes to plan → redirected to checkout
+- [ ] Mock payment success → membership activates
+- [ ] Payment appears in member history and admin payments tab
+- [ ] Same flows on Android
+
+### Screenshot
+_[Insert screenshot of payment success]_
+
+---
+
 ## Next slice
-When ready, say **"continue with payments slice"** — PayMongo checkout will move to `feature/payments/`.
+When ready, say **"continue with attendance slice"** — QR check-in/out will move to `feature/attendance/`.
