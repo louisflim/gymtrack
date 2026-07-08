@@ -53,8 +53,14 @@ class LoginFragment : Fragment() {
             )
         )
 
-        binding.emailInput.doAfterTextChanged { viewModel.clearError() }
-        binding.passwordInput.doAfterTextChanged { viewModel.clearError() }
+        binding.emailInput.doAfterTextChanged {
+            viewModel.clearError()
+            updateSignInButtonState()
+        }
+        binding.passwordInput.doAfterTextChanged {
+            viewModel.clearError()
+            updateSignInButtonState()
+        }
 
         binding.registerLink.setOnClickListener {
             findNavController().navigate(R.id.action_login_to_register)
@@ -67,18 +73,23 @@ class LoginFragment : Fragment() {
                 findNavController().navigate(R.id.action_login_to_dashboard)
             }
         }
+        updateSignInButtonState()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     binding.errorText.showError(state.error)
-                    binding.signInButton.isEnabled = !state.isLoading &&
-                        binding.emailInput.text?.isNotBlank() == true &&
-                        binding.passwordInput.text?.isNotBlank() == true
+                    updateSignInButtonState()
                     binding.signInButton.text = if (state.isLoading) "Signing In..." else "Sign In"
                 }
             }
         }
+    }
+
+    private fun updateSignInButtonState() {
+        binding.signInButton.isEnabled = !viewModel.uiState.value.isLoading &&
+            binding.emailInput.text?.isNotBlank() == true &&
+            binding.passwordInput.text?.isNotBlank() == true
     }
 
     override fun onDestroyView() {
