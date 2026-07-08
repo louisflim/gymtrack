@@ -1,14 +1,13 @@
 package edu.cit.lim.gymtrack.repository;
 
-import java.util.List;
-import java.util.Optional;
-
+import edu.cit.lim.gymtrack.entity.Role;
+import edu.cit.lim.gymtrack.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import edu.cit.lim.gymtrack.entity.Role;
-import edu.cit.lim.gymtrack.entity.User;
+import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -18,19 +17,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByRole(Role role);
 
-    long countByRole(Role role);
-
     List<User> findByRoleAndGymId(Role role, Long gymId);
 
     @Query("""
-        SELECT u FROM User u
-        WHERE u.role = :memberRole
+        SELECT u
+        FROM User u
+        WHERE u.role = :role
         AND u.gym.id = :gymId
-        AND (:search IS NULL OR :search = '' OR
-             LOWER(CONCAT(u.firstName, ' ', u.lastName, ' ', u.email)) LIKE LOWER(CONCAT('%', :search, '%')))
-        ORDER BY u.lastName ASC, u.firstName ASC
+        AND (
+            LOWER(u.firstName) LIKE LOWER(CONCAT('%', :search, '%'))
+            OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :search, '%'))
+            OR LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%'))
+        )
         """)
-    List<User> searchMembersByGym(@Param("search") String search,
-                                  @Param("memberRole") Role memberRole,
-                                  @Param("gymId") Long gymId);
+    List<User> searchMembersByGym(
+            @Param("search") String search,
+            @Param("role") Role role,
+            @Param("gymId") Long gymId
+    );
 }

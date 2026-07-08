@@ -2,17 +2,25 @@ package edu.cit.lim.gymtrack.dto;
 
 public class AuthResponse {
 
-    private String token;
-    private Long userId;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String role;
-    private Long gymId;
-    private String gymName;
+    private final String token;
+    private final Long userId;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
+    private final String role;
+    private final Long gymId;
+    private final String gymName;
 
-    public AuthResponse(String token, Long userId, String firstName, String lastName, String email, String role,
-                        Long gymId, String gymName) {
+    public AuthResponse(
+            String token,
+            Long userId,
+            String firstName,
+            String lastName,
+            String email,
+            String role,
+            Long gymId,
+            String gymName
+    ) {
         this.token = token;
         this.userId = userId;
         this.firstName = firstName;
@@ -23,12 +31,35 @@ public class AuthResponse {
         this.gymName = gymName;
     }
 
-    public String getToken() { return token; }
-    public Long getUserId() { return userId; }
-    public String getFirstName() { return firstName; }
-    public String getLastName() { return lastName; }
-    public String getEmail() { return email; }
-    public String getRole() { return role; }
-    public Long getGymId() { return gymId; }
-    public String getGymName() { return gymName; }
+    public String getToken() {
+        return token;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public Long getGymId() {
+        return gymId;
+    }
+
+    public String getGymName() {
+        return gymName;
+    }
 }
