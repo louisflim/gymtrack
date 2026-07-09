@@ -297,8 +297,15 @@ class DashboardFragment : Fragment() {
             }
             adminViewModel.setTab(adminTab)
         }
+        when (tab) {
+            "qr" -> when (session.role) {
+                "MEMBER" -> dashboardViewModel.loadMemberQr()
+                "ADMIN", "STAFF" -> dashboardViewModel.loadGymQr()
+            }
+        }
         updateNavTabs()
         updateVisibility()
+        renderDashboardState(dashboardViewModel.uiState.value)
     }
 
     private fun updateNavTabs() {
@@ -372,17 +379,22 @@ class DashboardFragment : Fragment() {
             val showMemberQr = membership?.nextStep == "FIRST_CHECK_IN" || membership?.nextStep == "ACTIVE"
             if (showMemberQr) {
                 binding.qrCard.qrLoading.isVisible = state.loading
-                binding.qrCard.qrImage.loadBase64Qr(state.qrImageBase64)
-                binding.qrCard.qrNote.text = if (membership?.nextStep == "FIRST_CHECK_IN") {
-                    DashboardUiCopy.memberQrNoteFirstCheckIn
-                } else {
-                    DashboardUiCopy.memberQrNoteActive
+                val loaded = binding.qrCard.qrImage.loadBase64Qr(state.qrImageBase64)
+                binding.qrCard.qrNote.text = when {
+                    state.loading -> "Loading QR code..."
+                    !loaded -> state.memberStatusMessage ?: "Unable to load QR code."
+                    membership?.nextStep == "FIRST_CHECK_IN" -> DashboardUiCopy.memberQrNoteFirstCheckIn
+                    else -> DashboardUiCopy.memberQrNoteActive
                 }
             }
         } else if (canScan && activeTab == "qr") {
             binding.qrCard.qrLoading.isVisible = state.loadingGymQr
-            binding.qrCard.qrImage.loadBase64Qr(state.gymQrImageBase64)
-            binding.qrCard.qrNote.text = "Display this QR at the front desk for member enrollment."
+            val loaded = binding.qrCard.qrImage.loadBase64Qr(state.gymQrImageBase64)
+            binding.qrCard.qrNote.text = when {
+                state.loadingGymQr -> "Loading gym QR code..."
+                !loaded -> state.scanStatusMessage ?: "Unable to load gym QR code."
+                else -> "Display this QR at the front desk for member enrollment."
+            }
         }
 
         binding.membershipCard.membershipPlan.text = membership?.planName ?: "No plan"

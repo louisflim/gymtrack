@@ -3,6 +3,7 @@ package edu.cit.lim.gymtrack.mobile.ui.util
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -20,7 +21,12 @@ fun LinearLayout.setupNavTabs(
     val inflater = LayoutInflater.from(context)
     DashboardUiCopy.navTabsForRole(role).forEach { tab ->
         val tabBinding = ItemNavTabBinding.inflate(inflater, this, false)
-        tabBinding.navIcon.text = tab.icon
+        if (tab.icon.isNotBlank()) {
+            tabBinding.navIcon.text = tab.icon
+            tabBinding.navIcon.visibility = View.VISIBLE
+        } else {
+            tabBinding.navIcon.visibility = View.GONE
+        }
         tabBinding.navLabel.text = tab.label.uppercase()
         val selected = tab.id == activeTab
         tabBinding.root.isSelected = selected
@@ -47,15 +53,19 @@ fun TextView.applyStatusBadge(status: String?) {
     setPadding(16, 8, 16, 8)
 }
 
-fun ImageView.loadBase64Qr(base64: String?) {
+fun ImageView.loadBase64Qr(base64: String?): Boolean {
     if (base64.isNullOrBlank()) {
         setImageDrawable(null)
-        return
+        return false
     }
-    runCatching {
-        val bytes = Base64.decode(base64, Base64.DEFAULT)
-        setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.size))
-    }
+    val payload = base64.substringAfter(",", base64).trim()
+    return runCatching {
+        val bytes = Base64.decode(payload, Base64.NO_WRAP)
+        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            ?: return false
+        setImageBitmap(bitmap)
+        true
+    }.getOrDefault(false)
 }
 
 fun LinearLayout.setupHeroStats() {

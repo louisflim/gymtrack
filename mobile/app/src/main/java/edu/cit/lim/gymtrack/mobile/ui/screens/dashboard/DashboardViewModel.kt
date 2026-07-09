@@ -60,7 +60,7 @@ class DashboardViewModel(
                 val attendance = runCatching { attendanceRepository.getMyAttendance() }.getOrDefault(emptyList())
                 val canShowQr = membership.nextStep == "FIRST_CHECK_IN" || membership.nextStep == "ACTIVE"
                 val qrImage = if (canShowQr) {
-                    runCatching { attendanceRepository.getMyQrCode().qrImageBase64 }.getOrNull()
+                    runCatching { fetchMemberQrImage() }.getOrNull()
                 } else null
                 _uiState.value = _uiState.value.copy(
                     loading = false,
@@ -85,10 +85,54 @@ class DashboardViewModel(
             try {
                 val qr = attendanceRepository.getGymQrCode()
                 _uiState.value = _uiState.value.copy(loadingGymQr = false, gymQrImageBase64 = qr.qrImageBase64)
+            } catch (e: AuthException) {
+                _uiState.value = _uiState.value.copy(
+                    loadingGymQr = false,
+                    gymQrImageBase64 = null,
+                    scanStatusMessage = e.message
+                )
             } catch (_: Exception) {
-                _uiState.value = _uiState.value.copy(loadingGymQr = false, gymQrImageBase64 = null)
+                _uiState.value = _uiState.value.copy(
+                    loadingGymQr = false,
+                    gymQrImageBase64 = null,
+                    scanStatusMessage = "Unable to load gym QR code."
+                )
             }
         }
+    }
+
+    fun loadMemberQr() {
+        val membership = _uiState.value.membership
+        val canShowQr = membership?.nextStep == "FIRST_CHECK_IN" || membership?.nextStep == "ACTIVE"
+        if (!canShowQr) return
+
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(loading = true, memberStatusMessage = null)
+            try {
+                val qrImage = fetchMemberQrImage()
+                _uiState.value = _uiState.value.copy(
+                    loading = false,
+                    qrImageBase64 = qrImage,
+                    memberStatusMessage = if (qrImage == null) "Unable to load QR code." else null
+                )
+            } catch (e: AuthException) {
+                _uiState.value = _uiState.value.copy(
+                    loading = false,
+                    qrImageBase64 = null,
+                    memberStatusMessage = e.message
+                )
+            } catch (_: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    loading = false,
+                    qrImageBase64 = null,
+                    memberStatusMessage = "Unable to load QR code."
+                )
+            }
+        }
+    }
+
+    private suspend fun fetchMemberQrImage(): String? {
+        return attendanceRepository.getMyQrCode().qrImageBase64
     }
 
     fun subscribeToPlan(planId: Long, onCheckoutUrl: (String) -> Unit) {

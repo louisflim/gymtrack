@@ -16,24 +16,24 @@ object DashboardUiCopy {
 
     fun navTabsForRole(role: String): List<DashboardNavItem> = when (role) {
         "STAFF" -> listOf(
-            DashboardNavItem("home", "Home", "⌂"),
-            DashboardNavItem("qr", "Gym QR", "▣"),
-            DashboardNavItem("scan", "Scan", "⌖")
+            DashboardNavItem("home", "Home"),
+            DashboardNavItem("qr", "Gym QR"),
+            DashboardNavItem("scan", "Scan")
         )
         "ADMIN" -> listOf(
-            DashboardNavItem("home", "Home", "⌂"),
-            DashboardNavItem("qr", "QR", "▣"),
-            DashboardNavItem("plans", "Plans", "☰"),
-            DashboardNavItem("members", "Members", "☺"),
-            DashboardNavItem("staff", "Staff", "⚙"),
-            DashboardNavItem("attendance", "Logs", "◷"),
-            DashboardNavItem("payments", "Pay", "₱")
+            DashboardNavItem("home", "Home"),
+            DashboardNavItem("qr", "QR"),
+            DashboardNavItem("plans", "Plans"),
+            DashboardNavItem("members", "Members"),
+            DashboardNavItem("staff", "Staff"),
+            DashboardNavItem("attendance", "Logs"),
+            DashboardNavItem("payments", "Payments")
         )
         else -> listOf(
-            DashboardNavItem("home", "Home", "⌂"),
-            DashboardNavItem("qr", "My QR", "▣"),
-            DashboardNavItem("plans", "Plans", "☰"),
-            DashboardNavItem("activity", "Activity", "◷")
+            DashboardNavItem("home", "Home"),
+            DashboardNavItem("qr", "My QR"),
+            DashboardNavItem("plans", "Plans"),
+            DashboardNavItem("activity", "Activity")
         )
     }
 

@@ -2,24 +2,24 @@
 
 export const NAV_TABS_BY_ROLE = {
   MEMBER: [
-    { id: "home", label: "Home", icon: "⌂" },
-    { id: "qr", label: "My QR", icon: "▣" },
-    { id: "plans", label: "Plans", icon: "☰" },
-    { id: "activity", label: "Activity", icon: "◷" },
+    { id: "home", label: "Home" },
+    { id: "qr", label: "My QR" },
+    { id: "plans", label: "Plans" },
+    { id: "activity", label: "Activity" },
   ],
   STAFF: [
-    { id: "home", label: "Home", icon: "⌂" },
-    { id: "qr", label: "Gym QR", icon: "▣" },
-    { id: "scan", label: "Scan", icon: "⌖" },
+    { id: "home", label: "Home" },
+    { id: "qr", label: "Gym QR" },
+    { id: "scan", label: "Scan" },
   ],
   ADMIN: [
-    { id: "home", label: "Home", icon: "⌂" },
-    { id: "qr", label: "QR", icon: "▣" },
-    { id: "plans", label: "Plans", icon: "☰" },
-    { id: "members", label: "Members", icon: "☺" },
-    { id: "staff", label: "Staff", icon: "⚙" },
-    { id: "attendance", label: "Logs", icon: "◷" },
-    { id: "payments", label: "Pay", icon: "₱" },
+    { id: "home", label: "Home" },
+    { id: "qr", label: "QR" },
+    { id: "plans", label: "Plans" },
+    { id: "members", label: "Members" },
+    { id: "staff", label: "Staff" },
+    { id: "attendance", label: "Logs" },
+    { id: "payments", label: "Payments" },
   ],
 };
 

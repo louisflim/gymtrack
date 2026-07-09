@@ -13,9 +13,11 @@ function DashboardNavBar({ role, activeTab, onChange }) {
             className={`dashboard-nav-item ${activeTab === tab.id ? "is-active" : ""}`}
             onClick={() => onChange(tab.id)}
           >
-            <span className="dashboard-nav-icon" aria-hidden="true">
-              {tab.icon}
-            </span>
+            {tab.icon ? (
+              <span className="dashboard-nav-icon" aria-hidden="true">
+                {tab.icon}
+              </span>
+            ) : null}
             <span className="dashboard-nav-label">{tab.label}</span>
           </button>
         ))}
