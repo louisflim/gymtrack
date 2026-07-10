@@ -3,7 +3,7 @@ import FilterBar from "../../components/common/FilterBar";
 import StatusBadge from "../../components/common/StatusBadge";
 import DashboardSection from "../../components/dashboard/DashboardSection";
 
-function MemberTable({ members, plans, onUpdate, onAssignPlan }) {
+function MemberTable({ members, plans, onUpdate, onAssignPlan, onDelete }) {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("ALL");
   const [editing, setEditing] = useState(null);
@@ -62,6 +62,17 @@ function MemberTable({ members, plans, onUpdate, onAssignPlan }) {
                   <td className="dashboard-actions-cell">
                     <button type="button" className="dashboard-link-button" onClick={() => setEditing(member)}>Edit</button>
                     <button type="button" className="dashboard-link-button" onClick={() => setAssigning(member)}>Assign Plan</button>
+                    <button
+                      type="button"
+                      className="dashboard-link-button dashboard-link-button-danger"
+                      onClick={() => {
+                        if (window.confirm(`Delete ${member.firstName} ${member.lastName}? This removes their account, memberships, payments, and attendance history.`)) {
+                          onDelete(member.id);
+                        }
+                      }}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))

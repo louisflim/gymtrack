@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { fetchMembers, assignPlanToMember, updateMember, MemberTable } from "../../features/members";
+import { fetchMembers, assignPlanToMember, updateMember, deleteMember, MemberTable } from "../../features/members";
 import { fetchAllPayments, PaymentTable } from "../../features/payments";
 import { createPlan, fetchAllPlans, updatePlan, PlanForm, PlanList } from "../../features/plans";
 import { fetchDashboardStats, KpiSummaryGrid } from "../../features/dashboard";
 import { fetchGymAttendanceLogs, AttendanceLogTable } from "../../features/attendance";
 import { formatCurrency } from "../../utils/formatters";
-import { fetchStaff, updateStaff, StaffTable } from "../../features/staff";
+import { fetchStaff, updateStaff, deleteStaff, StaffTable } from "../../features/staff";
 import { CreateStaffForm } from "../../features/auth/staff";
 
 const EMPTY_PLAN = { name: "", durationDays: 30, price: "999", active: true };
@@ -159,6 +159,16 @@ function AdminDashboardPanel({
     await loadData();
   };
 
+  const handleStaffDelete = async (id) => {
+    await deleteStaff(id);
+    await loadData();
+  };
+
+  const handleMemberDelete = async (id) => {
+    await deleteMember(id);
+    await loadData();
+  };
+
   return (
     <>
       {loadError && <p className="dashboard-scan-status">{loadError}</p>}
@@ -197,11 +207,12 @@ function AdminDashboardPanel({
           plans={plans}
           onUpdate={handleMemberUpdate}
           onAssignPlan={handleAssignPlan}
+          onDelete={handleMemberDelete}
         />
       )}
 
       {tab === "staff" && (
-        <StaffTable staff={staff} onUpdate={handleStaffUpdate} />
+        <StaffTable staff={staff} onUpdate={handleStaffUpdate} onDelete={handleStaffDelete} />
       )}
 
       {tab === "attendance" && (

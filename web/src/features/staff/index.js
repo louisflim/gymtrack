@@ -1,2 +1,2 @@
 export { default as StaffTable } from "./StaffTable";
-export { fetchStaff, updateStaff } from "./api";
+export { fetchStaff, updateStaff, deleteStaff } from "./api";

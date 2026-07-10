@@ -45,6 +45,18 @@ public class MemberController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteMember(@PathVariable Long id, Authentication authentication) {
+        try {
+            memberService.deleteMember(id, authentication.getName());
+            return ResponseEntity.noContent().build();
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PostMapping("/assign-plan")
     public ResponseEntity<?> assignPlan(@RequestBody AssignPlanRequest request, Authentication authentication) {
         try {

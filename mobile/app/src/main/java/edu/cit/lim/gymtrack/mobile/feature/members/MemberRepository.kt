@@ -15,6 +15,10 @@ class MemberRepository(private val apiService: ApiService) {
     suspend fun updateMember(id: Long, request: MemberUpdateRequest): MemberResponse =
         unwrap(apiService.updateMember(id, request))
 
+    suspend fun deleteMember(id: Long) {
+        unwrapUnit(apiService.deleteMember(id))
+    }
+
     suspend fun assignPlan(memberId: Long, planId: Long): MembershipResponse =
         unwrap(apiService.assignPlan(AssignPlanRequest(memberId, planId)))
 
@@ -22,6 +26,13 @@ class MemberRepository(private val apiService: ApiService) {
         if (response.isSuccessful) {
             return response.body() ?: throw AuthException(response.code(), "Empty response from server.")
         }
+        val message = response.errorBody()?.string()?.trim('"').orEmpty()
+            .ifBlank { "Request failed (${response.code()})." }
+        throw AuthException(response.code(), message)
+    }
+
+    private suspend fun unwrapUnit(response: retrofit2.Response<Unit>) {
+        if (response.isSuccessful) return
         val message = response.errorBody()?.string()?.trim('"').orEmpty()
             .ifBlank { "Request failed (${response.code()})." }
         throw AuthException(response.code(), message)

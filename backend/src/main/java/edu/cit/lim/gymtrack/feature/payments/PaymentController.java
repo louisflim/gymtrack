@@ -30,9 +30,16 @@ public class PaymentController {
     }
 
     @PostMapping("/webhook")
-    public ResponseEntity<Void> webhook(@RequestBody String payload) {
-        paymentService.handleWebhook(payload);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> webhook(
+            @RequestBody String payload,
+            @RequestHeader(value = "Paymongo-Signature", required = false) String signature
+    ) {
+        try {
+            paymentService.handleWebhook(payload, signature);
+            return ResponseEntity.ok().build();
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @PostMapping("/confirm-mock")
@@ -40,6 +47,19 @@ public class PaymentController {
         try {
             paymentService.confirmMockPayment(reference);
             return ResponseEntity.ok(Map.of("message", "Payment confirmed and membership activated."));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<?> paymentStatus(@RequestParam String reference, Authentication authentication) {
+        try {
+            return ResponseEntity.ok(paymentService.paymentStatus(reference, authentication.getName()));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

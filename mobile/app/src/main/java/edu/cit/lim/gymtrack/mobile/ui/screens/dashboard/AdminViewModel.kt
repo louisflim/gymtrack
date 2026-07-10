@@ -214,6 +214,30 @@ class AdminViewModel(
         }
     }
 
+    fun deleteStaff(id: Long) {
+        viewModelScope.launch {
+            try {
+                staffRepository.deleteStaff(id)
+                _uiState.value = _uiState.value.copy(statusMessage = "Staff deleted.")
+                loadAll()
+            } catch (e: AuthException) {
+                _uiState.value = _uiState.value.copy(statusMessage = e.message)
+            }
+        }
+    }
+
+    fun deleteMember(id: Long) {
+        viewModelScope.launch {
+            try {
+                memberRepository.deleteMember(id)
+                _uiState.value = _uiState.value.copy(statusMessage = "Member deleted.")
+                loadAll()
+            } catch (e: AuthException) {
+                _uiState.value = _uiState.value.copy(statusMessage = e.message)
+            }
+        }
+    }
+
     class Factory(
         private val staffRepository: StaffRepository,
         private val planRepository: PlanRepository,

@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 data class DashboardUiState(
     val qrImageBase64: String? = null,
@@ -35,7 +36,9 @@ data class DashboardUiState(
     val subscribing: Boolean = false,
     val myAttendanceLogs: List<AttendanceLogResponse> = emptyList(),
     val loadingAttendance: Boolean = false,
-    val staffRefreshKey: Int = 0
+    val staffRefreshKey: Int = 0,
+    val pendingPaymentReference: String? = null,
+    val pendingMockCheckout: Boolean = false
 )
 
 class DashboardViewModel(
@@ -140,22 +143,52 @@ class DashboardViewModel(
             _uiState.value = _uiState.value.copy(subscribing = true, memberStatusMessage = null)
             try {
                 val checkout = paymentRepository.checkout(planId)
+                _uiState.value = _uiState.value.copy(
+                    subscribing = false,
+                    pendingPaymentReference = checkout.reference,
+                    pendingMockCheckout = checkout.mockCheckout
+                )
                 onCheckoutUrl(checkout.checkoutUrl)
             } catch (e: AuthException) {
-                _uiState.value = _uiState.value.copy(memberStatusMessage = e.message)
+                _uiState.value = _uiState.value.copy(subscribing = false, memberStatusMessage = e.message)
             } catch (_: Exception) {
-                _uiState.value = _uiState.value.copy(memberStatusMessage = "Checkout failed.")
-            } finally {
-                _uiState.value = _uiState.value.copy(subscribing = false)
+                _uiState.value = _uiState.value.copy(subscribing = false, memberStatusMessage = "Checkout failed.")
             }
         }
     }
 
-    fun confirmMockIfNeeded(url: String) {
-        val reference = "reference=([^&]+)".toRegex().find(url)?.groupValues?.getOrNull(1) ?: return
+    fun syncPendingPayment() {
+        val reference = _uiState.value.pendingPaymentReference ?: return
         viewModelScope.launch {
-            runCatching { paymentRepository.confirmMockPayment(reference) }
-            loadMemberDashboard()
+            try {
+                val initial = paymentRepository.paymentStatus(reference)
+                if (initial.mockCheckout && !initial.paid) {
+                    paymentRepository.confirmMockPayment(reference)
+                } else if (!initial.paid) {
+                    var paid = false
+                    repeat(10) {
+                        if (paid) return@repeat
+                        val latest = paymentRepository.paymentStatus(reference)
+                        if (latest.paid) {
+                            paid = true
+                            return@repeat
+                        }
+                        delay(2000)
+                    }
+                }
+                _uiState.value = _uiState.value.copy(
+                    pendingPaymentReference = null,
+                    pendingMockCheckout = false,
+                    memberStatusMessage = "Payment confirmed."
+                )
+                loadMemberDashboard()
+            } catch (e: AuthException) {
+                _uiState.value = _uiState.value.copy(memberStatusMessage = e.message)
+            } catch (_: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    memberStatusMessage = "Payment confirmation is still pending."
+                )
+            }
         }
     }
 

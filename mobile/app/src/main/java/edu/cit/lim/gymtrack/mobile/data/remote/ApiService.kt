@@ -47,6 +47,9 @@ interface ApiService {
         @Body request: StaffUpdateRequest
     ): Response<StaffResponse>
 
+    @DELETE("api/staff/{id}")
+    suspend fun deleteStaff(@Path("id") id: Long): Response<Unit>
+
     @GET("api/plans/active")
     suspend fun activePlans(): Response<List<PlanResponse>>
 
@@ -68,6 +71,9 @@ interface ApiService {
     @PUT("api/members/{id}")
     suspend fun updateMember(@Path("id") id: Long, @Body request: MemberUpdateRequest): Response<MemberResponse>
 
+    @DELETE("api/members/{id}")
+    suspend fun deleteMember(@Path("id") id: Long): Response<Unit>
+
     @POST("api/members/assign-plan")
     suspend fun assignPlan(@Body request: AssignPlanRequest): Response<MembershipResponse>
 
@@ -82,6 +88,9 @@ interface ApiService {
 
     @GET("api/payments")
     suspend fun allPayments(): Response<List<PaymentResponse>>
+
+    @GET("api/payments/status")
+    suspend fun paymentStatus(@Query("reference") reference: String): Response<PaymentStatusResponse>
 
     @POST("api/payments/confirm-mock")
     suspend fun confirmMockPayment(@Query("reference") reference: String): Response<Map<String, String>>

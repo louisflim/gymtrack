@@ -86,7 +86,7 @@ class DashboardFragment : Fragment() {
     private val browserLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        dashboardViewModel.loadMemberDashboard()
+        dashboardViewModel.syncPendingPayment()
     }
 
     override fun onCreateView(
@@ -105,6 +105,11 @@ class DashboardFragment : Fragment() {
         setupMemberStatusChips()
         setupListeners()
         observeState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        dashboardViewModel.syncPendingPayment()
     }
 
     private fun setupHeroStats() {
@@ -149,12 +154,16 @@ class DashboardFragment : Fragment() {
 
         memberAdapter = MemberAdapter(
             onEdit = { member -> showMemberEditDialog(member) },
-            onAssignPlan = { member -> showAssignPlanDialog(member) }
+            onAssignPlan = { member -> showAssignPlanDialog(member) },
+            onDelete = { member -> confirmDeleteMember(member) }
         )
         binding.membersRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.membersRecycler.adapter = memberAdapter
 
-        staffAdapter = StaffAdapter { staff -> showStaffEditDialog(staff) }
+        staffAdapter = StaffAdapter(
+            onEdit = { staff -> showStaffEditDialog(staff) },
+            onDelete = { staff -> confirmDeleteStaff(staff) }
+        )
         binding.staffRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.staffRecycler.adapter = staffAdapter
 
@@ -583,6 +592,28 @@ class DashboardFragment : Fragment() {
                         activeSwitch.isChecked
                     )
                 )
+            }
+            .show()
+    }
+
+    private fun confirmDeleteMember(member: MemberResponse) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Delete Member")
+            .setMessage("Delete ${member.firstName} ${member.lastName}? This removes their account, memberships, payments, and attendance history.")
+            .setNegativeButton("Cancel", null)
+            .setPositiveButton("Delete") { _, _ ->
+                adminViewModel.deleteMember(member.id)
+            }
+            .show()
+    }
+
+    private fun confirmDeleteStaff(staff: StaffResponse) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Delete Staff")
+            .setMessage("Delete ${staff.firstName} ${staff.lastName}? This cannot be undone.")
+            .setNegativeButton("Cancel", null)
+            .setPositiveButton("Delete") { _, _ ->
+                adminViewModel.deleteStaff(staff.id)
             }
             .show()
     }

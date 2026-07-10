@@ -13,10 +13,21 @@ class StaffRepository(private val apiService: ApiService) {
     suspend fun updateStaff(id: Long, request: StaffUpdateRequest): StaffResponse =
         unwrap(apiService.updateStaff(id, request))
 
+    suspend fun deleteStaff(id: Long) {
+        unwrapUnit(apiService.deleteStaff(id))
+    }
+
     private suspend fun <T> unwrap(response: retrofit2.Response<T>): T {
         if (response.isSuccessful) {
             return response.body() ?: throw AuthException(response.code(), "Empty response from server.")
         }
+        val message = response.errorBody()?.string()?.trim('"').orEmpty()
+            .ifBlank { "Request failed (${response.code()})." }
+        throw AuthException(response.code(), message)
+    }
+
+    private suspend fun unwrapUnit(response: retrofit2.Response<Unit>) {
+        if (response.isSuccessful) return
         val message = response.errorBody()?.string()?.trim('"').orEmpty()
             .ifBlank { "Request failed (${response.code()})." }
         throw AuthException(response.code(), message)

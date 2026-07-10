@@ -14,6 +14,7 @@ import edu.cit.lim.gymtrack.repository.SubscriptionPlanRepository;
 import edu.cit.lim.gymtrack.repository.UserRepository;
 import edu.cit.lim.gymtrack.feature.membership.MembershipService;
 import edu.cit.lim.gymtrack.util.GymGuard;
+import edu.cit.lim.gymtrack.util.UserDeletionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +27,16 @@ public class MemberService {
     private final UserRepository userRepository;
     private final SubscriptionPlanRepository planRepository;
     private final MembershipService membershipService;
+    private final UserDeletionService userDeletionService;
 
     public MemberService(UserRepository userRepository,
                          SubscriptionPlanRepository planRepository,
-                         MembershipService membershipService) {
+                         MembershipService membershipService,
+                         UserDeletionService userDeletionService) {
         this.userRepository = userRepository;
         this.planRepository = planRepository;
         this.membershipService = membershipService;
+        this.userDeletionService = userDeletionService;
     }
 
     @Transactional(readOnly = true)
@@ -82,6 +86,22 @@ public class MemberService {
         }
 
         return toMemberResponse(userRepository.save(member));
+    }
+
+    @Transactional
+    public void deleteMember(Long memberId, String requesterEmail) {
+        User requester = userRepository.findByEmail(requesterEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Requesting user not found."));
+        Gym gym = GymGuard.requireAdminGym(requester);
+
+        User member = userRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found."));
+        if (member.getRole() != Role.MEMBER) {
+            throw new IllegalArgumentException("User is not a member.");
+        }
+        requireMemberAtGym(member, gym);
+
+        userDeletionService.deleteUserAndRelatedData(member);
     }
 
     public MembershipResponse assignPlan(AssignPlanRequest request, String requesterEmail) {

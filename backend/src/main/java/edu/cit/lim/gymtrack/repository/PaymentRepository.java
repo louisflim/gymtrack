@@ -13,6 +13,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<Payment> findByUserIdOrderByCreatedAtDesc(Long userId);
     List<Payment> findAllByOrderByCreatedAtDesc();
     Optional<Payment> findByPaymongoCheckoutId(String paymongoCheckoutId);
+    Optional<Payment> findByReferenceNumber(String referenceNumber);
     long countByStatus(PaymentStatus status);
 
     @Query("SELECT p FROM Payment p WHERE p.plan.gym.id = :gymId ORDER BY p.createdAt DESC")

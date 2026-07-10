@@ -14,3 +14,7 @@ export const assignPlanToMember = async (memberId, planId) => {
   const response = await axiosInstance.post("/members/assign-plan", { memberId, planId });
   return response.data;
 };
+
+export const deleteMember = async (id) => {
+  await axiosInstance.delete(`/members/${id}`);
+};

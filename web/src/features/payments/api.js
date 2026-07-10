@@ -15,6 +15,11 @@ export const fetchAllPayments = async () => {
   return response.data;
 };
 
+export const fetchPaymentStatus = async (reference) => {
+  const response = await axiosInstance.get("/payments/status", { params: { reference } });
+  return response.data;
+};
+
 export const confirmMockPayment = async (reference) => {
   const response = await axiosInstance.post("/payments/confirm-mock", null, { params: { reference } });
   return response.data;

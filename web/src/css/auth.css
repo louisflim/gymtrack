@@ -696,6 +696,10 @@
   margin-right: 10px;
 }
 
+.dashboard-link-button-danger {
+  color: #ff6b6b;
+}
+
 .dashboard-actions-cell {
   white-space: nowrap;
 }

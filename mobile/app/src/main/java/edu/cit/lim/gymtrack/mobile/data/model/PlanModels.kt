@@ -71,7 +71,16 @@ data class CheckoutRequest(
 data class CheckoutResponse(
     val paymentId: Long,
     val checkoutUrl: String,
-    val status: String
+    val status: String,
+    val reference: String? = null,
+    val mockCheckout: Boolean = false
+)
+
+data class PaymentStatusResponse(
+    val reference: String,
+    val status: String,
+    val paid: Boolean,
+    val mockCheckout: Boolean
 )
 
 data class PaymentResponse(

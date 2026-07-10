@@ -9,7 +9,8 @@ import edu.cit.lim.gymtrack.mobile.ui.util.applyStatusBadge
 
 class MemberAdapter(
     private val onEdit: (MemberResponse) -> Unit,
-    private val onAssignPlan: (MemberResponse) -> Unit
+    private val onAssignPlan: (MemberResponse) -> Unit,
+    private val onDelete: (MemberResponse) -> Unit
 ) : RecyclerView.Adapter<MemberAdapter.ViewHolder>() {
 
     private val items = mutableListOf<MemberResponse>()
@@ -39,6 +40,7 @@ class MemberAdapter(
             binding.memberStatus.applyStatusBadge(member.membershipStatus)
             binding.editMemberButton.setOnClickListener { onEdit(member) }
             binding.assignPlanButton.setOnClickListener { onAssignPlan(member) }
+            binding.deleteMemberButton.setOnClickListener { onDelete(member) }
         }
     }
 }

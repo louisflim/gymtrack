@@ -10,8 +10,11 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Base64;
 
 @Service
@@ -25,6 +28,9 @@ public class PayMongoService {
     @Value("${paymongo.secret-key:}")
     private String secretKey;
 
+    @Value("${paymongo.webhook-secret:}")
+    private String webhookSecret;
+
     @Value("${paymongo.success-url:http://localhost:5173/payment/success}")
     private String successUrl;
 
@@ -34,13 +40,18 @@ public class PayMongoService {
     @Value("${paymongo.mock-enabled:false}")
     private boolean mockEnabled;
 
-    public record CheckoutSessionResult(String checkoutId, String checkoutUrl) {}
+    public record CheckoutSessionResult(String checkoutId, String checkoutUrl, boolean mockCheckout) {}
+
+    public boolean isMockEnabled() {
+        return mockEnabled || secretKey == null || secretKey.isBlank();
+    }
 
     public CheckoutSessionResult createCheckoutSession(SubscriptionPlan plan, String reference) {
-        if (mockEnabled || secretKey == null || secretKey.isBlank()) {
+        if (isMockEnabled()) {
             return new CheckoutSessionResult(
                     "mock_" + reference,
-                    successUrl + "?reference=" + reference
+                    successUrl + "?reference=" + reference,
+                    true
             );
         }
 
@@ -61,8 +72,9 @@ public class PayMongoService {
             attributes.set("line_items", lineItems);
             ArrayNode paymentMethods = objectMapper.createArrayNode();
             paymentMethods.add("gcash");
-            paymentMethods.add("paymaya");
+            paymentMethods.add("grab_pay");
             paymentMethods.add("card");
+            paymentMethods.add("qrph");
             attributes.set("payment_method_types", paymentMethods);
             attributes.put("success_url", successUrl + "?reference=" + reference);
             attributes.put("cancel_url", cancelUrl);
@@ -90,9 +102,63 @@ public class PayMongoService {
             JsonNode sessionData = root.path("data");
             String checkoutId = sessionData.path("id").asText();
             String checkoutUrl = sessionData.path("attributes").path("checkout_url").asText();
-            return new CheckoutSessionResult(checkoutId, checkoutUrl);
+            if (checkoutId.isBlank() || checkoutUrl.isBlank()) {
+                throw new IllegalStateException("PayMongo returned an incomplete checkout session.");
+            }
+            return new CheckoutSessionResult(checkoutId, checkoutUrl, false);
         } catch (Exception e) {
             throw new IllegalStateException("Failed to create PayMongo checkout session: " + e.getMessage(), e);
+        }
+    }
+
+    public boolean verifyWebhookSignature(String signatureHeader, String rawBody) {
+        if (signatureHeader == null || signatureHeader.isBlank()) {
+            return false;
+        }
+        if (webhookSecret == null || webhookSecret.isBlank()) {
+            return !isLiveMode();
+        }
+
+        try {
+            String timestamp = null;
+            String testSignature = null;
+            String liveSignature = null;
+            for (String part : signatureHeader.split(",")) {
+                String trimmed = part.trim();
+                if (trimmed.startsWith("t=")) {
+                    timestamp = trimmed.substring(2);
+                } else if (trimmed.startsWith("te=")) {
+                    testSignature = trimmed.substring(3);
+                } else if (trimmed.startsWith("li=")) {
+                    liveSignature = trimmed.substring(3);
+                }
+            }
+
+            String providedSignature = isLiveMode() ? liveSignature : testSignature;
+            if (timestamp == null || providedSignature == null || providedSignature.isBlank()) {
+                return false;
+            }
+
+            String signedPayload = timestamp + "." + rawBody;
+            Mac mac = Mac.getInstance("HmacSHA256");
+            mac.init(new SecretKeySpec(webhookSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+            byte[] computed = mac.doFinal(signedPayload.getBytes(StandardCharsets.UTF_8));
+            byte[] provided = hexToBytes(providedSignature);
+            return MessageDigest.isEqual(computed, provided);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isPaidEvent(String payload) {
+        try {
+            JsonNode root = objectMapper.readTree(payload);
+            String eventType = root.path("data").path("attributes").path("type").asText("");
+            return eventType.contains("payment.paid")
+                    || eventType.contains("checkout.session.completed")
+                    || eventType.contains("checkout_session.payment.paid");
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -100,11 +166,38 @@ public class PayMongoService {
         try {
             JsonNode root = objectMapper.readTree(payload);
             JsonNode data = root.path("data");
-            String type = data.path("attributes").path("type").asText("");
-            if (type.contains("checkout.session")) {
-                return data.path("attributes").path("data").path("id").asText(null);
+            JsonNode attributes = data.path("attributes");
+            JsonNode nested = attributes.path("data");
+
+            String nestedId = nested.path("id").asText(null);
+            if (nestedId != null && nestedId.startsWith("cs_")) {
+                return nestedId;
             }
-            return data.path("id").asText(null);
+
+            String checkoutFromPayment = nested.path("attributes").path("checkout_session_id").asText(null);
+            if (checkoutFromPayment != null && !checkoutFromPayment.isBlank()) {
+                return checkoutFromPayment;
+            }
+
+            if (data.path("type").asText("").contains("checkout")) {
+                return data.path("id").asText(null);
+            }
+
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String extractReferenceFromWebhook(String payload) {
+        try {
+            JsonNode root = objectMapper.readTree(payload);
+            JsonNode attributes = root.path("data").path("attributes").path("data").path("attributes");
+            String reference = attributes.path("reference_number").asText(null);
+            if (reference != null && !reference.isBlank()) {
+                return reference;
+            }
+            return root.path("data").path("attributes").path("reference_number").asText(null);
         } catch (Exception e) {
             return null;
         }
@@ -113,21 +206,30 @@ public class PayMongoService {
     public String extractPaymentMethod(String payload) {
         try {
             JsonNode root = objectMapper.readTree(payload);
-            return root.path("data").path("attributes").path("data").path("attributes")
-                    .path("source").path("type").asText("paymongo");
+            String method = root.path("data").path("attributes").path("data").path("attributes")
+                    .path("source").path("type").asText("");
+            return method.isBlank() ? "paymongo" : method;
         } catch (Exception e) {
             return "paymongo";
         }
     }
 
-    public boolean isPaidEvent(String payload) {
+    public String extractPaymongoPaymentId(String payload) {
         try {
             JsonNode root = objectMapper.readTree(payload);
-            String eventType = root.path("data").path("attributes").path("type").asText("");
-            return eventType.contains("payment.paid") || eventType.contains("checkout.session.completed");
+            JsonNode nested = root.path("data").path("attributes").path("data");
+            String paymentId = nested.path("id").asText(null);
+            if (paymentId != null && paymentId.startsWith("pay_")) {
+                return paymentId;
+            }
+            return null;
         } catch (Exception e) {
-            return false;
+            return null;
         }
+    }
+
+    private boolean isLiveMode() {
+        return secretKey != null && secretKey.startsWith("sk_live");
     }
 
     private HttpHeaders authHeaders() {
@@ -136,5 +238,15 @@ public class PayMongoService {
                 .encodeToString((secretKey + ":").getBytes(StandardCharsets.UTF_8));
         headers.set("Authorization", "Basic " + token);
         return headers;
+    }
+
+    private static byte[] hexToBytes(String hex) {
+        int length = hex.length();
+        byte[] data = new byte[length / 2];
+        for (int i = 0; i < length; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+                    + Character.digit(hex.charAt(i + 1), 16));
+        }
+        return data;
     }
 }

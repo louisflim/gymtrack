@@ -32,6 +32,9 @@ public class Payment {
     @Column(name = "paymongo_payment_id")
     private String paymongoPaymentId;
 
+    @Column(name = "reference_number", unique = true)
+    private String referenceNumber;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentStatus status = PaymentStatus.PENDING;
@@ -72,6 +75,9 @@ public class Payment {
 
     public String getPaymongoPaymentId() { return paymongoPaymentId; }
     public void setPaymongoPaymentId(String paymongoPaymentId) { this.paymongoPaymentId = paymongoPaymentId; }
+
+    public String getReferenceNumber() { return referenceNumber; }
+    public void setReferenceNumber(String referenceNumber) { this.referenceNumber = referenceNumber; }
 
     public PaymentStatus getStatus() { return status; }
     public void setStatus(PaymentStatus status) { this.status = status; }
