@@ -75,6 +75,7 @@ class RegisterFragment : Fragment() {
                 selectedRole = if (position == 1) "owner" else "member"
                 binding.gymNameLayout.isVisible = selectedRole == "owner"
                 viewModel.clearError()
+                updateCreateAccountButtonState()
             }
 
             override fun onNothingSelected(parent: android.widget.AdapterView<*>?) = Unit
@@ -88,7 +89,10 @@ class RegisterFragment : Fragment() {
             binding.confirmPasswordInput,
             binding.gymNameInput
         ).forEach { field ->
-            field.doAfterTextChanged { viewModel.clearError() }
+            field.doAfterTextChanged {
+                viewModel.clearError()
+                updateCreateAccountButtonState()
+            }
         }
 
         binding.loginLink.setOnClickListener {
@@ -109,23 +113,28 @@ class RegisterFragment : Fragment() {
                 }
             )
         }
+        updateCreateAccountButtonState()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     binding.errorText.showError(state.error)
-                    val formValid = binding.firstNameInput.text?.isNotBlank() == true &&
-                        binding.lastNameInput.text?.isNotBlank() == true &&
-                        binding.emailInput.text?.isNotBlank() == true &&
-                        binding.passwordInput.text?.isNotBlank() == true &&
-                        binding.confirmPasswordInput.text?.isNotBlank() == true &&
-                        (selectedRole != "owner" || binding.gymNameInput.text?.isNotBlank() == true)
-                    binding.createAccountButton.isEnabled = !state.isLoading && formValid
+                    updateCreateAccountButtonState()
                     binding.createAccountButton.text =
                         if (state.isLoading) "Creating Account..." else "Create Account"
                 }
             }
         }
+    }
+
+    private fun updateCreateAccountButtonState() {
+        val formValid = binding.firstNameInput.text?.isNotBlank() == true &&
+            binding.lastNameInput.text?.isNotBlank() == true &&
+            binding.emailInput.text?.isNotBlank() == true &&
+            binding.passwordInput.text?.isNotBlank() == true &&
+            binding.confirmPasswordInput.text?.isNotBlank() == true &&
+            (selectedRole != "owner" || binding.gymNameInput.text?.isNotBlank() == true)
+        binding.createAccountButton.isEnabled = !viewModel.uiState.value.isLoading && formValid
     }
 
     override fun onDestroyView() {
