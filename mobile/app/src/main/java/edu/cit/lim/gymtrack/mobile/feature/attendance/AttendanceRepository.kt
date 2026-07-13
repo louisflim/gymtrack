@@ -16,7 +16,7 @@ class AttendanceRepository(
         if (!response.isSuccessful) {
             throw AuthException(response.code(), extractMessage(response.code(), response.errorBody()?.string()))
         }
-        return response.body() ?: throw AuthException(response.code(), "No QR data returned.")
+        return response.body() ?: throw AuthException(response.code(), "We couldn't load your QR code. Please try again.")
     }
 
     suspend fun getGymQrCode(): QrCodeResponse {
@@ -24,7 +24,7 @@ class AttendanceRepository(
         if (!response.isSuccessful) {
             throw AuthException(response.code(), extractMessage(response.code(), response.errorBody()?.string()))
         }
-        return response.body() ?: throw AuthException(response.code(), "No gym QR data returned.")
+        return response.body() ?: throw AuthException(response.code(), "We couldn't load the gym QR code. Please try again.")
     }
 
     suspend fun scanGymQr(qrData: String): MemberGymScanResponse {
@@ -32,7 +32,7 @@ class AttendanceRepository(
         if (!response.isSuccessful) {
             throw AuthException(response.code(), extractMessage(response.code(), response.errorBody()?.string()))
         }
-        return response.body() ?: throw AuthException(response.code(), "No scan result returned.")
+        return response.body() ?: throw AuthException(response.code(), "We couldn't complete that scan. Please try again.")
     }
 
     suspend fun scanQr(qrData: String): AttendanceScanResponse {
@@ -40,7 +40,7 @@ class AttendanceRepository(
         if (!response.isSuccessful) {
             throw AuthException(response.code(), extractMessage(response.code(), response.errorBody()?.string()))
         }
-        return response.body() ?: throw AuthException(response.code(), "No scan result returned.")
+        return response.body() ?: throw AuthException(response.code(), "We couldn't complete that scan. Please try again.")
     }
 
     suspend fun getMyAttendance(): List<AttendanceLogResponse> {
@@ -63,10 +63,10 @@ class AttendanceRepository(
         val clean = message?.trim('"')?.trim().orEmpty()
         if (clean.isNotBlank()) return clean
         return when (statusCode) {
-            400 -> "Invalid QR data."
-            401 -> "Please sign in again."
-            403 -> "Access denied for this action."
-            else -> "Something went wrong. Try again."
+            400 -> "That QR code isn't valid. Please try scanning again."
+            401 -> "Please sign in again to continue."
+            403 -> "You don't have permission to do that."
+            else -> "Something went wrong. Please try again."
         }
     }
 }

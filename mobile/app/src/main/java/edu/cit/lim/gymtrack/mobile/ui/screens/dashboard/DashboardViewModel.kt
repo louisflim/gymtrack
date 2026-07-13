@@ -77,7 +77,7 @@ class DashboardViewModel(
             } catch (e: AuthException) {
                 _uiState.value = _uiState.value.copy(loading = false, memberStatusMessage = e.message)
             } catch (_: Exception) {
-                _uiState.value = _uiState.value.copy(loading = false, memberStatusMessage = "Failed to load member data.")
+                _uiState.value = _uiState.value.copy(loading = false, memberStatusMessage = "We couldn't load your membership details. Please try again.")
             }
         }
     }
@@ -98,7 +98,7 @@ class DashboardViewModel(
                 _uiState.value = _uiState.value.copy(
                     loadingGymQr = false,
                     gymQrImageBase64 = null,
-                    scanStatusMessage = "Unable to load gym QR code."
+                    scanStatusMessage = "We couldn't load the gym QR code. Please try again."
                 )
             }
         }
@@ -116,7 +116,7 @@ class DashboardViewModel(
                 _uiState.value = _uiState.value.copy(
                     loading = false,
                     qrImageBase64 = qrImage,
-                    memberStatusMessage = if (qrImage == null) "Unable to load QR code." else null
+                    memberStatusMessage = if (qrImage == null) "We couldn't load your QR code. Please try again." else null
                 )
             } catch (e: AuthException) {
                 _uiState.value = _uiState.value.copy(
@@ -128,7 +128,7 @@ class DashboardViewModel(
                 _uiState.value = _uiState.value.copy(
                     loading = false,
                     qrImageBase64 = null,
-                    memberStatusMessage = "Unable to load QR code."
+                    memberStatusMessage = "We couldn't load your QR code. Please try again."
                 )
             }
         }
@@ -254,7 +254,7 @@ class DashboardViewModel(
             val session = authRepository.currentSession()
             if (session.gymName.isNullOrBlank()) {
                 _uiState.value = _uiState.value.copy(
-                    staffStatusMessage = "Your admin account is not linked to a gym. Sign out and register again as Gym Owner with a gym name."
+                    staffStatusMessage = "Your account isn't connected to a gym yet. Sign out, then create a new account as Gym Owner and enter your gym name."
                 )
                 return@launch
             }
@@ -273,7 +273,7 @@ class DashboardViewModel(
                 val networkMessage = ApiErrorParser.networkMessage(e)
                 _uiState.value = _uiState.value.copy(
                     creatingStaff = false,
-                    staffStatusMessage = networkMessage ?: "Failed to create staff account."
+                    staffStatusMessage = networkMessage ?: "We couldn't create the staff account. Please try again."
                 )
             }
         }

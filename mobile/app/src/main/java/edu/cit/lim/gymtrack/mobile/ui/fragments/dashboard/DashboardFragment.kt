@@ -391,7 +391,7 @@ class DashboardFragment : Fragment() {
                 val loaded = binding.qrCard.qrImage.loadBase64Qr(state.qrImageBase64)
                 binding.qrCard.qrNote.text = when {
                     state.loading -> "Loading QR code..."
-                    !loaded -> state.memberStatusMessage ?: "Unable to load QR code."
+                    !loaded -> state.memberStatusMessage ?: "We couldn't load your QR code. Please try again."
                     membership?.nextStep == "FIRST_CHECK_IN" -> DashboardUiCopy.memberQrNoteFirstCheckIn
                     else -> DashboardUiCopy.memberQrNoteActive
                 }
@@ -401,7 +401,7 @@ class DashboardFragment : Fragment() {
             val loaded = binding.qrCard.qrImage.loadBase64Qr(state.gymQrImageBase64)
             binding.qrCard.qrNote.text = when {
                 state.loadingGymQr -> "Loading gym QR code..."
-                !loaded -> state.scanStatusMessage ?: "Unable to load gym QR code."
+                !loaded -> state.scanStatusMessage ?: "We couldn't load the gym QR code. Please try again."
                 else -> "Display this QR at the front desk for member enrollment."
             }
         }
@@ -448,7 +448,7 @@ class DashboardFragment : Fragment() {
 
         val missingGym = session.gymName.isNullOrBlank()
         binding.createStaffForm.staffGymHint.text = if (missingGym) {
-            "Your admin account is not linked to a gym. Sign out and register again as Gym Owner with a gym name."
+            "Your account isn't connected to a gym yet. Sign out, then create a new account as Gym Owner and enter your gym name."
         } else {
             "Gym: ${session.gymName} — new staff will belong to this gym."
         }

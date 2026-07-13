@@ -35,7 +35,7 @@ function RegisterPage() {
     }
 
     if (form.role === "owner" && !form.gymName.trim()) {
-      setError("Gym name is required when registering as gym owner.");
+      setError("Please enter a gym name when registering as a gym owner.");
       return;
     }
 
@@ -54,7 +54,7 @@ function RegisterPage() {
       saveSession(data);
       navigate("/dashboard");
     } catch (err) {
-      setError(getApiError(err, "Registration failed. Check your details."));
+      setError(getApiError(err, "We couldn't create your account. Please check your details and try again."));
     } finally {
       setLoading(false);
     }

@@ -114,7 +114,7 @@ class AdminViewModel(
             } catch (e: AuthException) {
                 _uiState.value = _uiState.value.copy(loading = false, statusMessage = e.message)
             } catch (_: Exception) {
-                _uiState.value = _uiState.value.copy(loading = false, statusMessage = "Failed to load admin data.")
+                _uiState.value = _uiState.value.copy(loading = false, statusMessage = "We couldn't load your dashboard. Please try again.")
             }
         }
     }
@@ -173,7 +173,7 @@ class AdminViewModel(
             } catch (e: AuthException) {
                 _uiState.value = _uiState.value.copy(statusMessage = e.message)
             } catch (_: Exception) {
-                _uiState.value = _uiState.value.copy(statusMessage = "Failed to save plan.")
+                _uiState.value = _uiState.value.copy(statusMessage = "We couldn't save this plan. Please try again.")
             }
         }
     }

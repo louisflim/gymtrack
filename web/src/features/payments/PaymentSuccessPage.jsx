@@ -14,7 +14,7 @@ function PaymentSuccessPage() {
   useEffect(() => {
     const reference = params.get("reference");
     if (!reference) {
-      setMessage("Missing payment reference. Redirecting...");
+      setMessage("We couldn't find your payment details. Taking you back...");
       const timer = setTimeout(() => navigate("/dashboard", { replace: true }), 1500);
       return () => clearTimeout(timer);
     }
@@ -27,13 +27,13 @@ function PaymentSuccessPage() {
 
         if (initial.mockCheckout && !initial.paid) {
           await confirmMockPayment(reference);
-          if (!cancelled) setMessage("Payment confirmed. Activating membership...");
+          if (!cancelled) setMessage("Payment confirmed. Activating your membership...");
         } else if (!initial.paid) {
-          if (!cancelled) setMessage("Waiting for PayMongo confirmation...");
+          if (!cancelled) setMessage("Confirming your payment. This may take a moment...");
           for (let attempt = 0; attempt < 15 && !cancelled; attempt++) {
             const latest = await fetchPaymentStatus(reference);
             if (latest.paid) {
-              if (!cancelled) setMessage("Payment confirmed. Activating membership...");
+              if (!cancelled) setMessage("Payment confirmed. Activating your membership...");
               break;
             }
             await sleep(2000);
@@ -42,7 +42,7 @@ function PaymentSuccessPage() {
           if (!cancelled) setMessage("Payment already confirmed.");
         }
       } catch {
-        if (!cancelled) setMessage("We could not confirm your payment yet. Check your dashboard in a moment.");
+        if (!cancelled) setMessage("We couldn't confirm your payment yet. Check your dashboard in a moment.");
       } finally {
         if (!cancelled) {
           setTimeout(() => navigate("/dashboard", { replace: true }), 1500);

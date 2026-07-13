@@ -101,7 +101,7 @@ function Dashboard() {
           `${result.memberName} (${result.planName || "No plan"}) — ${result.membershipStatus} — ${result.action}`
       );
     } catch (err) {
-      setScanStatus(err.response?.data || "Scan failed. Try again.");
+      setScanStatus(getApiError(err, "Scan failed. Please try again."));
     }
   };
 
@@ -112,7 +112,7 @@ function Dashboard() {
       setMemberGymScanStatus(result.message);
       await loadMemberData();
     } catch (err) {
-      setMemberGymScanStatus(err.response?.data || "Scan failed. Try again.");
+      setMemberGymScanStatus(getApiError(err, "Scan failed. Please try again."));
     }
   };
 
@@ -140,7 +140,7 @@ function Dashboard() {
       setStaffForm(EMPTY_STAFF);
       setStaffRefreshKey((key) => key + 1);
     } catch (err) {
-      setStaffStatus(getApiError(err, "Failed to create staff account."));
+      setStaffStatus(getApiError(err, "We couldn't create the staff account. Please try again."));
     } finally {
       setCreatingStaff(false);
     }

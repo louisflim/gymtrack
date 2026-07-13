@@ -67,7 +67,7 @@ function QrScanner({ open, onScanSuccess, onClose, statusMessage }) {
         });
       } catch (_err) {
         if (isActive) {
-          onScanSuccessRef.current(null, "Unable to access camera. Check browser permission.");
+          onScanSuccessRef.current(null, "We couldn't access your camera. Please allow camera permission and try again.");
         }
         releaseCamera();
       }

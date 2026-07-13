@@ -7,7 +7,7 @@ function MemberQrCard({ qrImage, loading, note }) {
         <img src={qrImage} alt="My GymTrack QR" className="dashboard-qr-image" />
       ) : (
         <p className="dashboard-qr-note">
-          {loading ? "Generating your QR code..." : "Unable to load your QR code."}
+          {loading ? "Generating your QR code..." : "We couldn't load your QR code. Please try again."}
         </p>
       )}
       <p className="dashboard-qr-note">

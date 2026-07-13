@@ -24,15 +24,15 @@ public class StaffCreationService {
                 .orElseThrow(() -> new IllegalArgumentException("Requesting user not found."));
 
         if (requester.getRole() != Role.ADMIN) {
-            throw new SecurityException("Only ADMIN can create STAFF accounts.");
+            throw new SecurityException("You don't have permission to create staff accounts.");
         }
 
         if (requester.getGym() == null) {
-            throw new IllegalArgumentException("Your admin account is not linked to a gym.");
+            throw new IllegalArgumentException("Your account isn't connected to a gym yet.");
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email is already registered");
+            throw new IllegalArgumentException("That email is already registered.");
         }
 
         User staff = new User(

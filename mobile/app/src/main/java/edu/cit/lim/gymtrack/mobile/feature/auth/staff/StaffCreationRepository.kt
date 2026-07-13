@@ -25,7 +25,7 @@ class StaffCreationRepository(
         )
         if (response.isSuccessful) {
             return response.body()
-                ?: throw AuthException(response.code(), "Empty response from server.")
+                ?: throw AuthException(response.code(), ApiErrorParser.EMPTY)
         }
 
         val message = ApiErrorParser.parse(
@@ -37,8 +37,8 @@ class StaffCreationRepository(
     }
 
     private fun defaultErrorMessage(statusCode: Int): String = when (statusCode) {
-        403 -> "You do not have permission to perform this action."
-        400 -> "Request failed. Check your details."
-        else -> "Something went wrong. Try again."
+        403 -> "You don't have permission to do that."
+        400 -> ApiErrorParser.CHECK_DETAILS
+        else -> ApiErrorParser.GENERIC
     }
 }

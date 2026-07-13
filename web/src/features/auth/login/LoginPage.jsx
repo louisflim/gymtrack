@@ -27,7 +27,7 @@ function LoginPage() {
       if (err.response?.status === 401) {
         setError("Invalid email or password.");
       } else {
-        setError(getApiError(err, "Something went wrong. Try again."));
+        setError(getApiError(err, "Something went wrong. Please try again."));
       }
     } finally {
       setLoading(false);

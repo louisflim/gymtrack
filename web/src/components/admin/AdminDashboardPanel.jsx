@@ -5,6 +5,7 @@ import { createPlan, fetchAllPlans, updatePlan, PlanForm, PlanList } from "../..
 import { fetchDashboardStats, KpiSummaryGrid } from "../../features/dashboard";
 import { fetchGymAttendanceLogs, AttendanceLogTable } from "../../features/attendance";
 import { formatCurrency } from "../../utils/formatters";
+import { getApiError } from "../../utils/apiError";
 import { fetchStaff, updateStaff, deleteStaff, StaffTable } from "../../features/staff";
 import { CreateStaffForm } from "../../features/auth/staff";
 
@@ -53,7 +54,7 @@ function AdminDashboardPanel({
       setStats(statsData);
       setLoadError("");
     } catch (err) {
-      setLoadError(err.response?.data || "Failed to load admin data.");
+      setLoadError(getApiError(err, "We couldn't load your dashboard. Please try again."));
     }
   }, []);
 
@@ -62,7 +63,7 @@ function AdminDashboardPanel({
       const logs = await fetchGymAttendanceLogs(attendanceSearch, attendanceDate);
       setAttendanceLogs(logs);
     } catch (err) {
-      setLoadError(err.response?.data || "Failed to load attendance logs.");
+      setLoadError(getApiError(err, "We couldn't load attendance records. Please try again."));
     }
   }, [attendanceSearch, attendanceDate]);
 
@@ -74,7 +75,7 @@ function AdminDashboardPanel({
     if (tab === "members") {
       fetchMembers("", "ALL")
         .then((data) => setMembers(Array.isArray(data) ? data : []))
-        .catch((err) => setLoadError(err.response?.data || "Failed to load members."));
+        .catch((err) => setLoadError(getApiError(err, "We couldn't load members. Please try again.")));
     }
   }, [tab]);
 
@@ -127,7 +128,7 @@ function AdminDashboardPanel({
       setEditingPlanId(null);
       await loadData();
     } catch (err) {
-      setPlanStatus(err.response?.data || "Failed to save plan.");
+      setPlanStatus(getApiError(err, "We couldn't save this plan. Please try again."));
     } finally {
       setSavingPlan(false);
     }

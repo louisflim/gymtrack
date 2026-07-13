@@ -11,7 +11,7 @@ function CreateStaffForm({ values, onChange, onSubmit, loading, statusMessage, a
         <p className="dashboard-qr-note">Gym: <strong>{adminGymName}</strong> — new staff will belong to this gym.</p>
       ) : (
         <p className="auth-error dashboard-qr-note">
-          Your admin account is not linked to a gym. Sign out and register again as <strong>Gym Owner</strong> with a gym name.
+          Your account isn't connected to a gym yet. Sign out, then create a new account as <strong>Gym Owner</strong> and enter your gym name.
         </p>
       )}
       <form onSubmit={onSubmit}>

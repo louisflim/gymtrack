@@ -37,7 +37,7 @@ class RegistrationRepository(
     private suspend fun handleAuthResponse(response: retrofit2.Response<AuthResponse>): UserSession {
         if (response.isSuccessful) {
             val body = response.body()
-                ?: throw AuthException(response.code(), "Empty response from server.")
+                ?: throw AuthException(response.code(), ApiErrorParser.EMPTY)
             val session = body.toSession()
             sessionDataStore.saveSession(session)
             SessionTokenHolder.token = session.token
@@ -65,8 +65,8 @@ class RegistrationRepository(
 
     private fun defaultErrorMessage(statusCode: Int): String = when (statusCode) {
         401 -> "Invalid email or password."
-        403 -> "You do not have permission to perform this action."
-        400 -> "Request failed. Check your details."
-        else -> "Something went wrong. Try again."
+        403 -> "You don't have permission to do that."
+        400 -> ApiErrorParser.CHECK_DETAILS
+        else -> ApiErrorParser.GENERIC
     }
 }

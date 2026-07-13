@@ -33,7 +33,7 @@ class LoginViewModel(
             } catch (e: Exception) {
                 val networkMessage = ApiErrorParser.networkMessage(e)
                 _uiState.value = LoginUiState(
-                    error = networkMessage ?: "Something went wrong. Try again."
+                    error = networkMessage ?: ApiErrorParser.GENERIC
                 )
             }
         }

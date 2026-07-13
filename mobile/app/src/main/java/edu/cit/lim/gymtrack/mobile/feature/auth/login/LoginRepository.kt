@@ -21,7 +21,7 @@ class LoginRepository(
     private suspend fun handleAuthResponse(response: retrofit2.Response<AuthResponse>): UserSession {
         if (response.isSuccessful) {
             val body = response.body()
-                ?: throw AuthException(response.code(), "Empty response from server.")
+                ?: throw AuthException(response.code(), ApiErrorParser.EMPTY)
             val session = body.toSession()
             sessionDataStore.saveSession(session)
             SessionTokenHolder.token = session.token
@@ -50,6 +50,6 @@ class LoginRepository(
     private fun defaultErrorMessage(statusCode: Int): String = when (statusCode) {
         401 -> "Invalid email or password."
         403 -> "This account has been deactivated."
-        else -> "Something went wrong. Try again."
+        else -> ApiErrorParser.GENERIC
     }
 }

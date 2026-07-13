@@ -37,7 +37,7 @@ class RegistrationViewModel(
         }
 
         if (role == "owner" && gymName.isBlank()) {
-            _uiState.value = RegistrationUiState(error = "Gym name is required when registering as gym owner.")
+            _uiState.value = RegistrationUiState(error = "Please enter a gym name when registering as a gym owner.")
             return
         }
 
@@ -61,7 +61,7 @@ class RegistrationViewModel(
             } catch (e: Exception) {
                 val networkMessage = ApiErrorParser.networkMessage(e)
                 _uiState.value = RegistrationUiState(
-                    error = networkMessage ?: "Something went wrong. Try again."
+                    error = networkMessage ?: ApiErrorParser.GENERIC
                 )
             }
         }

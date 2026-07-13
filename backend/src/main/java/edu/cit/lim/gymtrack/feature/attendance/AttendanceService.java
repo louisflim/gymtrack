@@ -57,15 +57,15 @@ public class AttendanceService {
     public QrCodeResponse generateQrForUser(String email) {
         User user = findUserByEmail(email);
         if (user.getRole() != Role.MEMBER) {
-            throw new SecurityException("Only MEMBER accounts have personal QR codes.");
+            throw new SecurityException("Personal QR codes are only available on member accounts.");
         }
         if (user.getGym() == null) {
-            throw new IllegalArgumentException("Enroll at a gym before your member QR is available.");
+            throw new IllegalArgumentException("Join a gym first before your member QR code is available.");
         }
         Membership membership = membershipService.getLatestMembership(user.getId()).orElse(null);
         MembershipStatus status = membership != null ? membership.getStatus() : MembershipStatus.NONE;
         if (!MembershipStatusUtil.allowsAttendance(status)) {
-            throw new IllegalArgumentException("Purchase an active subscription before your member QR is available.");
+            throw new IllegalArgumentException("Get an active membership plan before your QR code is available.");
         }
         String payload = buildMemberQrPayload(user.getId());
         return new QrCodeResponse(payload, generateQrBase64(payload));
@@ -85,7 +85,7 @@ public class AttendanceService {
             throw new SecurityException("Only members can scan gym QR codes.");
         }
         if (!member.isActive()) {
-            throw new IllegalArgumentException("Your account is deactivated.");
+            throw new IllegalArgumentException("Your account has been deactivated. Please contact your gym.");
         }
 
         Long gymId = parseGymIdFromQr(qrData);
@@ -233,7 +233,7 @@ public class AttendanceService {
     public List<AttendanceLogResponse> getGymAttendanceLogs(String requesterEmail, String search, String date) {
         User requester = findUserByEmail(requesterEmail);
         if (requester.getRole() != Role.ADMIN) {
-            throw new SecurityException("Only admins can view gym attendance logs.");
+            throw new SecurityException("Only gym owners can view attendance records.");
         }
         Gym gym = GymGuard.requireAdminGym(requester);
 

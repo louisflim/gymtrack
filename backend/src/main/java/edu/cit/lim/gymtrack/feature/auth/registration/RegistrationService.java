@@ -33,11 +33,11 @@ public class RegistrationService {
         String requestedRole = request.getRole() == null ? "" : request.getRole().toUpperCase();
 
         if (!requestedRole.equals("ADMIN") && !requestedRole.equals("MEMBER")) {
-            throw new IllegalArgumentException("Role must be either ADMIN or MEMBER");
+            throw new IllegalArgumentException("Please choose Member or Gym Owner.");
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email is already registered");
+            throw new IllegalArgumentException("That email is already registered.");
         }
 
         Role role = Role.valueOf(requestedRole);
@@ -53,11 +53,11 @@ public class RegistrationService {
         if (role == Role.ADMIN) {
             String gymName = request.getGymName();
             if (gymName == null || gymName.isBlank()) {
-                throw new IllegalArgumentException("Gym name is required when registering as gym owner.");
+                throw new IllegalArgumentException("Please enter a gym name when registering as a gym owner.");
             }
             String trimmedName = gymName.trim();
             if (gymRepository.existsByNameIgnoreCase(trimmedName)) {
-                throw new IllegalArgumentException("A gym with this name already exists.");
+                throw new IllegalArgumentException("A gym with that name already exists. Please choose another name.");
             }
             Gym gym = gymRepository.save(new Gym(trimmedName));
             user.setGym(gym);

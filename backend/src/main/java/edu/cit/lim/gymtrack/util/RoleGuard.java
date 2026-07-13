@@ -10,13 +10,13 @@ public final class RoleGuard {
 
     public static User requireUser(UserRepository userRepository, String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new SecurityException("Authenticated user not found."));
+                .orElseThrow(() -> new SecurityException("Please sign in again to continue."));
     }
 
     public static User requireAdmin(UserRepository userRepository, String email) {
         User user = requireUser(userRepository, email);
         if (user.getRole() != Role.ADMIN) {
-            throw new SecurityException("Only ADMIN can perform this action.");
+            throw new SecurityException("You don't have permission to do that.");
         }
         return user;
     }
@@ -24,7 +24,7 @@ public final class RoleGuard {
     public static User requireAdminOrStaff(UserRepository userRepository, String email) {
         User user = requireUser(userRepository, email);
         if (user.getRole() != Role.ADMIN && user.getRole() != Role.STAFF) {
-            throw new SecurityException("Only ADMIN or STAFF can perform this action.");
+            throw new SecurityException("You don't have permission to do that.");
         }
         return user;
     }
@@ -32,7 +32,7 @@ public final class RoleGuard {
     public static User requireMember(UserRepository userRepository, String email) {
         User user = requireUser(userRepository, email);
         if (user.getRole() != Role.MEMBER) {
-            throw new SecurityException("Only MEMBER can perform this action.");
+            throw new SecurityException("You don't have permission to do that.");
         }
         return user;
     }
