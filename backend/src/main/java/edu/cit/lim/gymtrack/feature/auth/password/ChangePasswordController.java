@@ -3,6 +3,7 @@ package edu.cit.lim.gymtrack.feature.auth.password;
 import edu.cit.lim.gymtrack.feature.auth.password.dto.ChangePasswordRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ public class ChangePasswordController {
     }
 
     @PostMapping("/change-password")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> changePassword(
             @RequestBody ChangePasswordRequest request,
             Authentication authentication) {

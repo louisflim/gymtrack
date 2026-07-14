@@ -96,11 +96,15 @@ public class PaymentService {
     }
 
     @Transactional
-    public void confirmMockPayment(String reference) {
+    public void confirmMockPayment(String reference, String memberEmail) {
         if (!payMongoService.isMockEnabled()) {
             throw new SecurityException("Mock payment confirmation is disabled.");
         }
+        User member = RoleGuard.requireMember(userRepository, memberEmail);
         Payment payment = findPaymentByReference(reference);
+        if (!payment.getUser().getId().equals(member.getId())) {
+            throw new SecurityException("You do not have access to this payment.");
+        }
         if (payment.getStatus() == PaymentStatus.PAID) {
             return;
         }

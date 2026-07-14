@@ -3,6 +3,7 @@ package edu.cit.lim.gymtrack.feature.payments;
 import edu.cit.lim.gymtrack.feature.payments.dto.CheckoutRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ public class PaymentController {
     }
 
     @PostMapping("/checkout")
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<?> checkout(@RequestBody CheckoutRequest request, Authentication authentication) {
         try {
             return ResponseEntity.ok(paymentService.createCheckout(request.getPlanId(), authentication.getName()));
@@ -43,9 +45,10 @@ public class PaymentController {
     }
 
     @PostMapping("/confirm-mock")
-    public ResponseEntity<?> confirmMock(@RequestParam String reference) {
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<?> confirmMock(@RequestParam String reference, Authentication authentication) {
         try {
-            paymentService.confirmMockPayment(reference);
+            paymentService.confirmMockPayment(reference, authentication.getName());
             return ResponseEntity.ok(Map.of("message", "Payment confirmed and membership activated."));
         } catch (SecurityException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
@@ -55,6 +58,7 @@ public class PaymentController {
     }
 
     @GetMapping("/status")
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<?> paymentStatus(@RequestParam String reference, Authentication authentication) {
         try {
             return ResponseEntity.ok(paymentService.paymentStatus(reference, authentication.getName()));
@@ -66,6 +70,7 @@ public class PaymentController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<?> myPayments(Authentication authentication) {
         try {
             return ResponseEntity.ok(paymentService.myPayments(authentication.getName()));
@@ -75,6 +80,7 @@ public class PaymentController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> allPayments(Authentication authentication) {
         try {
             return ResponseEntity.ok(paymentService.allPayments(authentication.getName()));

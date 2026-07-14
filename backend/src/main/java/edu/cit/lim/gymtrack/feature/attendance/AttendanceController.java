@@ -4,6 +4,7 @@ import edu.cit.lim.gymtrack.feature.attendance.dto.AttendanceLogResponse;
 import edu.cit.lim.gymtrack.feature.attendance.dto.AttendanceScanResponse;
 import edu.cit.lim.gymtrack.feature.attendance.dto.ScanRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/scan-gym")
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<?> scanGym(@RequestBody ScanRequest request, Authentication authentication) {
         try {
             return ResponseEntity.ok(attendanceService.scanGymQrAsMember(
@@ -39,6 +41,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/scan")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<?> scan(@RequestBody ScanRequest request, Authentication authentication) {
         try {
             AttendanceScanResponse response = attendanceService.scanAttendance(
@@ -54,11 +57,13 @@ public class AttendanceController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<List<AttendanceLogResponse>> myLogs(Authentication authentication) {
         return ResponseEntity.ok(attendanceService.getMyAttendanceLogs(authentication.getName()));
     }
 
     @GetMapping("/gym")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> gymLogs(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String date,

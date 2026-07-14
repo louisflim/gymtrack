@@ -116,7 +116,7 @@ public class PayMongoService {
             return false;
         }
         if (webhookSecret == null || webhookSecret.isBlank()) {
-            return !isLiveMode();
+            return false;
         }
 
         try {

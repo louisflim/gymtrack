@@ -3,6 +3,7 @@ package edu.cit.lim.gymtrack.feature.auth.staff;
 import edu.cit.lim.gymtrack.feature.auth.staff.dto.CreateStaffRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ public class StaffCreationController {
     }
 
     @PostMapping("/staff")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createStaff(@RequestBody CreateStaffRequest request, Authentication authentication) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED)

@@ -1,14 +1,15 @@
 # Copy to application-local.properties (gitignored) or set these as environment variables.
 # Use TEST keys for local development; use LIVE keys only in production.
 
+# ---------------------------------------------------------------------------
+# Local JWT (optional — required in prod via JWT_SECRET)
+# ---------------------------------------------------------------------------
+# jwt.secret=local-dev-secret-change-me-32chars-min
+
 # Database (optional — defaults are in application.properties)
 # spring.datasource.url=jdbc:postgresql://YOUR_HOST:5432/postgres
 # spring.datasource.username=postgres.YOUR_PROJECT
 # spring.datasource.password=YOUR_PASSWORD
-#
-# If spring-boot:run fails with "Unable to determine Dialect", the app cannot reach
-# PostgreSQL. Check internet, Supabase project status, and that empty env vars like
-# SPRING_DATASOURCE_URL are not overriding your credentials.
 
 # ---------------------------------------------------------------------------
 # Local development (mock checkout — no PayMongo account required)
@@ -26,20 +27,18 @@ paymongo.mock-enabled=true
 # paymongo.webhook-secret=whsec_YOUR_TEST_WEBHOOK_SECRET
 
 # ---------------------------------------------------------------------------
-# Production deployment (set on your host — never commit live keys)
+# Production deployment (SPRING_PROFILES_ACTIVE=prod)
 # ---------------------------------------------------------------------------
-# PAYMONGO_SECRET_KEY=sk_live_YOUR_LIVE_SECRET_KEY
-# PAYMONGO_PUBLIC_KEY=pk_live_YOUR_LIVE_PUBLIC_KEY
+# JWT_SECRET=long-random-secret-at-least-32-characters
+# SPRING_DATASOURCE_URL=jdbc:postgresql://...
+# SPRING_DATASOURCE_USERNAME=...
+# SPRING_DATASOURCE_PASSWORD=...
+# PAYMONGO_SECRET_KEY=sk_live_...
+# PAYMONGO_PUBLIC_KEY=pk_live_...
 # PAYMONGO_MOCK_ENABLED=false
-# PAYMONGO_WEBHOOK_SECRET=whsec_YOUR_LIVE_WEBHOOK_SECRET
+# PAYMONGO_WEBHOOK_SECRET=whsec_...
 # PAYMONGO_SUCCESS_URL=https://your-frontend.com/payment/success
 # PAYMONGO_CANCEL_URL=https://your-frontend.com/payment/cancel
 # CORS_ALLOWED_ORIGINS=https://your-frontend.com
 
-# PayMongo dashboard setup (production):
-# 1. Developers → API keys → copy live secret key
-# 2. Developers → Webhooks → add endpoint:
-#    POST https://your-backend.com/api/payments/webhook
-#    Events: checkout.session.payment.paid (and/or payment.paid)
-# 3. Copy the webhook signing secret into PAYMONGO_WEBHOOK_SECRET
-# 4. Set success/cancel URLs to your deployed web app routes
+# PayMongo dashboard: webhook POST https://your-backend.com/api/payments/webhook
