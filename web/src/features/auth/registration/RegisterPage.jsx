@@ -4,6 +4,7 @@ import BrandPanel from "../../../components/auth/BrandPanel";
 import SplitAuthLayout from "../../../components/layout/SplitAuthLayout";
 import { saveSession } from "../../../utils/session";
 import { getApiError } from "../../../utils/apiError";
+import { getPasswordMismatchError } from "../../../utils/authHelpers";
 import { registerUser } from "./api";
 import RegisterForm from "./RegisterForm";
 
@@ -29,8 +30,9 @@ function RegisterPage() {
     e.preventDefault();
     setError("");
 
-    if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match.");
+    const mismatch = getPasswordMismatchError(form.password, form.confirmPassword);
+    if (mismatch) {
+      setError(mismatch);
       return;
     }
 

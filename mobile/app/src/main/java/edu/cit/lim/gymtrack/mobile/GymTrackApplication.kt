@@ -8,6 +8,7 @@ import edu.cit.lim.gymtrack.mobile.feature.attendance.AttendanceRepository
 import edu.cit.lim.gymtrack.mobile.feature.staff.StaffRepository
 import edu.cit.lim.gymtrack.mobile.data.repository.AuthRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.login.LoginRepository
+import edu.cit.lim.gymtrack.mobile.feature.auth.password.ChangePasswordRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.registration.RegistrationRepository
 import edu.cit.lim.gymtrack.mobile.feature.auth.staff.StaffCreationRepository
 import edu.cit.lim.gymtrack.mobile.feature.dashboard.DashboardRepository
@@ -29,6 +30,8 @@ class GymTrackApplication : Application() {
         private set
     lateinit var loginRepository: LoginRepository
         private set
+    lateinit var changePasswordRepository: ChangePasswordRepository
+        private set
     lateinit var staffCreationRepository: StaffCreationRepository
         private set
     lateinit var planRepository: PlanRepository
@@ -49,6 +52,7 @@ class GymTrackApplication : Application() {
         authRepository = AuthRepository(sessionDataStore)
         registrationRepository = RegistrationRepository(sessionDataStore, api)
         loginRepository = LoginRepository(sessionDataStore, api)
+        changePasswordRepository = ChangePasswordRepository(sessionDataStore, api)
         staffCreationRepository = StaffCreationRepository(api)
         planRepository = PlanRepository(api)
         memberRepository = MemberRepository(api)

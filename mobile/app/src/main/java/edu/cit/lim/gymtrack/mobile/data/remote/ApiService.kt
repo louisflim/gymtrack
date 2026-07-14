@@ -11,6 +11,9 @@ interface ApiService {
     @POST("api/auth/register")
     suspend fun register(@Body request: RegisterRequest): Response<AuthResponse>
 
+    @POST("api/auth/change-password")
+    suspend fun changePassword(@Body request: ChangePasswordRequest): Response<Map<String, String>>
+
     @POST("api/auth/staff")
     suspend fun createStaff(@Body request: CreateStaffRequest): Response<StaffAccountResponse>
 

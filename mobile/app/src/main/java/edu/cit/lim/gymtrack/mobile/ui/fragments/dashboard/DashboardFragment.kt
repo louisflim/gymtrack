@@ -262,6 +262,10 @@ class DashboardFragment : Fragment() {
                 launch {
                     authViewModel.session.collect { userSession ->
                         session = userSession
+                        if (userSession.isLoggedIn && userSession.mustChangePassword) {
+                            findNavController().navigate(R.id.action_dashboard_to_change_password)
+                            return@collect
+                        }
                         binding.overviewWelcome.text = "Welcome, ${userSession.firstName}"
                         updateNavTabs()
                         updateVisibility()

@@ -69,8 +69,12 @@ class LoginFragment : Fragment() {
         binding.signInButton.setOnClickListener {
             val email = binding.emailInput.text?.toString().orEmpty()
             val password = binding.passwordInput.text?.toString().orEmpty()
-            viewModel.login(email, password) {
-                findNavController().navigate(R.id.action_login_to_dashboard)
+            viewModel.login(email, password) { mustChangePassword ->
+                if (mustChangePassword) {
+                    findNavController().navigate(R.id.action_login_to_change_password)
+                } else {
+                    findNavController().navigate(R.id.action_login_to_dashboard)
+                }
             }
         }
         updateSignInButtonState()

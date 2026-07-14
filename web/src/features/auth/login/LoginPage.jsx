@@ -4,6 +4,7 @@ import BrandPanel from "../../../components/auth/BrandPanel";
 import SplitAuthLayout from "../../../components/layout/SplitAuthLayout";
 import { saveSession } from "../../../utils/session";
 import { getApiError } from "../../../utils/apiError";
+import { navigateAfterLogin } from "../../../utils/authHelpers";
 import { loginUser } from "./api";
 import LoginForm from "./LoginForm";
 
@@ -22,7 +23,7 @@ function LoginPage() {
     try {
       const data = await loginUser(email, password);
       saveSession(data);
-      navigate("/dashboard");
+      navigateAfterLogin(navigate, data);
     } catch (err) {
       if (err.response?.status === 401) {
         setError("Invalid email or password.");

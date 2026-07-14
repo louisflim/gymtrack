@@ -37,6 +37,9 @@ public class User {
     @Column(name = "first_check_in_completed", nullable = false)
     private boolean firstCheckInCompleted = false;
 
+    @Column(name = "must_change_password", nullable = false)
+    private boolean mustChangePassword = false;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -130,6 +133,14 @@ public class User {
 
     public void setFirstCheckInCompleted(boolean firstCheckInCompleted) {
         this.firstCheckInCompleted = firstCheckInCompleted;
+    }
+
+    public boolean isMustChangePassword() {
+        return mustChangePassword;
+    }
+
+    public void setMustChangePassword(boolean mustChangePassword) {
+        this.mustChangePassword = mustChangePassword;
     }
 
     public LocalDateTime getCreatedAt() {

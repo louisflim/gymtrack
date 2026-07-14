@@ -21,13 +21,13 @@ class LoginViewModel(
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-    fun login(email: String, password: String, onSuccess: () -> Unit) {
+    fun login(email: String, password: String, onSuccess: (mustChangePassword: Boolean) -> Unit) {
         viewModelScope.launch {
             _uiState.value = LoginUiState(isLoading = true)
             try {
-                loginRepository.login(email, password)
+                val session = loginRepository.login(email, password)
                 _uiState.value = LoginUiState()
-                onSuccess()
+                onSuccess(session.mustChangePassword)
             } catch (e: AuthException) {
                 _uiState.value = LoginUiState(error = e.message)
             } catch (e: Exception) {

@@ -43,6 +43,7 @@ public class StaffCreationService {
                 Role.STAFF
         );
         staff.setGym(requester.getGym());
+        staff.setMustChangePassword(true);
 
         User saved = userRepository.save(staff);
         return new StaffAccountResponse(

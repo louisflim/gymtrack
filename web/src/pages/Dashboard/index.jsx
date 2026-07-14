@@ -83,9 +83,13 @@ function Dashboard() {
       navigate("/", { replace: true });
       return;
     }
+    if (session.mustChangePassword) {
+      navigate("/change-password", { replace: true });
+      return;
+    }
     if (isMember) loadMemberData();
     if (canScan) loadGymQr();
-  }, [navigate, isMember, canScan, loadMemberData, loadGymQr]);
+  }, [navigate, isMember, canScan, loadMemberData, loadGymQr, session.mustChangePassword]);
 
   const handleLogout = () => {
     clearSession();

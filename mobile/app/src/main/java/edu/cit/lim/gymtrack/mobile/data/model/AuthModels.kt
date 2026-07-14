@@ -29,7 +29,8 @@ data class AuthResponse(
     val email: String,
     val role: String,
     val gymId: Long? = null,
-    val gymName: String? = null
+    val gymName: String? = null,
+    val mustChangePassword: Boolean = false
 )
 
 data class UserSession(
@@ -40,10 +41,17 @@ data class UserSession(
     val email: String = "",
     val role: String = "",
     val gymId: Long? = null,
-    val gymName: String? = null
+    val gymName: String? = null,
+    val mustChangePassword: Boolean = false
 ) {
     val isLoggedIn: Boolean get() = token.isNotBlank()
 }
+
+data class ChangePasswordRequest(
+    val currentPassword: String,
+    val newPassword: String,
+    val confirmPassword: String
+)
 
 data class QrCodeResponse(
     val qrData: String,

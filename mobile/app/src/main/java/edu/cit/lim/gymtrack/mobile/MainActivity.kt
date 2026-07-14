@@ -24,8 +24,13 @@ class MainActivity : AppCompatActivity() {
                 if (session.isLoggedIn) {
                     val navHost = supportFragmentManager
                         .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                    val destination = if (session.mustChangePassword) {
+                        R.id.changePasswordFragment
+                    } else {
+                        R.id.dashboardFragment
+                    }
                     navHost.navController.navigate(
-                        R.id.dashboardFragment,
+                        destination,
                         null,
                         navOptions {
                             popUpTo(R.id.loginFragment) { inclusive = true }

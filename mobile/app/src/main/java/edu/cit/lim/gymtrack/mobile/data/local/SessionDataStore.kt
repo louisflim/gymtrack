@@ -3,6 +3,7 @@ package edu.cit.lim.gymtrack.mobile.data.local
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -24,7 +25,8 @@ class SessionDataStore(private val context: Context) {
             email = prefs[KEY_EMAIL].orEmpty(),
             role = prefs[KEY_ROLE].orEmpty(),
             gymId = prefs[KEY_GYM_ID],
-            gymName = prefs[KEY_GYM_NAME]
+            gymName = prefs[KEY_GYM_NAME],
+            mustChangePassword = prefs[KEY_MUST_CHANGE_PASSWORD] ?: false
         )
     }
 
@@ -36,6 +38,7 @@ class SessionDataStore(private val context: Context) {
             prefs[KEY_LAST_NAME] = session.lastName
             prefs[KEY_EMAIL] = session.email
             prefs[KEY_ROLE] = session.role
+            prefs[KEY_MUST_CHANGE_PASSWORD] = session.mustChangePassword
             if (session.gymId != null) {
                 prefs[KEY_GYM_ID] = session.gymId
             } else {
@@ -49,13 +52,19 @@ class SessionDataStore(private val context: Context) {
         }
     }
 
+    suspend fun setMustChangePassword(value: Boolean) {
+        context.sessionDataStore.edit { prefs ->
+            prefs[KEY_MUST_CHANGE_PASSWORD] = value
+        }
+    }
+
     suspend fun clearSession() {
         context.sessionDataStore.edit { prefs ->
             prefs.clear()
         }
     }
 
-  companion object {
+    companion object {
         private val KEY_TOKEN = stringPreferencesKey("token")
         private val KEY_USER_ID = longPreferencesKey("user_id")
         private val KEY_FIRST_NAME = stringPreferencesKey("first_name")
@@ -64,5 +73,6 @@ class SessionDataStore(private val context: Context) {
         private val KEY_ROLE = stringPreferencesKey("role")
         private val KEY_GYM_ID = longPreferencesKey("gym_id")
         private val KEY_GYM_NAME = stringPreferencesKey("gym_name")
+        private val KEY_MUST_CHANGE_PASSWORD = booleanPreferencesKey("must_change_password")
     }
 }

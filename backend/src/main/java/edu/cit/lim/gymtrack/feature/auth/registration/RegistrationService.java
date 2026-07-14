@@ -7,6 +7,7 @@ import edu.cit.lim.gymtrack.entity.User;
 import edu.cit.lim.gymtrack.feature.auth.registration.dto.RegisterRequest;
 import edu.cit.lim.gymtrack.repository.GymRepository;
 import edu.cit.lim.gymtrack.repository.UserRepository;
+import edu.cit.lim.gymtrack.util.AuthMapper;
 import edu.cit.lim.gymtrack.util.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -64,23 +65,6 @@ public class RegistrationService {
         }
 
         User saved = userRepository.save(user);
-        String token = jwtUtil.generateToken(saved.getEmail(), saved.getRole().name(), saved.getId());
-        return toAuthResponse(saved, token);
-    }
-
-    private AuthResponse toAuthResponse(User user, String token) {
-        Gym gym = user.getGym();
-        Long gymId = gym != null ? gym.getId() : null;
-        String gymName = gym != null ? gym.getName() : null;
-        return new AuthResponse(
-                token,
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getRole().name(),
-                gymId,
-                gymName
-        );
+        return AuthMapper.issueToken(saved, jwtUtil);
     }
 }

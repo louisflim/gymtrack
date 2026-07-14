@@ -10,6 +10,7 @@ public class AuthResponse {
     private final String role;
     private final Long gymId;
     private final String gymName;
+    private final boolean mustChangePassword;
 
     public AuthResponse(
             String token,
@@ -19,7 +20,8 @@ public class AuthResponse {
             String email,
             String role,
             Long gymId,
-            String gymName
+            String gymName,
+            boolean mustChangePassword
     ) {
         this.token = token;
         this.userId = userId;
@@ -29,6 +31,7 @@ public class AuthResponse {
         this.role = role;
         this.gymId = gymId;
         this.gymName = gymName;
+        this.mustChangePassword = mustChangePassword;
     }
 
     public String getToken() {
@@ -61,5 +64,9 @@ public class AuthResponse {
 
     public String getGymName() {
         return gymName;
+    }
+
+    public boolean isMustChangePassword() {
+        return mustChangePassword;
     }
 }
