@@ -39,6 +39,7 @@ import edu.cit.lim.gymtrack.mobile.ui.adapters.PlanAdminAdapter
 import edu.cit.lim.gymtrack.mobile.ui.adapters.StaffAdapter
 import edu.cit.lim.gymtrack.mobile.ui.auth.AuthViewModel
 import edu.cit.lim.gymtrack.mobile.feature.attendance.QrScannerDialogFragment
+import edu.cit.lim.gymtrack.mobile.feature.settings.SettingsViewModel
 import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.AdminTab
 import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.AdminViewModel
 import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.DashboardViewModel
@@ -47,6 +48,7 @@ import edu.cit.lim.gymtrack.mobile.ui.util.AuthViewModelFactory
 import edu.cit.lim.gymtrack.mobile.ui.util.BrandStatData
 import edu.cit.lim.gymtrack.mobile.ui.util.DashboardUiCopy
 import edu.cit.lim.gymtrack.mobile.ui.util.DashboardViewModelFactory
+import edu.cit.lim.gymtrack.mobile.ui.util.SettingsViewModelFactory
 import edu.cit.lim.gymtrack.mobile.ui.util.applyStatusBadge
 import edu.cit.lim.gymtrack.mobile.ui.util.loadBase64Qr
 import edu.cit.lim.gymtrack.mobile.ui.util.setupNavTabs
@@ -66,6 +68,9 @@ class DashboardFragment : Fragment() {
     }
     private val adminViewModel: AdminViewModel by viewModels {
         AdminViewModelFactory(requireActivity().application as GymTrackApplication)
+    }
+    private val settingsViewModel: SettingsViewModel by viewModels {
+        SettingsViewModelFactory(requireActivity().application as GymTrackApplication)
     }
 
     private var activeTab = "home"
@@ -199,6 +204,8 @@ class DashboardFragment : Fragment() {
             }
         }
 
+        setupSettingsListeners()
+
         binding.memberOnboarding.scanGymButton.setOnClickListener {
             openScanner("gym")
         }
@@ -290,8 +297,77 @@ class DashboardFragment : Fragment() {
                         renderAdminState(state)
                     }
                 }
+                launch {
+                    settingsViewModel.uiState.collect { state ->
+                        renderSettingsState(state)
+                    }
+                }
             }
         }
+    }
+
+    private fun setupSettingsListeners() {
+        val panel = binding.settingsPanel
+        listOf(
+            panel.settingsCurrentPasswordInput,
+            panel.settingsNewPasswordInput,
+            panel.settingsConfirmPasswordInput
+        ).forEach { field ->
+            field.doAfterTextChanged { settingsViewModel.clearPasswordMessages() }
+        }
+        panel.settingsDeletePasswordInput.doAfterTextChanged {
+            settingsViewModel.clearDeleteError()
+        }
+
+        panel.settingsUpdatePasswordButton.setOnClickListener {
+            settingsViewModel.changePassword(
+                currentPassword = panel.settingsCurrentPasswordInput.text?.toString().orEmpty(),
+                newPassword = panel.settingsNewPasswordInput.text?.toString().orEmpty(),
+                confirmPassword = panel.settingsConfirmPasswordInput.text?.toString().orEmpty()
+            ) {
+                panel.settingsCurrentPasswordInput.text = null
+                panel.settingsNewPasswordInput.text = null
+                panel.settingsConfirmPasswordInput.text = null
+            }
+        }
+
+        panel.settingsDeleteAccountButton.setOnClickListener {
+            val password = panel.settingsDeletePasswordInput.text?.toString().orEmpty()
+            if (password.isBlank()) {
+                settingsViewModel.deleteAccount("") {}
+                return@setOnClickListener
+            }
+            val dialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Delete your account?")
+                .setMessage(
+                    "Your account, memberships, payments, and attendance history will be permanently removed. This cannot be undone."
+                )
+                .setNegativeButton("Keep Account", null)
+                .setPositiveButton("Delete Account") { _, _ ->
+                    settingsViewModel.deleteAccount(password) {
+                        findNavController().navigate(R.id.action_dashboard_to_login)
+                    }
+                }
+                .create()
+            dialog.show()
+            dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+                ?.setTextColor(requireContext().getColor(R.color.gymtrack_error))
+        }
+    }
+
+    private fun renderSettingsState(state: edu.cit.lim.gymtrack.mobile.feature.settings.SettingsUiState) {
+        val panel = binding.settingsPanel
+        panel.settingsPasswordError.showError(state.passwordError)
+        panel.settingsPasswordSuccess.isVisible = !state.passwordSuccess.isNullOrBlank()
+        panel.settingsPasswordSuccess.text = state.passwordSuccess.orEmpty()
+        panel.settingsUpdatePasswordButton.isEnabled = !state.passwordLoading
+        panel.settingsUpdatePasswordButton.text =
+            if (state.passwordLoading) "Updating..." else "Update Password"
+
+        panel.settingsDeleteError.showError(state.deleteError)
+        panel.settingsDeleteAccountButton.isEnabled = !state.deleteLoading
+        panel.settingsDeleteAccountButton.text =
+            if (state.deleteLoading) "Deleting..." else "Delete Account"
     }
 
     private fun selectTab(tab: String) {
@@ -329,6 +405,8 @@ class DashboardFragment : Fragment() {
         val isStaff = session.role == "STAFF"
 
         binding.summarySection.isVisible = activeTab == "home"
+        binding.overviewWelcome.isVisible = activeTab != "settings"
+        binding.overviewSubtitle.isVisible = activeTab != "settings"
         binding.memberOnboarding.root.isVisible = isMember && activeTab == "home"
         binding.staffHomeHint.isVisible = isStaff && activeTab == "home"
         if (isStaff && activeTab == "home") {
@@ -361,6 +439,7 @@ class DashboardFragment : Fragment() {
         binding.adminStaffSection.isVisible = isAdmin && activeTab == "staff"
         binding.adminAttendanceSection.isVisible = isAdmin && activeTab == "attendance"
         binding.adminPaymentsSection.isVisible = isAdmin && activeTab == "payments"
+        binding.settingsPanel.root.isVisible = activeTab == "settings"
     }
 
     private fun renderDashboardState(state: edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.DashboardUiState) {

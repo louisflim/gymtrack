@@ -18,7 +18,8 @@ object DashboardUiCopy {
         "STAFF" -> listOf(
             DashboardNavItem("home", "Home"),
             DashboardNavItem("qr", "Gym QR"),
-            DashboardNavItem("scan", "Scan")
+            DashboardNavItem("scan", "Scan"),
+            DashboardNavItem("settings", "Settings")
         )
         "ADMIN" -> listOf(
             DashboardNavItem("home", "Home"),
@@ -27,13 +28,15 @@ object DashboardUiCopy {
             DashboardNavItem("members", "Members"),
             DashboardNavItem("staff", "Staff"),
             DashboardNavItem("attendance", "Logs"),
-            DashboardNavItem("payments", "Payments")
+            DashboardNavItem("payments", "Payments"),
+            DashboardNavItem("settings", "Settings")
         )
         else -> listOf(
             DashboardNavItem("home", "Home"),
             DashboardNavItem("qr", "My QR"),
             DashboardNavItem("plans", "Plans"),
-            DashboardNavItem("activity", "Activity")
+            DashboardNavItem("activity", "Activity"),
+            DashboardNavItem("settings", "Settings")
         )
     }
 

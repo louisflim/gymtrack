@@ -9,6 +9,7 @@ import edu.cit.lim.gymtrack.mobile.ui.screens.dashboard.DashboardViewModel
 import edu.cit.lim.gymtrack.mobile.feature.auth.login.LoginViewModel
 import edu.cit.lim.gymtrack.mobile.feature.auth.password.ChangePasswordViewModel
 import edu.cit.lim.gymtrack.mobile.feature.auth.registration.RegistrationViewModel
+import edu.cit.lim.gymtrack.mobile.feature.settings.SettingsViewModel
 
 class AuthViewModelFactory(
     private val app: GymTrackApplication
@@ -84,6 +85,18 @@ class AdminViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AdminViewModel::class.java)) {
             return AdminViewModel(app.staffRepository, app.planRepository, app.memberRepository, app.paymentRepository, app.attendanceRepository, app.dashboardRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+
+class SettingsViewModelFactory(
+    private val app: GymTrackApplication
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
+            return SettingsViewModel(app.settingsRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

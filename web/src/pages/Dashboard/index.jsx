@@ -14,9 +14,12 @@ import DashboardHero from "../../components/dashboard/DashboardHero";
 import DashboardNavBar from "../../components/dashboard/DashboardNavBar";
 import DashboardSummaryGrid from "../../components/dashboard/DashboardSummaryGrid";
 import MemberDashboardPanel from "../../components/member/MemberDashboardPanel";
+import { SettingsPanel } from "../../features/settings";
 import { MEMBER_QR_NOTES, STAFF_HOME_HINT } from "../../constants/dashboardUi";
 import { clearSession, readSession } from "../../utils/session";
 import { getApiError } from "../../utils/apiError";
+
+const ADMIN_WORK_TABS = new Set(["home", "plans", "members", "staff", "attendance", "payments"]);
 
 const EMPTY_STAFF = { firstName: "", lastName: "", email: "", password: "", confirmPassword: "" };
 
@@ -164,9 +167,15 @@ function Dashboard() {
       <div className="dashboard-panel">
         <header className="dashboard-topbar">
           <div>
-            <p className="dashboard-summary-label">Overview</p>
-            <h2 className="dashboard-greeting">Welcome back, {session.firstName}</h2>
-            <p className="dashboard-subtitle">Your membership and attendance at a glance.</p>
+            <p className="dashboard-summary-label">{activeTab === "settings" ? "Account" : "Overview"}</p>
+            <h2 className="dashboard-greeting">
+              {activeTab === "settings" ? "Settings" : `Welcome back, ${session.firstName}`}
+            </h2>
+            <p className="dashboard-subtitle">
+              {activeTab === "settings"
+                ? "Manage your password and account."
+                : "Your membership and attendance at a glance."}
+            </p>
           </div>
           <button type="button" className="dashboard-logout" onClick={handleLogout}>
             Sign Out
@@ -236,7 +245,7 @@ function Dashboard() {
             />
           )}
 
-          {isAdmin && activeTab !== "qr" && (
+          {isAdmin && ADMIN_WORK_TABS.has(activeTab) && (
             <AdminDashboardPanel
               staffForm={staffForm}
               staffStatus={staffStatus}
@@ -252,6 +261,10 @@ function Dashboard() {
 
           {isStaff && activeTab === "home" && (
             <p className="dashboard-qr-note">{STAFF_HOME_HINT}</p>
+          )}
+
+          {activeTab === "settings" && (
+            <SettingsPanel onAccountDeleted={handleLogout} />
           )}
 
         </main>

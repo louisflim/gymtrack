@@ -16,6 +16,7 @@ import edu.cit.lim.gymtrack.mobile.feature.members.MemberRepository
 import edu.cit.lim.gymtrack.mobile.feature.membership.MembershipRepository
 import edu.cit.lim.gymtrack.mobile.feature.payments.PaymentRepository
 import edu.cit.lim.gymtrack.mobile.feature.plans.PlanRepository
+import edu.cit.lim.gymtrack.mobile.feature.settings.SettingsRepository
 import kotlinx.coroutines.runBlocking
 
 class GymTrackApplication : Application() {
@@ -31,6 +32,8 @@ class GymTrackApplication : Application() {
     lateinit var loginRepository: LoginRepository
         private set
     lateinit var changePasswordRepository: ChangePasswordRepository
+        private set
+    lateinit var settingsRepository: SettingsRepository
         private set
     lateinit var staffCreationRepository: StaffCreationRepository
         private set
@@ -53,6 +56,7 @@ class GymTrackApplication : Application() {
         registrationRepository = RegistrationRepository(sessionDataStore, api)
         loginRepository = LoginRepository(sessionDataStore, api)
         changePasswordRepository = ChangePasswordRepository(sessionDataStore, api)
+        settingsRepository = SettingsRepository(api, changePasswordRepository, authRepository)
         staffCreationRepository = StaffCreationRepository(api)
         planRepository = PlanRepository(api)
         memberRepository = MemberRepository(api)

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Reusable settings panel: change password + delete account (no theme toggles). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_section_card"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CHANGE PASSWORD"
+            android:textAppearance="@style/TextAppearance.GymTrack.SectionLabel" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Update your login password. You will stay signed in after the change."
+            android:textColor="@color/gymtrack_text_muted"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/settingsPasswordError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@color/gymtrack_error_bg"
+            android:padding="12dp"
+            android:textColor="@color/gymtrack_error"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/settingsPasswordSuccess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/gymtrack_accent"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.GymTrack.TextInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="CURRENT PASSWORD"
+            app:endIconMode="password_toggle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/settingsCurrentPasswordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="@color/gymtrack_text_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.GymTrack.TextInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="NEW PASSWORD"
+            app:endIconMode="password_toggle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/settingsNewPasswordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="@color/gymtrack_text_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.GymTrack.TextInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="CONFIRM NEW PASSWORD"
+            app:endIconMode="password_toggle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/settingsConfirmPasswordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="@color/gymtrack_text_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/settingsUpdatePasswordButton"
+            style="@style/Widget.GymTrack.Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Update Password" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_section_card"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DELETE ACCOUNT"
+            android:textAppearance="@style/TextAppearance.GymTrack.SectionLabel"
+            android:textColor="@color/gymtrack_error" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Permanently delete your GymTrack account and personal data. This cannot be undone."
+            android:textColor="@color/gymtrack_text_muted"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/settingsDeleteError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@color/gymtrack_error_bg"
+            android:padding="12dp"
+            android:textColor="@color/gymtrack_error"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.GymTrack.TextInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="CONFIRM WITH PASSWORD"
+            app:endIconMode="password_toggle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/settingsDeletePasswordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="@color/gymtrack_text_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/settingsDeleteAccountButton"
+            style="@style/Widget.GymTrack.Button.Outlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Delete Account"
+            android:textColor="@color/gymtrack_error"
+            app:strokeColor="@color/gymtrack_error_border" />
+    </LinearLayout>
+</LinearLayout>

@@ -808,6 +808,16 @@
   background: #ff8585;
 }
 
+.settings-panel {
+  display: grid;
+  gap: 18px;
+  max-width: 560px;
+}
+
+.settings-danger-card {
+  border-color: #592a2a;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
   .auth-shell {

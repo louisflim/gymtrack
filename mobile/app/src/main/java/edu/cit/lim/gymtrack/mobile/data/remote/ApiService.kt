@@ -14,6 +14,9 @@ interface ApiService {
     @POST("api/auth/change-password")
     suspend fun changePassword(@Body request: ChangePasswordRequest): Response<Map<String, String>>
 
+    @HTTP(method = "DELETE", path = "api/auth/account", hasBody = true)
+    suspend fun deleteAccount(@Body request: DeleteAccountRequest): Response<Map<String, String>>
+
     @POST("api/auth/staff")
     suspend fun createStaff(@Body request: CreateStaffRequest): Response<StaffAccountResponse>
 

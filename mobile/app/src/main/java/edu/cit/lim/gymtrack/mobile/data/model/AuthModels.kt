@@ -53,6 +53,10 @@ data class ChangePasswordRequest(
     val confirmPassword: String
 )
 
+data class DeleteAccountRequest(
+    val password: String
+)
+
 data class QrCodeResponse(
     val qrData: String,
     val qrImageBase64: String
