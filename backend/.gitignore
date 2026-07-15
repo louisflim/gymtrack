@@ -33,7 +33,9 @@ build/
 .vscode/
 
 ### Local secrets ###
+src/main/resources/application.properties
 src/main/resources/application-local.properties
 .env
 .env.*
 !.env.example
+!src/main/resources/application.properties.example

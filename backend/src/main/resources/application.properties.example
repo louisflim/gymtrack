@@ -1,8 +1,11 @@
+# Copy this file to application.properties and fill in your secrets.
+# application.properties is gitignored — never commit real credentials.
+
 spring.application.name=lim.gymtrack
 
-spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require&prepareThreshold=0}
-spring.datasource.username=${SPRING_DATASOURCE_USERNAME:postgres.urlttowtzsmbnmivwizy}
-spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:gymtack122003}
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://YOUR_HOST:6543/postgres?sslmode=require&prepareThreshold=0}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:postgres.YOUR_PROJECT_REF}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:YOUR_PASSWORD}
 spring.datasource.driver-class-name=org.postgresql.Driver
 
 spring.jpa.hibernate.ddl-auto=update
@@ -22,7 +25,6 @@ jwt.expiration=${JWT_EXPIRATION:86400000}
 paymongo.secret-key=${PAYMONGO_SECRET_KEY:}
 paymongo.public-key=${PAYMONGO_PUBLIC_KEY:}
 paymongo.webhook-secret=${PAYMONGO_WEBHOOK_SECRET:}
-# Prefer APP_WEB_BASE_URL; optional explicit overrides below.
 app.web-base-url=${APP_WEB_BASE_URL:http://localhost:5173}
 paymongo.success-url=${PAYMONGO_SUCCESS_URL:}
 paymongo.cancel-url=${PAYMONGO_CANCEL_URL:}
@@ -30,7 +32,7 @@ paymongo.mock-enabled=${PAYMONGO_MOCK_ENABLED:true}
 
 app.cors.allowed-origins=${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
 
-# Optional local overrides (gitignored). Copy from application-local.properties.example
+# Optional extra overrides (also gitignored)
 spring.config.import=optional:classpath:application-local.properties
 
 server.port=8080
