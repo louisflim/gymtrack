@@ -61,9 +61,11 @@ class RegisterFragment : Fragment() {
         val roles = listOf("Member", "Gym Owner")
         binding.roleSpinner.adapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
+            R.layout.item_spinner,
             roles
-        )
+        ).also { adapter ->
+            adapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
+        }
         binding.roleSpinner.setSelection(0)
         binding.roleSpinner.setOnItemSelectedListener(object : android.widget.AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
