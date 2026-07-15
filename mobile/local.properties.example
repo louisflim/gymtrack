@@ -1,8 +1,14 @@
+## Copy to local.properties (gitignored) and adjust.
+
 sdk.dir=C\:\\Users\\YOUR_NAME\\AppData\\Local\\Android\\Sdk
 
-# Emulator (Android Studio AVD):
-# debug.base.url=http://10.0.2.2:8080/
+# Backend base URL used by Retrofit (must end with /).
 #
-# Physical phone on same Wi-Fi (use your PC IPv4 from ipconfig):
-debug.base.url=http://192.168.1.19:8080/
-release.base.url=http://192.168.1.19:8080/
+# Android emulator → host machine:
+debug.base.url=http://10.0.2.2:8080/
+#
+# Physical phone on same Wi-Fi → your PC IPv4 (ipconfig):
+# debug.base.url=http://192.168.x.x:8080/
+#
+# Deployed API (release / HTTPS):
+release.base.url=https://YOUR-API-HOST/
