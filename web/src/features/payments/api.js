@@ -1,7 +1,12 @@
 import axiosInstance from "../../api/axiosInstance";
 
 export const createCheckout = async (planId) => {
-  const response = await axiosInstance.post("/payments/checkout", { planId });
+  const origin = window.location.origin;
+  const response = await axiosInstance.post("/payments/checkout", {
+    planId,
+    successUrl: `${origin}/payment/success`,
+    cancelUrl: `${origin}/payment/cancel`,
+  });
   return response.data;
 };
 

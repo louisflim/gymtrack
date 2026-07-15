@@ -65,7 +65,9 @@ data class AssignPlanRequest(
 )
 
 data class CheckoutRequest(
-    val planId: Long
+    val planId: Long,
+    val successUrl: String? = null,
+    val cancelUrl: String? = null
 )
 
 data class CheckoutResponse(

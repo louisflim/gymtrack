@@ -31,12 +31,6 @@ public class PayMongoService {
     @Value("${paymongo.webhook-secret:}")
     private String webhookSecret;
 
-    @Value("${paymongo.success-url:http://localhost:5173/payment/success}")
-    private String successUrl;
-
-    @Value("${paymongo.cancel-url:http://localhost:5173/payment/cancel}")
-    private String cancelUrl;
-
     @Value("${paymongo.mock-enabled:false}")
     private boolean mockEnabled;
 
@@ -46,11 +40,15 @@ public class PayMongoService {
         return mockEnabled || secretKey == null || secretKey.isBlank();
     }
 
-    public CheckoutSessionResult createCheckoutSession(SubscriptionPlan plan, String reference) {
+    public CheckoutSessionResult createCheckoutSession(
+            SubscriptionPlan plan,
+            String reference,
+            String successUrl,
+            String cancelUrl) {
         if (isMockEnabled()) {
             return new CheckoutSessionResult(
                     "mock_" + reference,
-                    successUrl + "?reference=" + reference,
+                    successUrl + (successUrl.contains("?") ? "&" : "?") + "reference=" + reference,
                     true
             );
         }
@@ -76,7 +74,7 @@ public class PayMongoService {
             paymentMethods.add("card");
             paymentMethods.add("qrph");
             attributes.set("payment_method_types", paymentMethods);
-            attributes.put("success_url", successUrl + "?reference=" + reference);
+            attributes.put("success_url", successUrl + (successUrl.contains("?") ? "&" : "?") + "reference=" + reference);
             attributes.put("cancel_url", cancelUrl);
             attributes.put("description", "GymTrack subscription: " + plan.getName());
             attributes.put("reference_number", reference);

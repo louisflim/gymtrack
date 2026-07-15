@@ -6,6 +6,7 @@ import edu.cit.lim.gymtrack.entity.PaymentStatus;
 import edu.cit.lim.gymtrack.entity.SubscriptionPlan;
 import edu.cit.lim.gymtrack.entity.User;
 import edu.cit.lim.gymtrack.feature.membership.MembershipService;
+import edu.cit.lim.gymtrack.feature.payments.dto.CheckoutRequest;
 import edu.cit.lim.gymtrack.feature.payments.dto.CheckoutResponse;
 import edu.cit.lim.gymtrack.feature.payments.dto.PaymentResponse;
 import edu.cit.lim.gymtrack.feature.payments.dto.PaymentStatusResponse;
@@ -28,23 +29,29 @@ public class PaymentService {
     private final PlanService planService;
     private final PayMongoService payMongoService;
     private final MembershipService membershipService;
+    private final PaymentReturnUrlResolver returnUrlResolver;
 
     public PaymentService(PaymentRepository paymentRepository,
                           UserRepository userRepository,
                           PlanService planService,
                           PayMongoService payMongoService,
-                          MembershipService membershipService) {
+                          MembershipService membershipService,
+                          PaymentReturnUrlResolver returnUrlResolver) {
         this.paymentRepository = paymentRepository;
         this.userRepository = userRepository;
         this.planService = planService;
         this.payMongoService = payMongoService;
         this.membershipService = membershipService;
+        this.returnUrlResolver = returnUrlResolver;
     }
 
     @Transactional
-    public CheckoutResponse createCheckout(Long planId, String memberEmail) {
+    public CheckoutResponse createCheckout(CheckoutRequest request, String memberEmail) {
+        if (request == null || request.getPlanId() == null) {
+            throw new IllegalArgumentException("Plan ID is required.");
+        }
         User member = RoleGuard.requireMember(userRepository, memberEmail);
-        SubscriptionPlan plan = planService.getActivePlan(planId);
+        SubscriptionPlan plan = planService.getActivePlan(request.getPlanId());
 
         if (member.getGym() == null) {
             throw new IllegalArgumentException(
@@ -54,6 +61,9 @@ public class PaymentService {
         if (plan.getGym() == null || !plan.getGym().getId().equals(member.getGym().getId())) {
             throw new IllegalArgumentException("This plan is not available for your gym.");
         }
+
+        String successUrl = returnUrlResolver.resolveSuccessUrl(request.getSuccessUrl());
+        String cancelUrl = returnUrlResolver.resolveCancelUrl(request.getCancelUrl());
 
         Payment payment = new Payment();
         payment.setUser(member);
@@ -65,7 +75,8 @@ public class PaymentService {
         String reference = "GT-" + payment.getId() + "-" + UUID.randomUUID().toString().substring(0, 8);
         payment.setReferenceNumber(reference);
 
-        PayMongoService.CheckoutSessionResult session = payMongoService.createCheckoutSession(plan, reference);
+        PayMongoService.CheckoutSessionResult session =
+                payMongoService.createCheckoutSession(plan, reference, successUrl, cancelUrl);
         payment.setPaymongoCheckoutId(session.checkoutId());
         paymentRepository.save(payment);
 

@@ -25,6 +25,15 @@ public class ProductionSecurityValidator implements ApplicationRunner {
     @Value("${spring.datasource.password:}")
     private String datasourcePassword;
 
+    @Value("${app.web-base-url:}")
+    private String webBaseUrl;
+
+    @Value("${paymongo.success-url:}")
+    private String successUrl;
+
+    @Value("${paymongo.cancel-url:}")
+    private String cancelUrl;
+
     @Override
     public void run(ApplicationArguments args) {
         if (jwtSecret == null
@@ -57,6 +66,16 @@ public class ProductionSecurityValidator implements ApplicationRunner {
         if (webhookSecret == null || webhookSecret.isBlank()) {
             throw new IllegalStateException(
                     "Production requires PAYMONGO_WEBHOOK_SECRET for webhook verification."
+            );
+        }
+
+        boolean hasWebBase = webBaseUrl != null && !webBaseUrl.isBlank();
+        boolean hasExplicitReturns =
+                successUrl != null && !successUrl.isBlank()
+                        && cancelUrl != null && !cancelUrl.isBlank();
+        if (!hasWebBase && !hasExplicitReturns) {
+            throw new IllegalStateException(
+                    "Production requires APP_WEB_BASE_URL (or both PAYMONGO_SUCCESS_URL and PAYMONGO_CANCEL_URL)."
             );
         }
     }

@@ -15,6 +15,7 @@
 # Local development (mock checkout — no PayMongo account required)
 # ---------------------------------------------------------------------------
 paymongo.mock-enabled=true
+# app.web-base-url=http://localhost:5173
 
 # ---------------------------------------------------------------------------
 # PayMongo test mode (real checkout UI, test cards/wallets)
@@ -22,6 +23,8 @@ paymongo.mock-enabled=true
 # paymongo.secret-key=sk_test_YOUR_TEST_SECRET_KEY
 # paymongo.public-key=pk_test_YOUR_TEST_PUBLIC_KEY
 # paymongo.mock-enabled=false
+# app.web-base-url=http://localhost:5173
+# Or set explicit return URLs:
 # paymongo.success-url=http://localhost:5173/payment/success
 # paymongo.cancel-url=http://localhost:5173/payment/cancel
 # paymongo.webhook-secret=whsec_YOUR_TEST_WEBHOOK_SECRET
@@ -37,8 +40,7 @@ paymongo.mock-enabled=true
 # PAYMONGO_PUBLIC_KEY=pk_live_...
 # PAYMONGO_MOCK_ENABLED=false
 # PAYMONGO_WEBHOOK_SECRET=whsec_...
-# PAYMONGO_SUCCESS_URL=https://your-frontend.com/payment/success
-# PAYMONGO_CANCEL_URL=https://your-frontend.com/payment/cancel
+# APP_WEB_BASE_URL=https://your-frontend.com
 # CORS_ALLOWED_ORIGINS=https://your-frontend.com
 
 # PayMongo dashboard: webhook POST https://your-backend.com/api/payments/webhook

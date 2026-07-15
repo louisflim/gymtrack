@@ -148,7 +148,12 @@ class DashboardViewModel(
                     pendingPaymentReference = checkout.reference,
                     pendingMockCheckout = checkout.mockCheckout
                 )
-                onCheckoutUrl(checkout.checkoutUrl)
+                if (checkout.mockCheckout) {
+                    // Confirm in-app — do not open localhost web return URLs on the phone.
+                    syncPendingPayment()
+                } else {
+                    onCheckoutUrl(checkout.checkoutUrl)
+                }
             } catch (e: AuthException) {
                 _uiState.value = _uiState.value.copy(subscribing = false, memberStatusMessage = e.message)
             } catch (_: Exception) {

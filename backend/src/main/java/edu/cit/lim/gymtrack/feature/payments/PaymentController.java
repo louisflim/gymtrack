@@ -23,7 +23,7 @@ public class PaymentController {
     @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<?> checkout(@RequestBody CheckoutRequest request, Authentication authentication) {
         try {
-            return ResponseEntity.ok(paymentService.createCheckout(request.getPlanId(), authentication.getName()));
+            return ResponseEntity.ok(paymentService.createCheckout(request, authentication.getName()));
         } catch (SecurityException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (IllegalArgumentException | IllegalStateException e) {
