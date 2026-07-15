@@ -1,7 +1,19 @@
 package edu.cit.lim.gymtrack.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -37,6 +49,7 @@ public class User {
     @Column(name = "first_check_in_completed", nullable = false)
     private boolean firstCheckInCompleted = false;
 
+    @org.hibernate.annotations.ColumnDefault("false")
     @Column(name = "must_change_password", nullable = false)
     private boolean mustChangePassword = false;
 
