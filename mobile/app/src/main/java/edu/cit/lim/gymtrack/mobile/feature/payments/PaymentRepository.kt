@@ -14,6 +14,9 @@ class PaymentRepository(private val apiService: ApiService) {
         // Mock checkouts confirm in-app and never open a browser.
         ApiResponses.unwrap(apiService.checkout(CheckoutRequest(planId = planId)))
 
+    suspend fun paymentMode() =
+        ApiResponses.unwrap(apiService.paymentMode())
+
     suspend fun myPayments(): List<PaymentResponse> =
         ApiResponses.unwrap(apiService.myPayments())
 

@@ -1,9 +1,10 @@
 import DashboardSection from "../../components/dashboard/DashboardSection";
 import DashboardStatus from "../../components/dashboard/DashboardStatus";
 
-function PlanPicker({ plans, onSubscribe, loading, statusMessage, enrolled }) {
+function PlanPicker({ plans, onSubscribe, loading, statusMessage, enrolled, paymentModeNote }) {
   return (
     <DashboardSection title="Choose a Plan" className="dashboard-staff-card">
+      {paymentModeNote && <p className="dashboard-scan-status">{paymentModeNote}</p>}
       <div className="dashboard-plan-grid">
         {!enrolled ? (
           <p className="dashboard-qr-note">

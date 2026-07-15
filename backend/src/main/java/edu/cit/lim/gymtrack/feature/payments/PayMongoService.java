@@ -36,8 +36,49 @@ public class PayMongoService {
 
     public record CheckoutSessionResult(String checkoutId, String checkoutUrl, boolean mockCheckout) {}
 
+    /**
+     * True only when mock checkout is explicitly enabled.
+     * Default for local/school is paymongo.mock-enabled=true; production profile forces false.
+     */
     public boolean isMockEnabled() {
-        return mockEnabled || secretKey == null || secretKey.isBlank();
+        return mockEnabled;
+    }
+
+    public PaymentMode currentMode() {
+        if (isMockEnabled()) {
+            return PaymentMode.MOCK;
+        }
+        if (secretKey != null && secretKey.startsWith("sk_live")) {
+            return PaymentMode.LIVE;
+        }
+        return PaymentMode.TEST;
+    }
+
+    public String modeDescription() {
+        return switch (currentMode()) {
+            case MOCK -> "Mock checkout for demos. No PayMongo charges. Membership activates after confirm-mock.";
+            case TEST -> "PayMongo test keys (sk_test). Use test payment methods; no real money.";
+            case LIVE -> "PayMongo live keys (sk_live). Real payments will be charged.";
+        };
+    }
+
+    /**
+     * Refuse real-gateway checkout when keys are missing or invalid.
+     */
+    public void assertCheckoutAllowed() {
+        if (mockEnabled) {
+            return;
+        }
+        if (secretKey == null || secretKey.isBlank()) {
+            throw new IllegalStateException(
+                    "PayMongo secret key is missing. Set PAYMONGO_SECRET_KEY, or set paymongo.mock-enabled=true for school demos."
+            );
+        }
+        if (!(secretKey.startsWith("sk_test") || secretKey.startsWith("sk_live"))) {
+            throw new IllegalStateException(
+                    "PAYMONGO_SECRET_KEY must start with sk_test_ (test) or sk_live_ (live)."
+            );
+        }
     }
 
     public CheckoutSessionResult createCheckoutSession(
@@ -45,6 +86,7 @@ public class PayMongoService {
             String reference,
             String successUrl,
             String cancelUrl) {
+        assertCheckoutAllowed();
         if (isMockEnabled()) {
             return new CheckoutSessionResult(
                     "mock_" + reference,

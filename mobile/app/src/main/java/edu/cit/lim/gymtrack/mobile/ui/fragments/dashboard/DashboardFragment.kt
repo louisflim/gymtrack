@@ -512,6 +512,8 @@ class DashboardFragment : Fragment() {
             binding.plansRecycler.adapter = planAdapter
             planAdapter.submitList(state.activePlans)
         }
+        binding.paymentModeNote.isVisible = !state.paymentModeNote.isNullOrBlank()
+        binding.paymentModeNote.text = state.paymentModeNote.orEmpty()
         binding.memberStatusMessage.showError(state.memberStatusMessage)
 
         binding.paymentsEmpty.isVisible = state.myPayments.isEmpty()

@@ -1,46 +1,37 @@
 # Copy to application-local.properties (gitignored) or set these as environment variables.
-# Use TEST keys for local development; use LIVE keys only in production.
 
 # ---------------------------------------------------------------------------
-# Local JWT (optional — required in prod via JWT_SECRET)
-# ---------------------------------------------------------------------------
-# jwt.secret=local-dev-secret-change-me-32chars-min
-
-# Database (optional — defaults are in application.properties)
-# spring.datasource.url=jdbc:postgresql://YOUR_HOST:5432/postgres
-# spring.datasource.username=postgres.YOUR_PROJECT
-# spring.datasource.password=YOUR_PASSWORD
-
-# ---------------------------------------------------------------------------
-# Local development (mock checkout — no PayMongo account required)
+# MOCK (school demo — default in application.properties)
+# No PayMongo account required. Membership activates via confirm-mock.
 # ---------------------------------------------------------------------------
 paymongo.mock-enabled=true
-# app.web-base-url=http://localhost:5173
 
 # ---------------------------------------------------------------------------
-# PayMongo test mode (real checkout UI, test cards/wallets)
+# TEST (PayMongo sandbox — no live charges)
 # ---------------------------------------------------------------------------
+# paymongo.mock-enabled=false
 # paymongo.secret-key=sk_test_YOUR_TEST_SECRET_KEY
 # paymongo.public-key=pk_test_YOUR_TEST_PUBLIC_KEY
-# paymongo.mock-enabled=false
 # app.web-base-url=http://localhost:5173
-# Or set explicit return URLs:
-# paymongo.success-url=http://localhost:5173/payment/success
-# paymongo.cancel-url=http://localhost:5173/payment/cancel
 # paymongo.webhook-secret=whsec_YOUR_TEST_WEBHOOK_SECRET
 
 # ---------------------------------------------------------------------------
-# Production deployment (SPRING_PROFILES_ACTIVE=prod)
+# LIVE (real money — use SPRING_PROFILES_ACTIVE=prod)
 # ---------------------------------------------------------------------------
-# JWT_SECRET=long-random-secret-at-least-32-characters
-# SPRING_DATASOURCE_URL=jdbc:postgresql://...
-# SPRING_DATASOURCE_USERNAME=...
-# SPRING_DATASOURCE_PASSWORD=...
+# paymongo.mock-enabled=false
 # PAYMONGO_SECRET_KEY=sk_live_...
 # PAYMONGO_PUBLIC_KEY=pk_live_...
-# PAYMONGO_MOCK_ENABLED=false
-# PAYMONGO_WEBHOOK_SECRET=whsec_...
 # APP_WEB_BASE_URL=https://your-frontend.com
+# PAYMONGO_WEBHOOK_SECRET=whsec_...
 # CORS_ALLOWED_ORIGINS=https://your-frontend.com
 
-# PayMongo dashboard: webhook POST https://your-backend.com/api/payments/webhook
+# Modes reported by GET /api/payments/mode and startup logs:
+#   MOCK = demo checkout, no PayMongo API
+#   TEST = sk_test_ keys
+#   LIVE = sk_live_ keys (real charges)
+
+# Optional JWT / database overrides
+# jwt.secret=local-dev-secret-change-me-32chars-min
+# spring.datasource.url=jdbc:postgresql://YOUR_HOST:5432/postgres
+
+# PayMongo webhook: POST https://your-backend.com/api/payments/webhook

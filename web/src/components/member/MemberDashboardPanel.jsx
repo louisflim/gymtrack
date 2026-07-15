@@ -1,8 +1,19 @@
 import { useEffect, useState } from "react";
 import { fetchMyMembership, MembershipCard } from "../../features/membership";
-import { createCheckout, fetchMyPayments, PaymentHistory } from "../../features/payments";
+import { createCheckout, fetchMyPayments, fetchPaymentMode, PaymentHistory } from "../../features/payments";
 import { fetchActivePlans, PlanPicker } from "../../features/plans";
 import { AttendanceHistory } from "../../features/attendance";
+
+function paymentModeNoteFrom(modeInfo) {
+  if (!modeInfo?.mode) return "";
+  if (modeInfo.mode === "MOCK") {
+    return "Payment mode: MOCK (school demo). No real PayMongo charge.";
+  }
+  if (modeInfo.mode === "TEST") {
+    return "Payment mode: PayMongo TEST. Use test wallets/cards only.";
+  }
+  return "Payment mode: PayMongo LIVE. Real money will be charged.";
+}
 
 function MemberDashboardPanel({ membership: membershipProp, onMembershipChange, section = "all" }) {
   const [membership, setMembership] = useState(membershipProp);
@@ -10,18 +21,21 @@ function MemberDashboardPanel({ membership: membershipProp, onMembershipChange, 
   const [payments, setPayments] = useState([]);
   const [payStatus, setPayStatus] = useState("");
   const [paying, setPaying] = useState(false);
+  const [paymentModeNote, setPaymentModeNote] = useState("");
 
   const enrolled = membership?.gymId != null;
 
   const loadData = async () => {
-    const [membershipData, planData, paymentData] = await Promise.all([
+    const [membershipData, planData, paymentData, modeInfo] = await Promise.all([
       fetchMyMembership(),
       fetchActivePlans(),
       fetchMyPayments(),
+      fetchPaymentMode().catch(() => null),
     ]);
     setMembership(membershipData);
     setPlans(planData);
     setPayments(paymentData);
+    setPaymentModeNote(paymentModeNoteFrom(modeInfo));
     onMembershipChange?.(membershipData);
   };
 
@@ -38,6 +52,9 @@ function MemberDashboardPanel({ membership: membershipProp, onMembershipChange, 
     setPayStatus("");
     try {
       const checkout = await createCheckout(planId);
+      if (checkout.mockCheckout || checkout.paymentMode === "MOCK") {
+        setPayStatus("Mock checkout — confirming payment...");
+      }
       window.location.href = checkout.checkoutUrl;
     } catch (err) {
       setPayStatus(err.response?.data || "Checkout failed.");
@@ -59,6 +76,7 @@ function MemberDashboardPanel({ membership: membershipProp, onMembershipChange, 
             loading={paying}
             statusMessage={payStatus}
             enrolled={enrolled}
+            paymentModeNote={paymentModeNote}
           />
         </>
       )}

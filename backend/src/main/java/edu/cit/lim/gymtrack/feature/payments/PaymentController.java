@@ -1,6 +1,7 @@
 package edu.cit.lim.gymtrack.feature.payments;
 
 import edu.cit.lim.gymtrack.feature.payments.dto.CheckoutRequest;
+import edu.cit.lim.gymtrack.feature.payments.dto.PaymentModeResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,12 @@ public class PaymentController {
 
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
+    }
+
+    @GetMapping("/mode")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<PaymentModeResponse> paymentMode() {
+        return ResponseEntity.ok(paymentService.paymentMode());
     }
 
     @PostMapping("/checkout")

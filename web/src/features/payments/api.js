@@ -10,6 +10,11 @@ export const createCheckout = async (planId) => {
   return response.data;
 };
 
+export const fetchPaymentMode = async () => {
+  const response = await axiosInstance.get("/payments/mode");
+  return response.data;
+};
+
 export const fetchMyPayments = async () => {
   const response = await axiosInstance.get("/payments/me");
   return response.data;

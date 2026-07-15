@@ -8,6 +8,7 @@ import edu.cit.lim.gymtrack.entity.User;
 import edu.cit.lim.gymtrack.feature.membership.MembershipService;
 import edu.cit.lim.gymtrack.feature.payments.dto.CheckoutRequest;
 import edu.cit.lim.gymtrack.feature.payments.dto.CheckoutResponse;
+import edu.cit.lim.gymtrack.feature.payments.dto.PaymentModeResponse;
 import edu.cit.lim.gymtrack.feature.payments.dto.PaymentResponse;
 import edu.cit.lim.gymtrack.feature.payments.dto.PaymentStatusResponse;
 import edu.cit.lim.gymtrack.feature.plans.PlanService;
@@ -85,7 +86,17 @@ public class PaymentService {
                 session.checkoutUrl(),
                 payment.getStatus().name(),
                 reference,
-                session.mockCheckout()
+                session.mockCheckout(),
+                payMongoService.currentMode().name()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public PaymentModeResponse paymentMode() {
+        return new PaymentModeResponse(
+                payMongoService.currentMode(),
+                payMongoService.isMockEnabled(),
+                payMongoService.modeDescription()
         );
     }
 

@@ -38,7 +38,8 @@ data class DashboardUiState(
     val loadingAttendance: Boolean = false,
     val staffRefreshKey: Int = 0,
     val pendingPaymentReference: String? = null,
-    val pendingMockCheckout: Boolean = false
+    val pendingMockCheckout: Boolean = false,
+    val paymentModeNote: String? = null
 )
 
 class DashboardViewModel(
@@ -61,6 +62,14 @@ class DashboardViewModel(
                 val plans = if (membership.gymId != null) planRepository.activePlans() else emptyList()
                 val payments = paymentRepository.myPayments()
                 val attendance = runCatching { attendanceRepository.getMyAttendance() }.getOrDefault(emptyList())
+                val paymentModeNote = runCatching { paymentRepository.paymentMode() }.getOrNull()?.let { mode ->
+                    when (mode.mode) {
+                        "MOCK" -> "Payment mode: MOCK (school demo). No real PayMongo charge."
+                        "TEST" -> "Payment mode: PayMongo TEST. Use test wallets/cards only."
+                        "LIVE" -> "Payment mode: PayMongo LIVE. Real money will be charged."
+                        else -> mode.description
+                    }
+                }
                 val canShowQr = membership.nextStep == "FIRST_CHECK_IN" || membership.nextStep == "ACTIVE"
                 val qrImage = if (canShowQr) {
                     runCatching { fetchMemberQrImage() }.getOrNull()
@@ -72,7 +81,8 @@ class DashboardViewModel(
                     activePlans = plans,
                     myPayments = payments,
                     myAttendanceLogs = attendance,
-                    loadingAttendance = false
+                    loadingAttendance = false,
+                    paymentModeNote = paymentModeNote
                 )
             } catch (e: AuthException) {
                 _uiState.value = _uiState.value.copy(loading = false, memberStatusMessage = e.message)

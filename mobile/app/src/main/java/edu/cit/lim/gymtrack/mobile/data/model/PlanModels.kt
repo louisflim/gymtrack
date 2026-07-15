@@ -75,7 +75,14 @@ data class CheckoutResponse(
     val checkoutUrl: String,
     val status: String,
     val reference: String? = null,
-    val mockCheckout: Boolean = false
+    val mockCheckout: Boolean = false,
+    val paymentMode: String? = null
+)
+
+data class PaymentModeResponse(
+    val mode: String,
+    val mockEnabled: Boolean,
+    val description: String
 )
 
 data class PaymentStatusResponse(

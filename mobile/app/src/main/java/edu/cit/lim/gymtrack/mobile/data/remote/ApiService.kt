@@ -86,6 +86,9 @@ interface ApiService {
     @POST("api/payments/checkout")
     suspend fun checkout(@Body request: CheckoutRequest): Response<CheckoutResponse>
 
+    @GET("api/payments/mode")
+    suspend fun paymentMode(): Response<PaymentModeResponse>
+
     @GET("api/payments/me")
     suspend fun myPayments(): Response<List<PaymentResponse>>
 

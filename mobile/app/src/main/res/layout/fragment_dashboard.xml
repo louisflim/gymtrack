@@ -127,6 +127,15 @@
                     android:textAppearance="@style/TextAppearance.GymTrack.SectionLabel" />
 
                 <TextView
+                    android:id="@+id/paymentModeNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/gymtrack_accent"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
+                <TextView
                     android:id="@+id/planPickerEmpty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
