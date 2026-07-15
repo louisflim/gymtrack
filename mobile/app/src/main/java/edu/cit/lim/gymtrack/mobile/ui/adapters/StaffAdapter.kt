@@ -7,8 +7,7 @@ import edu.cit.lim.gymtrack.mobile.data.model.StaffResponse
 import edu.cit.lim.gymtrack.mobile.databinding.ItemStaffBinding
 
 class StaffAdapter(
-    private val onEdit: (StaffResponse) -> Unit,
-    private val onDelete: (StaffResponse) -> Unit
+    private val onEdit: (StaffResponse) -> Unit
 ) : RecyclerView.Adapter<StaffAdapter.ViewHolder>() {
 
     private val items = mutableListOf<StaffResponse>()
@@ -36,7 +35,6 @@ class StaffAdapter(
             binding.staffEmail.text = staff.email
             binding.staffActiveLabel.text = if (staff.active) "Active" else "Deactivated"
             binding.editStaffButton.setOnClickListener { onEdit(staff) }
-            binding.deleteStaffButton.setOnClickListener { onDelete(staff) }
         }
     }
 }

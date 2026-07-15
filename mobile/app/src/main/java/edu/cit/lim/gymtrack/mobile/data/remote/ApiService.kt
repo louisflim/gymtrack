@@ -50,9 +50,6 @@ interface ApiService {
         @Body request: StaffUpdateRequest
     ): Response<StaffResponse>
 
-    @DELETE("api/staff/{id}")
-    suspend fun deleteStaff(@Path("id") id: Long): Response<Unit>
-
     @GET("api/plans/active")
     suspend fun activePlans(): Response<List<PlanResponse>>
 

@@ -9,7 +9,3 @@ export const updateStaff = async (id, payload) => {
   const response = await axiosInstance.put(`/staff/${id}`, payload);
   return response.data;
 };
-
-export const deleteStaff = async (id) => {
-  await axiosInstance.delete(`/staff/${id}`);
-};

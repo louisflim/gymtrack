@@ -12,8 +12,4 @@ class StaffRepository(private val apiService: ApiService) {
 
     suspend fun updateStaff(id: Long, request: StaffUpdateRequest): StaffResponse =
         ApiResponses.unwrap(apiService.updateStaff(id, request))
-
-    suspend fun deleteStaff(id: Long) {
-        ApiResponses.unwrapUnit(apiService.deleteStaff(id))
-    }
 }

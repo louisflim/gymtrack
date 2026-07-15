@@ -787,6 +787,27 @@
   margin-top: 16px;
 }
 
+.dashboard-confirm-modal {
+  width: min(420px, 100%);
+}
+
+.dashboard-confirm-message {
+  margin: 0 0 8px;
+  color: #8a8a8e;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.auth-submit-danger {
+  background: #ff6b6b;
+  color: #0b0b0d;
+}
+
+.auth-submit-danger:hover:not(:disabled),
+.auth-submit-danger:focus-visible {
+  background: #ff8585;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
   .auth-shell {

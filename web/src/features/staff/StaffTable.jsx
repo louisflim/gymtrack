@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DashboardSection from "../../components/dashboard/DashboardSection";
 
-function StaffTable({ staff, onUpdate, onDelete }) {
+function StaffTable({ staff, onUpdate }) {
   const [editing, setEditing] = useState(null);
 
   return (
@@ -30,17 +30,6 @@ function StaffTable({ staff, onUpdate, onDelete }) {
                   <td className="dashboard-actions-cell">
                     <button type="button" className="dashboard-link-button" onClick={() => setEditing(member)}>
                       Edit
-                    </button>
-                    <button
-                      type="button"
-                      className="dashboard-link-button dashboard-link-button-danger"
-                      onClick={() => {
-                        if (window.confirm(`Delete ${member.firstName} ${member.lastName}? This cannot be undone.`)) {
-                          onDelete(member.id);
-                        }
-                      }}
-                    >
-                      Delete
                     </button>
                   </td>
                 </tr>

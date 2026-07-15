@@ -160,10 +160,7 @@ class DashboardFragment : Fragment() {
         binding.membersRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.membersRecycler.adapter = memberAdapter
 
-        staffAdapter = StaffAdapter(
-            onEdit = { staff -> showStaffEditDialog(staff) },
-            onDelete = { staff -> confirmDeleteStaff(staff) }
-        )
+        staffAdapter = StaffAdapter { staff -> showStaffEditDialog(staff) }
         binding.staffRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.staffRecycler.adapter = staffAdapter
 
@@ -601,25 +598,20 @@ class DashboardFragment : Fragment() {
     }
 
     private fun confirmDeleteMember(member: MemberResponse) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Delete Member")
-            .setMessage("Delete ${member.firstName} ${member.lastName}? This removes their account, memberships, payments, and attendance history.")
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Delete") { _, _ ->
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Remove member from gym?")
+            .setMessage(
+                "This will remove ${member.firstName} ${member.lastName} (${member.email}) from your gym and end their membership.\n\nTheir login account stays active so they can join a gym again later."
+            )
+            .setNegativeButton("Keep Member", null)
+            .setPositiveButton("Remove from Gym") { _, _ ->
                 adminViewModel.deleteMember(member.id)
             }
-            .show()
-    }
+            .create()
 
-    private fun confirmDeleteStaff(staff: StaffResponse) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Delete Staff")
-            .setMessage("Delete ${staff.firstName} ${staff.lastName}? This cannot be undone.")
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Delete") { _, _ ->
-                adminViewModel.deleteStaff(staff.id)
-            }
-            .show()
+        dialog.show()
+        dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+            ?.setTextColor(requireContext().getColor(R.color.gymtrack_error))
     }
 
     override fun onDestroyView() {

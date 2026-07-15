@@ -6,7 +6,7 @@ import { fetchDashboardStats, KpiSummaryGrid } from "../../features/dashboard";
 import { fetchGymAttendanceLogs, AttendanceLogTable } from "../../features/attendance";
 import { formatCurrency } from "../../utils/formatters";
 import { getApiError } from "../../utils/apiError";
-import { fetchStaff, updateStaff, deleteStaff, StaffTable } from "../../features/staff";
+import { fetchStaff, updateStaff, StaffTable } from "../../features/staff";
 import { CreateStaffForm } from "../../features/auth/staff";
 
 const EMPTY_PLAN = { name: "", durationDays: 30, price: "999", active: true };
@@ -160,11 +160,6 @@ function AdminDashboardPanel({
     await loadData();
   };
 
-  const handleStaffDelete = async (id) => {
-    await deleteStaff(id);
-    await loadData();
-  };
-
   const handleMemberDelete = async (id) => {
     await deleteMember(id);
     await loadData();
@@ -213,7 +208,7 @@ function AdminDashboardPanel({
       )}
 
       {tab === "staff" && (
-        <StaffTable staff={staff} onUpdate={handleStaffUpdate} onDelete={handleStaffDelete} />
+        <StaffTable staff={staff} onUpdate={handleStaffUpdate} />
       )}
 
       {tab === "attendance" && (

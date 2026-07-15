@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ConfirmDialog from "../../components/common/ConfirmDialog";
 import FilterBar from "../../components/common/FilterBar";
 import StatusBadge from "../../components/common/StatusBadge";
 import DashboardSection from "../../components/dashboard/DashboardSection";
@@ -8,6 +9,8 @@ function MemberTable({ members, plans, onUpdate, onAssignPlan, onDelete }) {
   const [status, setStatus] = useState("ALL");
   const [editing, setEditing] = useState(null);
   const [assigning, setAssigning] = useState(null);
+  const [deleting, setDeleting] = useState(null);
+  const [deletingBusy, setDeletingBusy] = useState(false);
 
   const filtered = members.filter((member) => {
     const term = search.toLowerCase();
@@ -15,6 +18,17 @@ function MemberTable({ members, plans, onUpdate, onAssignPlan, onDelete }) {
     const matchesStatus = status === "ALL" || member.membershipStatus === status;
     return matchesSearch && matchesStatus;
   });
+
+  const handleConfirmDelete = async () => {
+    if (!deleting) return;
+    setDeletingBusy(true);
+    try {
+      await onDelete(deleting.id);
+      setDeleting(null);
+    } finally {
+      setDeletingBusy(false);
+    }
+  };
 
   return (
     <DashboardSection title="Member Management" className="dashboard-staff-card">
@@ -65,11 +79,7 @@ function MemberTable({ members, plans, onUpdate, onAssignPlan, onDelete }) {
                     <button
                       type="button"
                       className="dashboard-link-button dashboard-link-button-danger"
-                      onClick={() => {
-                        if (window.confirm(`Delete ${member.firstName} ${member.lastName}? This removes their account, memberships, payments, and attendance history.`)) {
-                          onDelete(member.id);
-                        }
-                      }}
+                      onClick={() => setDeleting(member)}
                     >
                       Delete
                     </button>
@@ -86,6 +96,20 @@ function MemberTable({ members, plans, onUpdate, onAssignPlan, onDelete }) {
       )}
       {assigning && (
         <AssignPlanModal member={assigning} plans={plans.filter((p) => p.active)} onClose={() => setAssigning(null)} onAssign={onAssignPlan} />
+      )}
+      {deleting && (
+        <ConfirmDialog
+          title="Remove member from gym?"
+          message={`This will remove ${deleting.firstName} ${deleting.lastName} (${deleting.email}) from your gym and end their membership. Their login account stays active so they can join a gym again later.`}
+          confirmLabel="Remove from Gym"
+          cancelLabel="Keep Member"
+          danger
+          loading={deletingBusy}
+          onConfirm={handleConfirmDelete}
+          onClose={() => {
+            if (!deletingBusy) setDeleting(null);
+          }}
+        />
       )}
     </DashboardSection>
   );

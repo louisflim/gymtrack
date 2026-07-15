@@ -9,7 +9,6 @@ import edu.cit.lim.gymtrack.repository.UserRepository;
 import edu.cit.lim.gymtrack.util.GymGuard;
 import edu.cit.lim.gymtrack.util.GymUserLookup;
 import edu.cit.lim.gymtrack.util.RoleGuard;
-import edu.cit.lim.gymtrack.util.UserDeletionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +18,9 @@ import java.util.List;
 public class StaffService {
 
     private final UserRepository userRepository;
-    private final UserDeletionService userDeletionService;
 
-    public StaffService(UserRepository userRepository, UserDeletionService userDeletionService) {
+    public StaffService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userDeletionService = userDeletionService;
     }
 
     @Transactional(readOnly = true)
@@ -47,12 +44,6 @@ public class StaffService {
                 userRepository
         );
         return toResponse(userRepository.save(staff));
-    }
-
-    @Transactional
-    public void deleteStaff(Long staffId, String requesterEmail) {
-        Gym gym = adminGym(requesterEmail);
-        userDeletionService.deleteUserAndRelatedData(requireStaff(staffId, gym));
     }
 
     private Gym adminGym(String requesterEmail) {

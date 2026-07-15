@@ -11,15 +11,16 @@ import edu.cit.lim.gymtrack.feature.members.dto.MemberResponse;
 import edu.cit.lim.gymtrack.feature.members.dto.MemberUpdateRequest;
 import edu.cit.lim.gymtrack.feature.membership.MembershipService;
 import edu.cit.lim.gymtrack.feature.membership.dto.MembershipResponse;
+import edu.cit.lim.gymtrack.repository.MembershipRepository;
 import edu.cit.lim.gymtrack.repository.SubscriptionPlanRepository;
 import edu.cit.lim.gymtrack.repository.UserRepository;
 import edu.cit.lim.gymtrack.util.GymGuard;
 import edu.cit.lim.gymtrack.util.GymUserLookup;
 import edu.cit.lim.gymtrack.util.RoleGuard;
-import edu.cit.lim.gymtrack.util.UserDeletionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,16 +30,16 @@ public class MemberService {
     private final UserRepository userRepository;
     private final SubscriptionPlanRepository planRepository;
     private final MembershipService membershipService;
-    private final UserDeletionService userDeletionService;
+    private final MembershipRepository membershipRepository;
 
     public MemberService(UserRepository userRepository,
                          SubscriptionPlanRepository planRepository,
                          MembershipService membershipService,
-                         UserDeletionService userDeletionService) {
+                         MembershipRepository membershipRepository) {
         this.userRepository = userRepository;
         this.planRepository = planRepository;
         this.membershipService = membershipService;
-        this.userDeletionService = userDeletionService;
+        this.membershipRepository = membershipRepository;
     }
 
     @Transactional(readOnly = true)
@@ -69,10 +70,28 @@ public class MemberService {
         return toMemberResponse(userRepository.save(member));
     }
 
+    /**
+     * Removes a member from this gym only. The user account stays in the database
+     * so they can sign in and join a gym again later.
+     */
     @Transactional
     public void deleteMember(Long memberId, String requesterEmail) {
         Gym gym = adminGym(requesterEmail);
-        userDeletionService.deleteUserAndRelatedData(requireMember(memberId, gym));
+        User member = requireMember(memberId, gym);
+
+        List<Membership> memberships = membershipRepository.findByUserIdOrderByEndDateDesc(member.getId());
+        for (Membership membership : memberships) {
+            if (membership.getStatus() != MembershipStatus.EXPIRED
+                    && membership.getStatus() != MembershipStatus.NONE) {
+                membership.setStatus(MembershipStatus.EXPIRED);
+                membership.setEndDate(LocalDate.now());
+                membershipRepository.save(membership);
+            }
+        }
+
+        member.setGym(null);
+        member.setFirstCheckInCompleted(false);
+        userRepository.save(member);
     }
 
     public MembershipResponse assignPlan(AssignPlanRequest request, String requesterEmail) {
