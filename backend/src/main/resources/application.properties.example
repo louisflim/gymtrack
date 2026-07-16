@@ -1,11 +1,12 @@
-# Copy this file to application.properties and fill in your secrets.
-# application.properties is gitignored — never commit real credentials.
+# Copy to application.properties (gitignored) OR set the env vars below.
+# Never commit real credentials.
 
 spring.application.name=lim.gymtrack
 
-spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://YOUR_HOST:6543/postgres?sslmode=require&prepareThreshold=0}
-spring.datasource.username=${SPRING_DATASOURCE_USERNAME:postgres.YOUR_PROJECT_REF}
-spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:YOUR_PASSWORD}
+# Database (required via env)
+spring.datasource.url=${SPRING_DATASOURCE_URL}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
 spring.datasource.driver-class-name=org.postgresql.Driver
 
 spring.jpa.hibernate.ddl-auto=update
@@ -19,9 +20,11 @@ spring.datasource.hikari.initialization-fail-timeout=30000
 spring.datasource.hikari.maximum-pool-size=3
 spring.datasource.hikari.minimum-idle=1
 
-jwt.secret=${JWT_SECRET:CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_AT_LEAST_32_CHARACTERS_LONG}
+# Auth (required via env)
+jwt.secret=${JWT_SECRET}
 jwt.expiration=${JWT_EXPIRATION:86400000}
 
+# PayMongo / API keys (via env; empty is OK when mock is enabled)
 paymongo.secret-key=${PAYMONGO_SECRET_KEY:}
 paymongo.public-key=${PAYMONGO_PUBLIC_KEY:}
 paymongo.webhook-secret=${PAYMONGO_WEBHOOK_SECRET:}
@@ -32,7 +35,6 @@ paymongo.mock-enabled=${PAYMONGO_MOCK_ENABLED:true}
 
 app.cors.allowed-origins=${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
 
-# Optional extra overrides (also gitignored)
 spring.config.import=optional:classpath:application-local.properties
 
 server.port=8080
