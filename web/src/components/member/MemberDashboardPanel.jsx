@@ -4,17 +4,6 @@ import { createCheckout, fetchMyPayments, fetchPaymentMode, PaymentHistory } fro
 import { fetchActivePlans, PlanPicker } from "../../features/plans";
 import { AttendanceHistory } from "../../features/attendance";
 
-function paymentModeNoteFrom(modeInfo) {
-  if (!modeInfo?.mode) return "";
-  if (modeInfo.mode === "MOCK") {
-    return "Payment mode: MOCK (school demo). No real PayMongo charge.";
-  }
-  if (modeInfo.mode === "TEST") {
-    return "Payment mode: PayMongo TEST. Use test wallets/cards only.";
-  }
-  return "Payment mode: PayMongo LIVE. Real money will be charged.";
-}
-
 function MemberDashboardPanel({ membership: membershipProp, onMembershipChange, section = "all" }) {
   const [membership, setMembership] = useState(membershipProp);
   const [plans, setPlans] = useState([]);

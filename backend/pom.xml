@@ -97,7 +97,7 @@
 		<dependency>
 			<groupId>me.paulschwarz</groupId>
 			<artifactId>springboot3-dotenv</artifactId>
-			<optional>true</optional>
+			<version>5.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.zxing</groupId>
