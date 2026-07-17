@@ -24,11 +24,11 @@ dist-ssr
 *.sw?
 
 # IDE
-.idea/
-.vscode/
+.idea
+.vscode
 
 # Node.js
-node_modules/
+node_modules
 
 # Environment files
 .env
