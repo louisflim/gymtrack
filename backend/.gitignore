@@ -33,7 +33,7 @@ build/
 .vscode/
 
 ### Local secrets ###
-src/main/resources/application.properties
+# application.properties is committed (env placeholders only). Keep secrets in .env / host env.
 src/main/resources/application-local.properties
 .env
 .env.*

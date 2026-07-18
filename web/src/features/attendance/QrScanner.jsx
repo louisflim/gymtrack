@@ -1,6 +1,14 @@
 import { useEffect, useRef } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
 
+/** Decode-loop noise — keep scanning; do not close the camera. */
+const IGNORABLE_SCAN_ERRORS = new Set([
+  "NotFoundException",
+  "ChecksumException",
+  "FormatException",
+  "ReaderException",
+]);
+
 function stopVideoStream(videoEl) {
   const stream = videoEl?.srcObject;
   if (stream && typeof stream.getTracks === "function") {
@@ -48,26 +56,40 @@ function QrScanner({ open, onScanSuccess, onClose, statusMessage }) {
     };
 
     const startScanner = async () => {
+      // Wait one frame so the <video> element is mounted before ZXing attaches.
+      await new Promise((resolve) => requestAnimationFrame(() => resolve()));
+      if (!isActive || !videoRef.current) {
+        return;
+      }
+
       try {
-        controlsRef.current = await scanner.decodeFromVideoDevice(null, videoRef.current, (result, error) => {
-          if (!isActive) {
-            return;
-          }
+        controlsRef.current = await scanner.decodeFromVideoDevice(
+          undefined,
+          videoRef.current,
+          (result, error) => {
+            if (!isActive) {
+              return;
+            }
 
-          if (result && !ignoreFurtherScans) {
-            ignoreFurtherScans = true;
-            onScanSuccessRef.current(result.getText());
-            releaseCamera();
-          }
+            if (result && !ignoreFurtherScans) {
+              ignoreFurtherScans = true;
+              onScanSuccessRef.current(result.getText());
+              releaseCamera();
+              return;
+            }
 
-          if (error && error.name !== "NotFoundException") {
-            onScanSuccessRef.current(null, "Camera scan failed. Please try again.");
-            releaseCamera();
+            // Continuous decode fires NotFound/Checksum/Format constantly — ignore those.
+            if (error && !IGNORABLE_SCAN_ERRORS.has(error.name)) {
+              console.warn("QR scanner decode warning:", error.name || error);
+            }
           }
-        });
+        );
       } catch (_err) {
         if (isActive) {
-          onScanSuccessRef.current(null, "We couldn't access your camera. Please allow camera permission and try again.");
+          onScanSuccessRef.current(
+            null,
+            "We couldn't access your camera. Please allow camera permission and try again."
+          );
         }
         releaseCamera();
       }
