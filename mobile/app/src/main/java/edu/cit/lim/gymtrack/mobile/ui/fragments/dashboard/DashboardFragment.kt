@@ -491,28 +491,45 @@ class DashboardFragment : Fragment() {
         binding.membershipCard.membershipEndDate.text = membership?.endDate ?: "—"
 
         val enrolled = membership?.gymId != null
-        if (!enrolled) {
-            binding.planPickerEmpty.isVisible = true
-            binding.planPickerEmpty.text =
-                "Scan the gym QR code at the front desk first to see available subscription plans."
-            binding.plansRecycler.isVisible = false
-        } else if (state.activePlans.isEmpty()) {
-            binding.planPickerEmpty.isVisible = true
-            binding.planPickerEmpty.text = "No active plans available at your gym."
-            binding.plansRecycler.isVisible = false
-        } else {
-            binding.planPickerEmpty.isVisible = false
-            binding.plansRecycler.isVisible = true
-            planAdapter = PlanAdapter(state.subscribing) { planId ->
-                dashboardViewModel.subscribeToPlan(planId) { url ->
-                    val intent = CustomTabsIntent.Builder().build()
-                    browserLauncher.launch(intent.intent.apply { data = Uri.parse(url) })
-                }
+        val alreadySubscribed =
+            membership?.status == "ACTIVE" || membership?.status == "EXPIRING_SOON"
+        when {
+            !enrolled -> {
+                binding.planPickerEmpty.isVisible = true
+                binding.planPickerEmpty.text =
+                    "Scan the gym QR code at the front desk first to see available subscription plans."
+                binding.plansRecycler.isVisible = false
             }
-            binding.plansRecycler.adapter = planAdapter
-            planAdapter.submitList(state.activePlans)
+            alreadySubscribed -> {
+                binding.planPickerEmpty.isVisible = true
+                val until = membership?.endDate?.takeIf { it.isNotBlank() }
+                binding.planPickerEmpty.text = if (until != null) {
+                    "You already have an active membership until $until. You can subscribe again after it expires."
+                } else {
+                    "You already have an active membership. You can subscribe again after it expires."
+                }
+                binding.plansRecycler.isVisible = false
+            }
+            state.activePlans.isEmpty() -> {
+                binding.planPickerEmpty.isVisible = true
+                binding.planPickerEmpty.text = "No active plans available at your gym."
+                binding.plansRecycler.isVisible = false
+            }
+            else -> {
+                binding.planPickerEmpty.isVisible = false
+                binding.plansRecycler.isVisible = true
+                planAdapter = PlanAdapter(state.subscribing) { planId ->
+                    dashboardViewModel.subscribeToPlan(planId) { url ->
+                        val intent = CustomTabsIntent.Builder().build()
+                        browserLauncher.launch(intent.intent.apply { data = Uri.parse(url) })
+                    }
+                }
+                binding.plansRecycler.adapter = planAdapter
+                planAdapter.submitList(state.activePlans)
+            }
         }
-        binding.paymentModeNote.isVisible = !state.paymentModeNote.isNullOrBlank()
+        binding.paymentModeNote.isVisible =
+            !alreadySubscribed && !state.paymentModeNote.isNullOrBlank()
         binding.paymentModeNote.text = state.paymentModeNote.orEmpty()
         binding.memberStatusMessage.showError(state.memberStatusMessage)
 

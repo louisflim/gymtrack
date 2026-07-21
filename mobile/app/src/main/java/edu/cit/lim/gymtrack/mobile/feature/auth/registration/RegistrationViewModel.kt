@@ -59,9 +59,8 @@ class RegistrationViewModel(
             } catch (e: AuthException) {
                 _uiState.value = RegistrationUiState(error = e.message)
             } catch (e: Exception) {
-                val networkMessage = ApiErrorParser.networkMessage(e)
                 _uiState.value = RegistrationUiState(
-                    error = networkMessage ?: ApiErrorParser.GENERIC
+                    error = ApiErrorParser.friendlyExceptionMessage(e)
                 )
             }
         }

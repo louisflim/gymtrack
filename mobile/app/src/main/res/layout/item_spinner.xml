@@ -4,8 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="end"
+    android:gravity="center_vertical"
     android:maxLines="1"
-    android:paddingHorizontal="4dp"
-    android:paddingVertical="10dp"
+    android:minHeight="40dp"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="8dp"
     android:textColor="@color/gymtrack_text_primary"
     android:textSize="15sp" />

@@ -31,9 +31,8 @@ class LoginViewModel(
             } catch (e: AuthException) {
                 _uiState.value = LoginUiState(error = e.message)
             } catch (e: Exception) {
-                val networkMessage = ApiErrorParser.networkMessage(e)
                 _uiState.value = LoginUiState(
-                    error = networkMessage ?: ApiErrorParser.GENERIC
+                    error = ApiErrorParser.friendlyExceptionMessage(e)
                 )
             }
         }

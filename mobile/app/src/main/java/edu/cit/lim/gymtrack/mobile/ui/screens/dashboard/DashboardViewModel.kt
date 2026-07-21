@@ -159,10 +159,16 @@ class DashboardViewModel(
                     pendingMockCheckout = checkout.mockCheckout
                 )
                 if (checkout.mockCheckout) {
-                    // Confirm in-app — do not open localhost web return URLs on the phone.
+                    // Confirm in-app — do not open return URLs on the phone.
                     syncPendingPayment()
                 } else {
-                    onCheckoutUrl(checkout.checkoutUrl)
+                    val url = checkout.checkoutUrl
+                    // Misconfigured mock sometimes returns the success page as checkoutUrl (shows "Not Found").
+                    if (url.contains("/payment/success")) {
+                        syncPendingPayment()
+                    } else {
+                        onCheckoutUrl(url)
+                    }
                 }
             } catch (e: AuthException) {
                 _uiState.value = _uiState.value.copy(subscribing = false, memberStatusMessage = e.message)

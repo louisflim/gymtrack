@@ -10,9 +10,16 @@ import edu.cit.lim.gymtrack.mobile.data.remote.ApiService
 class PaymentRepository(private val apiService: ApiService) {
 
     suspend fun checkout(planId: Long): CheckoutResponse =
-        // Return URLs come from APP_WEB_BASE_URL / PayMongo config on the backend.
-        // Mock checkouts confirm in-app and never open a browser.
-        ApiResponses.unwrap(apiService.checkout(CheckoutRequest(planId = planId)))
+        // Deep-link returns for real PayMongo; mock checkouts confirm in-app and never open a browser.
+        ApiResponses.unwrap(
+            apiService.checkout(
+                CheckoutRequest(
+                    planId = planId,
+                    successUrl = "gymtrack://payment/success",
+                    cancelUrl = "gymtrack://payment/cancel"
+                )
+            )
+        )
 
     suspend fun paymentMode() =
         ApiResponses.unwrap(apiService.paymentMode())

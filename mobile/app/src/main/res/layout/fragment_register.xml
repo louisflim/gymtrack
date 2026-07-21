@@ -157,10 +157,13 @@
             <Spinner
                 android:id="@+id/roleSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="56dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_spinner"
-                android:padding="8dp" />
+                android:gravity="center_vertical"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:spinnerMode="dropdown" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/gymNameLayout"

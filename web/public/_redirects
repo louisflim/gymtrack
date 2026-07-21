@@ -1,0 +1,2 @@
+# Render / Netlify-style SPA fallback so /payment/success and other client routes work.
+/*    /index.html   200

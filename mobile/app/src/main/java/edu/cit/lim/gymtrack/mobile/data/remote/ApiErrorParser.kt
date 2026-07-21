@@ -26,6 +26,32 @@ object ApiErrorParser {
         else -> null
     }
 
+    /** Prefer a clear network/API message over a silent generic fallback. */
+    fun friendlyExceptionMessage(cause: Throwable?): String {
+        networkMessage(cause)?.let { return it }
+        var current: Throwable? = cause
+        while (current != null) {
+            networkMessage(current)?.let { return it }
+            val msg = current.message?.trim().orEmpty()
+            if (msg.contains("Unable to resolve host", ignoreCase = true) ||
+                msg.contains("failed to connect", ignoreCase = true) ||
+                msg.contains("timeout", ignoreCase = true)
+            ) {
+                return NETWORK
+            }
+            if (msg.contains("BEGIN_OBJECT") ||
+                msg.contains("Expected BEGIN") ||
+                msg.contains("JsonReader") ||
+                msg.contains("malformed")
+            ) {
+                return "The server returned an unexpected response. Open the API URL in a browser to wake it, then try again."
+            }
+            current = current.cause
+        }
+        val detail = cause?.message?.trim().orEmpty()
+        return if (detail.isNotBlank()) detail else GENERIC
+    }
+
     fun fromFailedResponse(statusCode: Int, errorBody: String?): String =
         parse(errorBody, statusCode, GENERIC)
 }

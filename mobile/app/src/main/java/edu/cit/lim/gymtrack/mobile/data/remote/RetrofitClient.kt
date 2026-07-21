@@ -27,8 +27,11 @@ object RetrofitClient {
         OkHttpClient.Builder()
             .addInterceptor(AuthInterceptor { tokenProvider() })
             .addInterceptor(loggingInterceptor)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            // Render free tier cold starts can exceed 30s
+            .connectTimeout(90, TimeUnit.SECONDS)
+            .readTimeout(90, TimeUnit.SECONDS)
+            .writeTimeout(90, TimeUnit.SECONDS)
+            .callTimeout(120, TimeUnit.SECONDS)
             .build()
     }
 
