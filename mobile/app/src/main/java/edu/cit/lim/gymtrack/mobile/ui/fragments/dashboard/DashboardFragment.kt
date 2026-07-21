@@ -52,6 +52,7 @@ import edu.cit.lim.gymtrack.mobile.ui.util.SettingsViewModelFactory
 import edu.cit.lim.gymtrack.mobile.ui.util.applyStatusBadge
 import edu.cit.lim.gymtrack.mobile.ui.util.loadBase64Qr
 import edu.cit.lim.gymtrack.mobile.ui.util.setupNavTabs
+import edu.cit.lim.gymtrack.mobile.ui.util.setTextIfChanged
 import edu.cit.lim.gymtrack.mobile.ui.util.showError
 import kotlinx.coroutines.launch
 
@@ -555,11 +556,11 @@ class DashboardFragment : Fragment() {
             requireContext().getColor(if (missingGym) R.color.gymtrack_error else R.color.gymtrack_text_primary)
         )
         syncingStaffForm = true
-        binding.createStaffForm.staffFirstName.setText(state.staffForm.firstName)
-        binding.createStaffForm.staffLastName.setText(state.staffForm.lastName)
-        binding.createStaffForm.staffEmail.setText(state.staffForm.email)
-        binding.createStaffForm.staffPassword.setText(state.staffForm.password)
-        binding.createStaffForm.staffConfirmPassword.setText(state.staffForm.confirmPassword)
+        binding.createStaffForm.staffFirstName.setTextIfChanged(state.staffForm.firstName)
+        binding.createStaffForm.staffLastName.setTextIfChanged(state.staffForm.lastName)
+        binding.createStaffForm.staffEmail.setTextIfChanged(state.staffForm.email)
+        binding.createStaffForm.staffPassword.setTextIfChanged(state.staffForm.password)
+        binding.createStaffForm.staffConfirmPassword.setTextIfChanged(state.staffForm.confirmPassword)
         syncingStaffForm = false
         binding.createStaffForm.createStaffButton.isEnabled = !state.creatingStaff && !missingGym
         binding.createStaffForm.createStaffButton.text =
@@ -576,9 +577,9 @@ class DashboardFragment : Fragment() {
 
         syncingPlanForm = true
         binding.planForm.planFormTitle.text = if (state.editingPlanId != null) "EDIT PLAN" else "CREATE PLAN"
-        binding.planForm.planNameInput.setText(state.planForm.name)
-        binding.planForm.planDurationInput.setText(state.planForm.durationDays)
-        binding.planForm.planPriceInput.setText(state.planForm.price)
+        binding.planForm.planNameInput.setTextIfChanged(state.planForm.name)
+        binding.planForm.planDurationInput.setTextIfChanged(state.planForm.durationDays)
+        binding.planForm.planPriceInput.setTextIfChanged(state.planForm.price)
         binding.planForm.savePlanButton.text =
             if (state.editingPlanId != null) "Update Plan" else "Create Plan"
         syncingPlanForm = false

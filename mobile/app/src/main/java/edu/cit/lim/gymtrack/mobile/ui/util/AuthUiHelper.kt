@@ -46,3 +46,11 @@ fun TextView.showError(message: String?) {
         text = message
     }
 }
+
+/** Avoid resetting the cursor when StateFlow re-renders the same typed value. */
+fun android.widget.EditText.setTextIfChanged(value: String) {
+    val current = text?.toString().orEmpty()
+    if (current == value) return
+    setText(value)
+    setSelection(text?.length ?: 0)
+}
