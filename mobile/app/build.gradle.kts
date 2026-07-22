@@ -12,8 +12,8 @@ val localProperties = Properties().apply {
     }
 }
 
-val debugBaseUrl = localProperties.getProperty("debug.base.url", "http://10.0.2.2:8080/")
-val releaseBaseUrl = localProperties.getProperty("release.base.url", "http://10.0.2.2:8080/")
+val debugBaseUrl = localProperties.getProperty("debug.base.url", "https://gymtrack-inz1.onrender.com/")
+val releaseBaseUrl = localProperties.getProperty("release.base.url", "https://gymtrack-inz1.onrender.com/")
 
 android {
     namespace = "edu.cit.lim.gymtrack.mobile"
